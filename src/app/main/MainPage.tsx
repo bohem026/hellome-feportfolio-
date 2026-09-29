@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import "./page.scss";
+import "./MainPage.scss";
 
 // 포트폴리오 메인 워크 데이터 타입 정의
 interface WorkItem {
