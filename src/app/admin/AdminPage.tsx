@@ -116,7 +116,7 @@ export function AdminPage() {
   return (
     <div className="admin-container">
       {/* Top Header */}
-      <header className="header">
+      {/* <header className="header">
         <div className="header__left">
           <span className="logo">ARCH™</span>
           <span className="sub-tag">ADMINISTRATION ARCHIVE</span>
@@ -144,7 +144,7 @@ export function AdminPage() {
             <span className="avatar">JH</span>
           </div>
         </div>
-      </header>
+      </header> */}
 
       <div className="admin-layout">
         {/* Left Sidebar */}
@@ -312,11 +312,11 @@ export function AdminPage() {
       </div>
 
       {/* Footer */}
-      <footer className="footer">
+      {/* <footer className="footer">
         <div>ATELIER MONOCHROME / ADMIN CONSOLE V4.1</div>
         <div>LAT 37.5665° N, LON 126.9780° E</div>
         <div>© 2026 ALL RIGHTS RESERVED</div>
-      </footer>
+      </footer> */}
     </div>
   );
 }

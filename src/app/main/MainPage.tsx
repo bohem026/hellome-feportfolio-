@@ -143,7 +143,7 @@ export function MainPage() {
   return (
     <div className="portfolio-main">
       {/* Top Header */}
-      <header className="header">
+      {/* <header className="header">
         <div className="header__left">
           <span className="logo">ARCH™ 2026</span>
           <span className="sub-tag">
@@ -175,7 +175,7 @@ export function MainPage() {
             <span className="avatar">JH</span>
           </div>
         </div>
-      </header>
+      </header> */}
 
       {/* Hero Section */}
       <section className="hero">
@@ -409,11 +409,11 @@ export function MainPage() {
       </section>
 
       {/* Footer */}
-      <footer className="footer">
+      {/* <footer className="footer">
         <div>ATELIER MORPHOLOGY / SWISS MODERN DESIGN SYSTEMS</div>
         <div>LAT 47.3769° N, LON 8.5417° E</div>
         <div>© 2026 ALL RIGHTS RESERVED</div>
-      </footer>
+      </footer> */}
     </div>
   );
 }

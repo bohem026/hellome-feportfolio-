@@ -105,7 +105,7 @@ export function AboutPage() {
   return (
     <div className="about-container">
       {/* Header */}
-      <header className="header">
+      {/* <header className="header">
         <div className="header__left">
           <span className="logo">ARCH™</span>
           <span className="sub-tag">
@@ -137,7 +137,7 @@ export function AboutPage() {
             <span className="avatar">JH</span>
           </div>
         </div>
-      </header>
+      </header> */}
 
       {/* Hero / Bio Section */}
       <section className="bio-section">
@@ -315,11 +315,11 @@ export function AboutPage() {
       </section>
 
       {/* Footer */}
-      <footer className="footer">
+      {/* <footer className="footer">
         <div>ATELIER MONOCHROME / SWISS MODERN DESIGN SYSTEMS</div>
         <div>LAT 37.5665° N, LON 126.9780° E</div>
         <div>© 2026 ALL RIGHTS RESERVED</div>
-      </footer>
+      </footer> */}
     </div>
   );
 }

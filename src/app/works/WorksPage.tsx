@@ -112,7 +112,7 @@ export function WorksPage() {
   return (
     <div className="works-container">
       {/* Header */}
-      <header className="header">
+      {/* <header className="header">
         <div className="header__left">
           <span className="logo">ARCH™</span>
           <span className="sub-tag">
@@ -144,7 +144,7 @@ export function WorksPage() {
             <span className="avatar">JH</span>
           </div>
         </div>
-      </header>
+      </header> */}
 
       {/* Main Title */}
       <section className="title-section">
@@ -346,11 +346,11 @@ export function WorksPage() {
       </section>
 
       {/* Footer */}
-      <footer className="footer">
+      {/* <footer className="footer">
         <div>ATELIER MONOCHROME / SWISS MODERN DESIGN SYSTEMS</div>
         <div>LAT 47.3769° N, LON 8.5417° E</div>
         <div>© 2026 ALL RIGHTS RESERVED</div>
-      </footer>
+      </footer> */}
     </div>
   );
 }
