@@ -1,151 +1,24 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React from "react";
+import { useWorksPage } from "@/hooks";
 import "./WorksPage.scss";
 
-export interface WorkProject {
-  id: string;
-  archiveNum: string;
-  year: string;
-  categoryTag: string;
-  categoryLabel: string;
-  title: string;
-  imageUrl: string;
-  linkUrl: string;
-}
-
-const ALL_WORKS: WorkProject[] = [
-  {
-    id: "1",
-    archiveNum: "/01 — ARCHIVE",
-    year: "2024",
-    categoryTag: "BRAND SYSTEMS",
-    categoryLabel: "BRAND SYSTEMS & ART DIRECTION",
-    title: "HUNTER YEANY",
-    imageUrl:
-      "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80",
-    linkUrl: "#",
-  },
-  {
-    id: "2",
-    archiveNum: "/02 — ARCHIVE",
-    year: "2024",
-    categoryTag: "CREATIVE ENGINEERING",
-    categoryLabel: "CREATIVE ENGINEERING & WEBGL",
-    title: "VELOCE OS",
-    imageUrl:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
-    linkUrl: "#",
-  },
-  {
-    id: "3",
-    archiveNum: "/03 — ARCHIVE",
-    year: "2023",
-    categoryTag: "SPATIAL",
-    categoryLabel: "SPATIAL & ENVIRONMENTAL",
-    title: "WALKER PAVILION",
-    imageUrl:
-      "https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=800&q=80",
-    linkUrl: "#",
-  },
-  {
-    id: "4",
-    archiveNum: "/04 — ARCHIVE",
-    year: "2023",
-    categoryTag: "MOTION",
-    categoryLabel: "MOTION & KINETIC TYPE",
-    title: "KINETIX LAB",
-    imageUrl:
-      "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
-    linkUrl: "#",
-  },
-  {
-    id: "5",
-    archiveNum: "/05 — ARCHIVE",
-    year: "2023",
-    categoryTag: "BRAND SYSTEMS",
-    categoryLabel: "BRAND SYSTEMS & IDENTITY",
-    title: "NORDIC SOUND",
-    imageUrl:
-      "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80",
-    linkUrl: "#",
-  },
-  {
-    id: "6",
-    archiveNum: "/06 — ARCHIVE",
-    year: "2022",
-    categoryTag: "CREATIVE ENGINEERING",
-    categoryLabel: "CREATIVE ENGINEERING & UI",
-    title: "STRATA COMPUTE",
-    imageUrl:
-      "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80",
-    linkUrl: "#",
-  },
-];
-
-const CATEGORIES = [
-  "ALL",
-  "BRAND SYSTEMS",
-  "CREATIVE ENGINEERING",
-  "MOTION",
-  "SPATIAL",
-];
-
 export function WorksPage() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
-
-  // 필터링 처리
-  const filteredWorks = useMemo(() => {
-    return ALL_WORKS.filter((work) => {
-      const matchCategory =
-        selectedCategory === "ALL" || work.categoryTag === selectedCategory;
-      const matchSearch =
-        work.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        work.categoryLabel.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        work.year.includes(searchTerm);
-      return matchCategory && matchSearch;
-    });
-  }, [selectedCategory, searchTerm]);
+  const {
+    selectedCategory,
+    setSelectedCategory,
+    searchTerm,
+    setSearchTerm,
+    viewMode,
+    setViewMode,
+    categories,
+    filteredWorks,
+    totalCount,
+  } = useWorksPage();
 
   return (
     <div className="works-container">
-      {/* Header */}
-      {/* <header className="header">
-        <div className="header__left">
-          <span className="logo">ARCH™</span>
-          <span className="sub-tag">
-            ARCHIVE / EDITORIAL
-            <br />
-            SYS.REF 2026.09
-          </span>
-        </div>
-        <nav className="header__nav">
-          <a href="/" className="nav-link">
-            INDEX
-          </a>
-          <a href="/works" className="nav-link active">
-            WORKS
-          </a>
-          <a href="#about" className="nav-link">
-            ABOUT
-          </a>
-          <a href="#contact" className="nav-link">
-            CONTACT ASSISTANT
-          </a>
-          <a href="#sys" className="nav-link">
-            SYS CONSOLE
-          </a>
-        </nav>
-        <div className="header__right">
-          <span className="status-badge">● AVAILABLE FOR Q3/Q4</span>
-          <div className="user-profile">
-            <span className="avatar">JH</span>
-          </div>
-        </div>
-      </header> */}
-
       {/* Main Title */}
       <section className="title-section">
         <div className="title-meta">
@@ -153,8 +26,7 @@ export function WorksPage() {
         </div>
         <div className="title-wrap">
           <h1 className="main-title">
-            INDEX OF WORKS{" "}
-            <span className="count-badge">({ALL_WORKS.length})</span>
+            INDEX OF WORKS <span className="count-badge">({totalCount})</span>
           </h1>
           <div className="view-toggle">
             <button
@@ -186,13 +58,13 @@ export function WorksPage() {
         </div>
 
         <div className="category-filters">
-          {CATEGORIES.map((cat) => (
+          {categories.map((cat) => (
             <button
               key={cat}
               className={`cat-btn ${selectedCategory === cat ? "active" : ""}`}
               onClick={() => setSelectedCategory(cat)}
             >
-              {cat === "ALL" ? `ALL (${ALL_WORKS.length})` : cat}
+              {cat === "ALL" ? `ALL (${totalCount})` : cat}
             </button>
           ))}
         </div>
@@ -344,13 +216,6 @@ export function WorksPage() {
           <button className="cta-btn">SCHEDULE INTAKE →</button>
         </div>
       </section>
-
-      {/* Footer */}
-      {/* <footer className="footer">
-        <div>ATELIER MONOCHROME / SWISS MODERN DESIGN SYSTEMS</div>
-        <div>LAT 47.3769° N, LON 8.5417° E</div>
-        <div>© 2026 ALL RIGHTS RESERVED</div>
-      </footer> */}
     </div>
   );
 }

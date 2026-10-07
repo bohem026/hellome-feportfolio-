@@ -1,197 +1,24 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import "./MainPage.scss";
-
-// 포트폴리오 메인 워크 데이터 타입 정의
-interface WorkItem {
-  id: string;
-  category: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  linkUrl: string;
-}
-
-// 프로세스 데이터 타입 정의
-interface ProcessItem {
-  step: string;
-  title: string;
-  description: string;
-  phase: string;
-}
-
-// FAQ 데이터 타입 정의
-interface FAQItem {
-  id: number;
-  question: string;
-  answer: string;
-}
-
-const FEATURED_WORKS: WorkItem[] = [
-  {
-    id: "01",
-    category: "ARCH-01 / FRONTEND ARCHITECTURE",
-    title: "HUNTER YEANY RACING",
-    description:
-      "Comprehensive telemetry dashboard and real-time kinetic digital identity for Formula motorsport driver.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80",
-    linkUrl: "#",
-  },
-  {
-    id: "02",
-    category: "CASE 02 / IDENTITY & E-COMMERCE",
-    title: "VELOCE ATELIER",
-    description:
-      "Art direction and spatial digital storefront for contemporary industrial ceramic studio based in Zurich.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
-    linkUrl: "#",
-  },
-  {
-    id: "03",
-    category: "TYPE 003 / DIGITAL SYSTEM",
-    title: "WALKER SOUND LAB",
-    description:
-      "Generative waveform acoustic interface and bespoke variable typography engine for spatial audio brand.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=1200&q=80",
-    linkUrl: "#",
-  },
-];
-
-const PROCESS_STEPS: ProcessItem[] = [
-  {
-    step: "/ 01",
-    title: "DISCOVERY",
-    description:
-      "Deconstructing foundational business intent, ecosystem benchmarks, and user behavioral archetypes before lines are drawn.",
-    phase: "PHASE_01",
-  },
-  {
-    step: "/ 02",
-    title: "RESEARCH",
-    description:
-      "Synthesizing visual culture, architectural typography, and technical stack ergonomics into a comprehensive briefing index.",
-    phase: "PHASE_02",
-  },
-  {
-    step: "/ 03",
-    title: "DESIGN",
-    description:
-      "Radical spatial composition, microscopic grid systems, motion prototypes, and deliberate visual tension.",
-    phase: "PHASE_03",
-  },
-  {
-    step: "/ 04",
-    title: "DEVELOPMENT",
-    description:
-      "Pixel-exact translation utilizing Next.js, semantic clean architectures, responsive kinetics, and microsecond render paths.",
-    phase: "PHASE_04",
-  },
-  {
-    step: "/ 05",
-    title: "VALIDATION",
-    description:
-      "Stress-testing viewport breakpoints, accessibility vectors, typography responsiveness, and performance profiling.",
-    phase: "PHASE_05",
-  },
-  {
-    step: "/ 06",
-    title: "EVOLVE",
-    description:
-      "Ongoing creative guardianship, brand evolution tooling, design system scalability, and ongoing optimization cycles.",
-    phase: "PHASE_06",
-  },
-];
-
-const FAQS: FAQItem[] = [
-  {
-    id: 1,
-    question: "WHAT IS YOUR CURRENT COMMENCEMENT LEAD TIME?",
-    answer:
-      "Projects typically commence within 2-4 weeks depending on the existing scope and design system requirements.",
-  },
-  {
-    id: 2,
-    question: "DO YOU PROVIDE FULL TECHNICAL STACK IMPLEMENTATION?",
-    answer:
-      "Yes, full-stack implementation using React, Next.js, TypeScript, and Supabase is provided natively.",
-  },
-  {
-    id: 3,
-    question: "HOW DO YOU STRUCTURE PROJECT ENGAGEMENTS?",
-    answer:
-      "Engagements are structured into discovery, architecture, iterative design sprints, and full-scale deployment.",
-  },
-  {
-    id: 4,
-    question: "CAN YOU COLLABORATE WITH INTERNAL ENGINEERING TEAMS?",
-    answer:
-      "Seamless embedment within product and engineering teams via Slack, GitHub, and Figma workflows is standard.",
-  },
-];
+import React from 'react';
+import { useMainPage } from '@/hooks';
+import './MainPage.scss';
 
 export function MainPage() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-
-  const toggleFaq = (id: number) => {
-    setOpenFaq(openFaq === id ? null : id);
-  };
+  const { featuredWorks, processSteps, faqs, openFaq, toggleFaq } = useMainPage();
 
   return (
     <div className="portfolio-main">
-      {/* Top Header */}
-      {/* <header className="header">
-        <div className="header__left">
-          <span className="logo">ARCH™ 2026</span>
-          <span className="sub-tag">
-            ARCHIVE / EDITORIAL
-            <br />
-            SYSTEM V2026.09
-          </span>
-        </div>
-        <nav className="header__nav">
-          <a href="#index" className="nav-link active">
-            INDEX
-          </a>
-          <a href="#works" className="nav-link">
-            WORKS
-          </a>
-          <a href="#about" className="nav-link">
-            ABOUT
-          </a>
-          <a href="#contact" className="nav-link">
-            CONTACT ASSISTANT
-          </a>
-          <a href="#sys" className="nav-link">
-            SYS CONSOLE
-          </a>
-        </nav>
-        <div className="header__right">
-          <span className="status-badge">● AVAILABLE FOR Q3/Q4</span>
-          <div className="user-profile">
-            <span className="avatar">JH</span>
-          </div>
-        </div>
-      </header> */}
-
       {/* Hero Section */}
       <section className="hero">
         <div className="hero__top-meta">
-          <span className="role-title">
-            FRONTEND ENGINEER & CREATIVE ARCHITECT
-          </span>
+          <span className="role-title">FRONTEND ENGINEER & CREATIVE ARCHITECT</span>
           <span className="year-range">(2022 — 2026)</span>
         </div>
         <h1 className="hero__title">
-          STUNNING
-          <br />
-          BRANDS
-          <br />
-          & DIGITAL
-          <br />
+          STUNNING<br />
+          BRANDS<br />
+          & DIGITAL<br />
           EXPERIENCES
         </h1>
         <div className="hero__badge-bar">
@@ -208,15 +35,9 @@ export function MainPage() {
 
         <div className="hero__intro">
           <p className="intro-text">
-            — Ethan Suero is an independent designer and creative engineer
-            focused on crafting immersive digital experiences. He believes every
-            project is an uncompromising opportunity to deliver a singular,
-            indelible digital narrative that delights users and scales brand
-            equity.
+            — Ethan Suero is an independent designer and creative engineer focused on crafting immersive digital experiences. He believes every project is an uncompromising opportunity to deliver a singular, indelible digital narrative that delights users and scales brand equity.
           </p>
-          <a href="#dossier" className="link-arrow">
-            READ FULL DOSSIER →
-          </a>
+          <a href="#dossier" className="link-arrow">READ FULL DOSSIER →</a>
         </div>
       </section>
 
@@ -228,15 +49,13 @@ export function MainPage() {
         </div>
 
         <div className="works-list">
-          {FEATURED_WORKS.map((work) => (
+          {featuredWorks.map((work) => (
             <article className="work-card" key={work.id}>
               <div className="work-card__info">
                 <span className="category">{work.category}</span>
                 <h2 className="title">{work.title}</h2>
                 <p className="description">{work.description}</p>
-                <a href={work.linkUrl} className="explore-btn">
-                  EXPLORE ARCHIVE ↗
-                </a>
+                <a href={work.linkUrl} className="explore-btn">EXPLORE ARCHIVE ↗</a>
               </div>
               <div className="work-card__media">
                 <img src={work.imageUrl} alt={work.title} />
@@ -246,16 +65,12 @@ export function MainPage() {
         </div>
       </section>
 
-      {/* Client List Ticker Banner */}
+      {/* Client List Banner */}
       <section className="banner-names">
-        <div className="banner-names__header">
-          CLIENT ROSTER // ARCHIVAL INDEX
-        </div>
+        <div className="banner-names__header">CLIENT ROSTER // ARCHIVAL INDEX</div>
         <h2 className="banner-names__list">
-          HUNTER YEANY
-          <br />
-          VELOCE
-          <br />
+          HUNTER YEANY<br />
+          VELOCE<br />
           WALKER
         </h2>
       </section>
@@ -263,16 +78,12 @@ export function MainPage() {
       {/* Thoughtful Process */}
       <section className="process-section">
         <div className="section-header">
-          <h2>
-            THOUGHTFUL
-            <br />
-            PROCESS
-          </h2>
+          <h2>THOUGHTFUL<br />PROCESS</h2>
           <span className="sub-label">[DISCIPLINE & EXECUTION]</span>
         </div>
 
         <div className="process-grid">
-          {PROCESS_STEPS.map((step, idx) => (
+          {processSteps.map((step, idx) => (
             <div className="process-card" key={idx}>
               <div className="step-num">{step.step}</div>
               <h3>{step.title}</h3>
@@ -289,11 +100,7 @@ export function MainPage() {
       {/* Humble Brag / Highlights Section */}
       <section className="brag-section">
         <div className="section-header">
-          <h2>
-            HUMBLE
-            <br />
-            BRAG
-          </h2>
+          <h2>HUMBLE<br />BRAG</h2>
           <span className="sub-label">[RECOGNITION & AWARDS]</span>
         </div>
 
@@ -364,10 +171,7 @@ export function MainPage() {
             </div>
           </div>
           <blockquote className="quote-text">
-            "Ethan possesses that extraordinarily rare hybrid capability:
-            uncompromising Swiss typographic discipline combined with native,
-            fluid web engineering instincts. The digital experience he
-            engineered redefined our market positioning instantly."
+            "Ethan possesses that extraordinarily rare hybrid capability: uncompromising Swiss typographic discipline combined with native, fluid web engineering instincts. The digital experience he engineered redefined our market positioning instantly."
           </blockquote>
         </div>
       </section>
@@ -375,28 +179,20 @@ export function MainPage() {
       {/* FAQ Accordion Section */}
       <section className="faq-section">
         <div className="section-header">
-          <h2>
-            COMMON
-            <br />
-            QUESTIONS
-          </h2>
+          <h2>COMMON<br />QUESTIONS</h2>
           <span className="sub-label">[TERMS & WORKFLOW]</span>
         </div>
 
         <div className="faq-list">
-          {FAQS.map((faq) => (
+          {faqs.map((faq) => (
             <div
-              className={`faq-item ${openFaq === faq.id ? "open" : ""}`}
+              className={`faq-item ${openFaq === faq.id ? 'open' : ''}`}
               key={faq.id}
               onClick={() => toggleFaq(faq.id)}
             >
               <div className="faq-question">
-                <span>
-                  0{faq.id} {faq.question}
-                </span>
-                <span className="toggle-icon">
-                  {openFaq === faq.id ? "−" : "+"}
-                </span>
+                <span>0{faq.id} {faq.question}</span>
+                <span className="toggle-icon">{openFaq === faq.id ? '−' : '+'}</span>
               </div>
               {openFaq === faq.id && (
                 <div className="faq-answer">
@@ -407,13 +203,6 @@ export function MainPage() {
           ))}
         </div>
       </section>
-
-      {/* Footer */}
-      {/* <footer className="footer">
-        <div>ATELIER MORPHOLOGY / SWISS MODERN DESIGN SYSTEMS</div>
-        <div>LAT 47.3769° N, LON 8.5417° E</div>
-        <div>© 2026 ALL RIGHTS RESERVED</div>
-      </footer> */}
     </div>
   );
 }
