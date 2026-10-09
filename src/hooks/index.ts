@@ -1,5 +1,6 @@
 // Common Hooks
 export * from './common/useDebounce';
+export * from './common/useHeader';
 
 // Page-specific Hooks
 export * from './pages/useAboutPage';
