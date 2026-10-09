@@ -1,0 +1,87 @@
+$font-sans:
+  "Inter",
+  -apple-system,
+  BlinkMacSystemFont,
+  "Segoe UI",
+  Roboto,
+  sans-serif;
+
+.custom-toast-snackbar {
+  bottom: 24px !important;
+  right: 24px !important;
+  font-family: $font-sans !important;
+
+  .custom-toast-alert {
+    background: #ffffff !important;
+    border: 1px solid #000000 !important;
+    border-radius: 0px !important; // 모던 브루탈리즘 느낌의 각진 형태
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+    padding: 12px 16px !important;
+    align-items: flex-start !important;
+
+    .MuiAlert-icon {
+      font-size: 18px !important;
+      margin-top: 2px !important;
+    }
+
+    .MuiAlert-message {
+      padding: 0 !important;
+    }
+
+    .MuiAlert-action {
+      padding-top: 0 !important;
+      margin-right: -4px !important;
+
+      .MuiIconButton-root {
+        color: #666666;
+        &:hover {
+          color: #000000;
+          background: rgba(0, 0, 0, 0.05);
+        }
+      }
+    }
+
+    .toast-content {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .toast-tag {
+        font-size: 9px;
+        font-weight: 800;
+        color: #666666;
+        letter-spacing: 0.05em;
+      }
+
+      .toast-message {
+        font-size: 12px;
+        font-weight: 600;
+        color: #0d0d0d;
+        line-height: 1.4;
+        margin: 0;
+      }
+    }
+
+    /* 타입별 포인트 스타일 */
+    &.type-success {
+      border-left: 4px solid #000000 !important;
+      .MuiAlert-icon {
+        color: #000000 !important;
+      }
+    }
+
+    &.type-warning {
+      border-left: 4px solid #d97706 !important;
+      .MuiAlert-icon {
+        color: #d97706 !important;
+      }
+    }
+
+    &.type-danger {
+      border-left: 4px solid #dc2626 !important;
+      .MuiAlert-icon {
+        color: #dc2626 !important;
+      }
+    }
+  }
+}
