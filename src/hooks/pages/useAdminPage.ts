@@ -1,18 +1,77 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
 import { INITIAL_PROJECTS, INITIAL_INQUIRIES } from "@/constants";
 import { Project, Inquiry, AdminTab } from "@/types";
 
 export function useAdminPage() {
   const router = useRouter();
+  const supabase = createClient();
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
+
+  const [isGithubConnected, setIsGithubConnected] = useState(false);
+  const [githubUser, setGithubUser] = useState<string | null>(null);
 
   const [projects, setProjects] = useState<Project[]>(INITIAL_PROJECTS);
   const [inquiries, setInquiries] = useState<Inquiry[]>(INITIAL_INQUIRIES);
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
+
+  /**
+   * Supabase Auth 세션 체크
+   * Github OAuth 연동 유무 확인
+   */
+  useEffect(() => {
+    const checkGithubSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session && session.user) {
+        setIsGithubConnected(true);
+        setGithubUser(
+          session.user.user_metadata?.preferred_username ||
+            session.user.email ||
+            "CONNECTED",
+        );
+      } else {
+        setIsGithubConnected(false);
+        setGithubUser(null);
+      }
+    };
+
+    checkGithubSession();
+  }, []);
+
+  /**
+   * Github OAuth 연동 요청
+   */
+  const handleConnectGithub = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "github",
+      options: {
+        scopes: "repo read:user",
+        redirectTo: `${window.location.origin}/api/auth/github/callback?next=/admin`,
+      },
+    });
+
+    if (error) {
+      alert(`GitHub 연동 에러: ${error.message}`);
+    }
+  };
+
+  /**
+   * Github OAuth 연동 해제
+   */
+  const handleDisconnectGithub = async () => {
+    if (confirm("GitHub 연동을 해제하시겠습니까?")) {
+      await supabase.auth.signOut();
+      setIsGithubConnected(false);
+      setGithubUser(null);
+    }
+  };
 
   /**
    * 인증 성공 처리
@@ -70,10 +129,14 @@ export function useAdminPage() {
   return {
     isAuthenticated,
     isAuthModalOpen,
+    isGithubConnected,
+    githubUser,
     projects,
     inquiries,
     activeTab,
     setActiveTab,
+    handleConnectGithub,
+    handleDisconnectGithub,
     handleAuthSuccess,
     handleAuthFailure,
     handleDeleteProject,

@@ -140,31 +140,71 @@ body {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 10px;
-        font-weight: 700;
-        color: $text-muted;
-        margin-bottom: 16px;
+        padding: 12px 16px;
+        background: #f4f4f0;
+        border: 1px solid #000000;
+        margin-bottom: 24px;
+
+        .console-status {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-size: 11px;
+          font-weight: 800;
+
+          .github-badge {
+            padding: 4px 8px;
+            font-size: 10px;
+
+            &.connected {
+              background: #000000;
+              color: #00ff66; // 형광 네온 그린 포인트
+            }
+
+            &.disconnected {
+              background: #e5e5e5;
+              color: #666666;
+            }
+          }
+        }
 
         .console-actions {
           display: flex;
           gap: 8px;
 
           button {
-            padding: 6px 12px;
+            padding: 8px 12px;
             font-size: 10px;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
-            border: 1px solid #000;
-          }
+            border: 1px solid #000000;
+            transition: all 0.2s ease;
 
-          .btn-outline {
-            background: transparent;
-            color: #000;
-          }
+            &.btn-outline {
+              background: transparent;
+              color: #000000;
 
-          .btn-solid {
-            background: #000;
-            color: #fff;
+              &.connect:hover {
+                background: #000000;
+                color: #ffffff;
+              }
+
+              &.disconnect:hover {
+                background: #dc2626;
+                color: #ffffff;
+                border-color: #dc2626;
+              }
+            }
+
+            &.btn-solid {
+              background: #000000;
+              color: #ffffff;
+
+              &:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+              }
+            }
           }
         }
       }

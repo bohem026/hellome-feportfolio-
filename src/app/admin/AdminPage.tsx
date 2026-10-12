@@ -9,10 +9,14 @@ export function AdminPage() {
   const {
     isAuthenticated,
     isAuthModalOpen,
+    isGithubConnected,
+    githubUser,
     projects,
     inquiries,
     activeTab,
     setActiveTab,
+    handleConnectGithub,
+    handleDisconnectGithub,
     handleAuthSuccess,
     handleAuthFailure,
     handleDeleteProject,
@@ -29,7 +33,7 @@ export function AdminPage() {
         onFailure={handleAuthFailure}
       />
 
-      {/* 배경 레이아웃 (인증 미완료 시 스켈레톤 클래스 적용) */}
+      {/* 배경 레이아웃 (인증 미완료 시 스켈레톤 UI 적용) */}
       <div
         className={`admin-layout ${!isAuthenticated ? "skeleton-mode" : ""}`}
       >
@@ -60,11 +64,44 @@ export function AdminPage() {
 
         {/* Main Content Dashboard */}
         <main className="admin-main">
+          {/* Console Bar */}
           <div className="console-bar">
-            <span>[CONSOLE CONTROL V4.1] ● LIVE SYSTEM DISPATCH</span>
+            <div className="console-status">
+              <span>[CONSOLE CONTROL V4.1]</span>
+
+              {/* GitHub Status Badge */}
+              {isGithubConnected ? (
+                <span className="github-badge connected">
+                  ● GITHUB: {githubUser} (CONNECTED)
+                </span>
+              ) : (
+                <span className="github-badge disconnected">
+                  ○ GITHUB: DISCONNECTED
+                </span>
+              )}
+            </div>
+
             <div className="console-actions">
-              <button className="btn-outline">RE-INDEX CACHE</button>
-              <button className="btn-solid">+ CREATE NEW WORK</button>
+              {/* GitHub Connect/Disconnect Button */}
+              {isGithubConnected ? (
+                <button
+                  className="btn-outline disconnect"
+                  onClick={handleDisconnectGithub}
+                >
+                  DISCONNECT GITHUB
+                </button>
+              ) : (
+                <button
+                  className="btn-outline connect"
+                  onClick={handleConnectGithub}
+                >
+                  CONNECT GITHUB
+                </button>
+              )}
+
+              <button className="btn-solid" disabled={!isGithubConnected}>
+                + IMPORT FROM REPO
+              </button>
             </div>
           </div>
 
