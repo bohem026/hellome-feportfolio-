@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { INITIAL_PROJECTS, INITIAL_INQUIRIES } from "@/constants";
 import { Project, Inquiry, AdminTab } from "@/types";
+import { ToastType } from "@/components/Toast";
 
 export function useAdminPage() {
   const router = useRouter();
@@ -13,12 +14,35 @@ export function useAdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
 
+  // Github OAuth 연동 상태
   const [isGithubConnected, setIsGithubConnected] = useState(false);
   const [githubUser, setGithubUser] = useState<string | null>(null);
+
+  // Disconnect Modal 상태
+  const [isDisconnectModalOpen, setIsDisconnectModalOpen] = useState(false);
+
+  // Toast 메세지 상태
+  const [toastState, setToastState] = useState<{
+    isOpen: boolean;
+    message: string;
+    type: ToastType;
+  }>({
+    isOpen: false,
+    message: "",
+    type: "success",
+  });
 
   const [projects, setProjects] = useState<Project[]>(INITIAL_PROJECTS);
   const [inquiries, setInquiries] = useState<Inquiry[]>(INITIAL_INQUIRIES);
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
+
+  const triggerToast = (message: string, type: ToastType = "success") => {
+    setToastState({ isOpen: true, message, type });
+  };
+
+  const handleCloseToast = () => {
+    setToastState((prev) => ({ ...prev, isOpen: false }));
+  };
 
   /**
    * Supabase Auth 세션 체크
@@ -36,6 +60,9 @@ export function useAdminPage() {
             session.user.email ||
             "CONNECTED",
         );
+        // 추가: OAuth 콜백 후 해당 페이지로 복귀 시 관리자 로그인 모달 스킵
+        setIsAuthenticated(true);
+        setIsAuthModalOpen(false);
       } else {
         setIsGithubConnected(false);
         setGithubUser(null);
