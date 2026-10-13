@@ -85,19 +85,31 @@ export function useAdminPage() {
     });
 
     if (error) {
-      alert(`GitHub 연동 에러: ${error.message}`);
+      triggerToast(`GitHub 연동 에러: ${error.message}`, "danger");
     }
+  };
+
+  const handleOpenDisconnectModal = () => {
+    setIsDisconnectModalOpen(true);
+  };
+
+  const handleCloseDisconnectModal = () => {
+    setIsDisconnectModalOpen(false);
   };
 
   /**
    * Github OAuth 연동 해제
    */
   const handleDisconnectGithub = async () => {
-    if (confirm("GitHub 연동을 해제하시겠습니까?")) {
-      await supabase.auth.signOut();
-      setIsGithubConnected(false);
-      setGithubUser(null);
-    }
+    // 추가: 토스트 메세지 출력
+    setIsDisconnectModalOpen(false);
+    await supabase.auth.signOut();
+    setIsGithubConnected(false);
+    setGithubUser(null);
+    triggerToast(
+      "GitHub 계정 연동 및 아카이빙 데이터가 해제되었습니다.",
+      "warning",
+    );
   };
 
   /**
@@ -106,6 +118,9 @@ export function useAdminPage() {
   const handleAuthSuccess = () => {
     setIsAuthenticated(true);
     setIsAuthModalOpen(false);
+    if (isGithubConnected) {
+      triggerToast("GitHub 계정이 성공적으로 연동되었습니다.", "success");
+    }
   };
 
   /**
@@ -114,7 +129,7 @@ export function useAdminPage() {
    */
   const handleAuthFailure = (errorMsg: string) => {
     setTimeout(() => {
-      alert(`${errorMsg}\n메인 페이지로 이동합니다.`);
+      triggerToast(`${errorMsg} 메인 페이지로 이동합니다.`, "warning");
       router.push("/");
     }, 1200);
   };
@@ -124,9 +139,8 @@ export function useAdminPage() {
    * @param id
    */
   const handleDeleteProject = (id: string) => {
-    if (confirm("해당 프로젝트를 삭제하시겠습니까?")) {
-      setProjects((prev) => prev.filter((p) => p.id !== id));
-    }
+    setProjects((prev) => prev.filter((p) => p.id !== id));
+    triggerToast("프로젝트가 성공적으로 삭제되었습니다.", "success");
   };
 
   /**
@@ -143,6 +157,8 @@ export function useAdminPage() {
         return p;
       }),
     );
+
+    triggerToast("프로젝트 게시 상태가 변경되었습니다.", "success");
   };
 
   /**
@@ -151,6 +167,7 @@ export function useAdminPage() {
    */
   const handleRemoveInquiry = (id: string) => {
     setInquiries((prev) => prev.filter((i) => i.id !== id));
+    triggerToast("취업 제안이 삭제되었습니다.", "success");
   };
 
   return {
@@ -158,11 +175,17 @@ export function useAdminPage() {
     isAuthModalOpen,
     isGithubConnected,
     githubUser,
+    isDisconnectModalOpen,
+    toastState,
     projects,
     inquiries,
     activeTab,
     setActiveTab,
+    triggerToast,
+    handleCloseToast,
     handleConnectGithub,
+    handleOpenDisconnectModal,
+    handleCloseDisconnectModal,
     handleDisconnectGithub,
     handleAuthSuccess,
     handleAuthFailure,
