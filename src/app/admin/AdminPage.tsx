@@ -9,6 +9,7 @@ import "./AdminPage.scss";
 
 export function AdminPage() {
   const {
+    isAuthLoading,
     isAuthenticated,
     isAuthModalOpen,
     isGithubConnected,
@@ -34,11 +35,14 @@ export function AdminPage() {
   return (
     <div className="admin-container">
       {/* 관리자 인증 모달 */}
-      <AdminAuthModal
-        isOpen={!isAuthenticated && isAuthModalOpen}
-        onSuccess={handleAuthSuccess}
-        onFailure={handleAuthFailure}
-      />
+      {/* 추가: 세션 검수가 끝난 경우에만 로그인 모달 팝업_ 점멸 현상 방지 */}
+      {!isAuthLoading && (
+        <AdminAuthModal
+          isOpen={!isAuthenticated && isAuthModalOpen}
+          onSuccess={handleAuthSuccess}
+          onFailure={handleAuthFailure}
+        />
+      )}
 
       {/* GitHub 연동 해제 모달: 최고 단계 경고 */}
       <ConfirmModal

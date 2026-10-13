@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { INITIAL_PROJECTS, INITIAL_INQUIRIES } from "@/constants";
 import { Project, Inquiry, AdminTab } from "@/types";
@@ -9,7 +9,11 @@ import { ToastType } from "@/components/Toast";
 
 export function useAdminPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
+
+  // 추가: 세션 로딩 상태(관리자 인증 모달 점멸 현상 방지)
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
@@ -18,7 +22,7 @@ export function useAdminPage() {
   const [isGithubConnected, setIsGithubConnected] = useState(false);
   const [githubUser, setGithubUser] = useState<string | null>(null);
 
-  // Github OAuth 연동 모달 상태
+  // Github OAuth 연동 해제 모달 상태
   const [isDisconnectModalOpen, setIsDisconnectModalOpen] = useState(false);
 
   // Toast 메세지 상태
@@ -47,25 +51,47 @@ export function useAdminPage() {
   /**
    * Supabase Auth 세션 체크
    * Github OAuth 연동 유무 확인
+   * 추가: Supabase Auth 세션 검수 및 OAuth 복귀 시 인증 기능 핸들링
    */
   useEffect(() => {
     const checkGithubSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (session && session.user) {
-        setIsGithubConnected(true);
-        setGithubUser(
-          session.user.user_metadata?.preferred_username ||
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (session && session.user) {
+          const username =
+            session.user.user_metadata?.preferred_username ||
             session.user.email ||
-            "CONNECTED",
-        );
-        // 추가: OAuth 콜백 후 해당 페이지로 복귀 시 관리자 로그인 모달 스킵
-        setIsAuthenticated(true);
-        setIsAuthModalOpen(false);
-      } else {
-        setIsGithubConnected(false);
-        setGithubUser(null);
+            "CONNECTED";
+
+          setIsGithubConnected(true);
+          setGithubUser(username);
+
+          // GitHub 연동 계정이 존재하면 어드민 인증 통과
+          setIsAuthenticated(true);
+          setIsAuthModalOpen(false);
+
+          // OAuth 인증 직후 콜백(?connected=true)으로 들어온 경우 토스트 출력
+          const isJustConnected = searchParams.get("connected") === "true";
+          if (isJustConnected) {
+            triggerToast(
+              `GitHub 계정(${username})이 성공적으로 연동되었습니다!`,
+              "success",
+            );
+            // URL Clean-up(쿼리 파라미터 제거)
+            router.replace("/admin", { scroll: false });
+          }
+        } else {
+          setIsGithubConnected(false);
+          setGithubUser(null);
+        }
+      } catch (error) {
+        console.error("Session check error:", error);
+      } finally {
+        // 추가: 세션 점검 완료 후 로딩 해제(인증 모달 점멸 방지)
+        setIsAuthLoading(false);
       }
     };
 
@@ -77,12 +103,13 @@ export function useAdminPage() {
    */
   const handleConnectGithub = async () => {
     // 연동 성공 시 리다이렉팅하면서 관리자 권한 재요청 무시하기 위함
-    sessionStorage.removeItem('github_connect_noticed');
+    sessionStorage.removeItem("github_connect_noticed");
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
         scopes: "repo read:user",
-        redirectTo: `${window.location.origin}/api/auth/github/callback?next=/admin`,
+        // 추가: 연동 성공 후 콜백 시 ?connected=true 쿼리 파라미터를 붙여서 토스트 출력
+        redirectTo: `${window.location.origin}/api/auth/github/callback?next=/admin?connected=true`,
       },
     });
 
@@ -103,14 +130,21 @@ export function useAdminPage() {
    * Github OAuth 연동 해제
    */
   const handleConfirmDisconnectGithub = async () => {
-    // 추가: 토스트 메세지 출력
     setIsDisconnectModalOpen(false);
+
     await supabase.auth.signOut();
+
+    // 세션 스토리지 클리어
+    if (typeof window !== "undefined") {
+      sessionStorage.clear();
+    }
+
     setIsGithubConnected(false);
     setGithubUser(null);
+
     triggerToast(
-      "GitHub 계정 연동 및 아카이빙 데이터가 해제되었습니다.",
-      "warning",
+      "GitHub 계정 연동 및 자동 로그인 세션이 해제되었습니다.",
+      "success",
     );
   };
 
@@ -131,7 +165,7 @@ export function useAdminPage() {
    */
   const handleAuthFailure = (errorMsg: string) => {
     setTimeout(() => {
-      triggerToast(`${errorMsg} 메인 페이지로 이동합니다.`, "warning");
+      triggerToast(`${errorMsg}\n메인 페이지로 이동합니다.`, "warning");
       router.push("/");
     }, 1200);
   };
@@ -173,6 +207,7 @@ export function useAdminPage() {
   };
 
   return {
+    isAuthLoading,
     isAuthenticated,
     isAuthModalOpen,
     isGithubConnected,
