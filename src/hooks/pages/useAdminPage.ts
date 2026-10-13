@@ -18,7 +18,7 @@ export function useAdminPage() {
   const [isGithubConnected, setIsGithubConnected] = useState(false);
   const [githubUser, setGithubUser] = useState<string | null>(null);
 
-  // Disconnect Modal 상태
+  // Github OAuth 연동 모달 상태
   const [isDisconnectModalOpen, setIsDisconnectModalOpen] = useState(false);
 
   // Toast 메세지 상태
@@ -76,6 +76,8 @@ export function useAdminPage() {
    * Github OAuth 연동 요청
    */
   const handleConnectGithub = async () => {
+    // 연동 성공 시 리다이렉팅하면서 관리자 권한 재요청 무시하기 위함
+    sessionStorage.removeItem('github_connect_noticed');
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
@@ -140,7 +142,7 @@ export function useAdminPage() {
    */
   const handleDeleteProject = (id: string) => {
     setProjects((prev) => prev.filter((p) => p.id !== id));
-    triggerToast("프로젝트가 성공적으로 삭제되었습니다.", "success");
+    triggerToast("프로젝트가 삭제되었습니다.", "success");
   };
 
   /**

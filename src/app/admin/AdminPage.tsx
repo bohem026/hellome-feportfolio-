@@ -43,7 +43,7 @@ export function AdminPage() {
       {/* GitHub 연동 해제 모달: 최고 단계 경고 */}
       <ConfirmModal
         isOpen={isDisconnectModalOpen}
-        title="[DANGER] GITHUB ACCOUNT DISCONNECT"
+        title="GITHUB ACCOUNT DISCONNECT"
         message="GitHub 연동이 해제됩니다. 연동이 해제되면 아카이빙 중인 레포지토리 목록 데이터 참조가 즉시 초기화됩니다. 계속 진행하시겠습니까?"
         confirmText="UNLINK"
         cancelText="CANCEL"
