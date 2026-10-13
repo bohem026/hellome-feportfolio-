@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Modal } from "@/components/Modal";
+import { ConfirmModal } from "@/components/ConfirmModal";
 import { Toast } from "@/components/Toast";
 import { useHeader } from "@/hooks";
 import "./Header.scss";
@@ -84,7 +84,7 @@ export function Header() {
       </header>
 
       {/* 테스트용 */}
-      <Modal
+      <ConfirmModal
         isOpen={isModalOpen}
         title="시스템 가용성 안내"
         message="2026년 Q3/Q4 신규 프론트엔드 구축 및 디자인 시스템 파트너십 제안이 가능합니다. 계속 진행하시겠습니까?"

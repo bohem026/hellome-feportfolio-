@@ -3,6 +3,8 @@
 import React from "react";
 import { useAdminPage } from "@/hooks";
 import { AdminAuthModal } from "@/components/AdminAuthModal";
+import { ConfirmModal } from "@/components/ConfirmModal";
+import { Toast } from "@/components/Toast";
 import "./AdminPage.scss";
 
 export function AdminPage() {
@@ -11,12 +13,17 @@ export function AdminPage() {
     isAuthModalOpen,
     isGithubConnected,
     githubUser,
+    isDisconnectModalOpen,
+    toastState,
     projects,
     inquiries,
     activeTab,
     setActiveTab,
+    handleCloseToast,
     handleConnectGithub,
-    handleDisconnectGithub,
+    handleOpenDisconnectModal,
+    handleCloseDisconnectModal,
+    handleConfirmDisconnectGithub,
     handleAuthSuccess,
     handleAuthFailure,
     handleDeleteProject,
@@ -31,6 +38,25 @@ export function AdminPage() {
         isOpen={!isAuthenticated && isAuthModalOpen}
         onSuccess={handleAuthSuccess}
         onFailure={handleAuthFailure}
+      />
+
+      {/* GitHub 연동 해제 모달: 최고 단계 경고 */}
+      <ConfirmModal
+        isOpen={isDisconnectModalOpen}
+        title="[DANGER] GITHUB ACCOUNT DISCONNECT"
+        message="GitHub 연동이 해제됩니다. 연동이 해제되면 아카이빙 중인 레포지토리 목록 데이터 참조가 즉시 초기화됩니다. 계속 진행하시겠습니까?"
+        confirmText="UNLINK"
+        cancelText="CANCEL"
+        type="danger"
+        onConfirm={handleConfirmDisconnectGithub}
+        onCancel={handleCloseDisconnectModal}
+      />
+
+      <Toast
+        open={toastState.isOpen}
+        message={toastState.message}
+        type={toastState.type}
+        onClose={handleCloseToast}
       />
 
       {/* 배경 레이아웃 (인증 미완료 시 스켈레톤 UI 적용) */}
@@ -86,7 +112,7 @@ export function AdminPage() {
               {isGithubConnected ? (
                 <button
                   className="btn-outline disconnect"
-                  onClick={handleDisconnectGithub}
+                  onClick={handleOpenDisconnectModal}
                 >
                   DISCONNECT GITHUB
                 </button>
@@ -200,8 +226,7 @@ export function AdminPage() {
                             </td>
                           </tr>
                         ))
-                      : /* 스켈레톤 행 렌더링 */
-                        [1, 2, 3].map((idx) => (
+                      : [1, 2, 3].map((idx) => (
                           <tr key={idx} className="skeleton-row">
                             <td>
                               <div className="skeleton-box thumb-box" />
@@ -265,5 +290,3 @@ export function AdminPage() {
     </div>
   );
 }
-
-export default AdminPage;

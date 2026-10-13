@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import "./Modal.scss";
+import "./ConfirmModal.scss";
 
 export interface ModalProps {
   isOpen: boolean;
@@ -14,7 +14,7 @@ export interface ModalProps {
   onCancel: () => void;
 }
 
-export function Modal({
+export function ConfirmModal({
   isOpen,
   title,
   message,

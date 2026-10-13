@@ -100,7 +100,7 @@ export function useAdminPage() {
   /**
    * Github OAuth 연동 해제
    */
-  const handleDisconnectGithub = async () => {
+  const handleConfirmDisconnectGithub = async () => {
     // 추가: 토스트 메세지 출력
     setIsDisconnectModalOpen(false);
     await supabase.auth.signOut();
@@ -186,7 +186,7 @@ export function useAdminPage() {
     handleConnectGithub,
     handleOpenDisconnectModal,
     handleCloseDisconnectModal,
-    handleDisconnectGithub,
+    handleConfirmDisconnectGithub,
     handleAuthSuccess,
     handleAuthFailure,
     handleDeleteProject,
