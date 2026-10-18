@@ -76,10 +76,7 @@ export function useAdminPage() {
           // OAuth 인증 직후 콜백(?connected=true)으로 들어온 경우 토스트 출력
           const isJustConnected = searchParams.get("connected") === "true";
           if (isJustConnected) {
-            triggerToast(
-              `GitHub 계정이 성공적으로 연동되었습니다!`,
-              "success",
-            );
+            triggerToast(`GitHub 계정이 성공적으로 연동되었습니다!`, "success");
             // URL Clean-up(쿼리 파라미터 제거)
             router.replace("/admin", { scroll: false });
           }
@@ -96,20 +93,26 @@ export function useAdminPage() {
     };
 
     checkGithubSession();
-  }, []);
+  }, [searchParams, router]);
 
   /**
    * Github OAuth 연동 요청
+   * 추가: 재연동 시 모달 강제 팝업
    */
   const handleConnectGithub = async () => {
     // 연동 성공 시 리다이렉팅하면서 관리자 권한 재요청 무시하기 위함
-    sessionStorage.removeItem("github_connect_noticed");
+    // sessionStorage.removeItem("github_connect_noticed");
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
         scopes: "repo read:user",
         // 추가: 연동 성공 후 콜백 시 ?connected=true 쿼리 파라미터를 붙여서 토스트 출력
         redirectTo: `${window.location.origin}/api/auth/github/callback?next=/admin?connected=true`,
+        // 추가: 기존 GitHub 자동 로그인 쿠키를 무시하고 모달을 강제로 띄움
+        queryParams: {
+          prompt: "consent",
+        },
       },
     });
 
@@ -132,7 +135,7 @@ export function useAdminPage() {
   const handleConfirmDisconnectGithub = async () => {
     setIsDisconnectModalOpen(false);
 
-    await supabase.auth.signOut();
+    await supabase.auth.signOut({ scope: "global" });
 
     // 세션 스토리지 클리어
     if (typeof window !== "undefined") {
@@ -142,10 +145,7 @@ export function useAdminPage() {
     setIsGithubConnected(false);
     setGithubUser(null);
 
-    triggerToast(
-      "GitHub 계정 연동이 해제되었습니다.",
-      "success",
-    );
+    triggerToast("GitHub 계정 연동이 해제되었습니다.", "success");
   };
 
   /**
