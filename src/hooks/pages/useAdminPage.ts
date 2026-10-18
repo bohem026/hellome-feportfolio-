@@ -76,10 +76,6 @@ export function useAdminPage() {
           setIsGithubConnected(true);
           setGithubUser(username);
 
-          // GitHub 연동 계정이 존재하면 어드민 인증 통과
-          setIsAuthenticated(true);
-          setIsAuthModalOpen(false);
-
           // OAuth 인증 직후 콜백(?connected=true)으로 들어온 경우 성공 처리
           const isJustConnected = searchParams.get("connected") === "true";
           // 추가: 깃허브 연동 승인과 함께 관리자 인증 세션도 함께 부여
@@ -164,12 +160,10 @@ export function useAdminPage() {
    * /admin이 아닌 다른 주소로 이동하는 즉시 인증 세션 삭제
    */
   useEffect(() => {
-    return () => {
-      if (typeof window !== "undefined" && pathname !== "/admin") {
-        sessionStorage.removeItem("admin_authenticated");
-        setIsAuthenticated(false);
-      }
-    };
+    if (pathname !== "/admin" && typeof window !== "undefined") {
+      sessionStorage.removeItem("admin_authenticated");
+      setIsAuthenticated(false);
+    }
   }, [pathname]);
 
   /**
