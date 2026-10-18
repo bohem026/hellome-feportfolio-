@@ -16,7 +16,7 @@ export function useAdminPage() {
   // 추가: 세션 로딩 상태(관리자 인증 모달 점멸 현상 방지)
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
-  // 로그인 세션 확인_ 탭/브라우저 닫으면 자동 삭제됨
+  // 관리자 로그인 세션 확인_ sessionStorage 기반
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       return sessionStorage.getItem("admin_authenticated") === "true";
@@ -80,9 +80,14 @@ export function useAdminPage() {
           setIsAuthenticated(true);
           setIsAuthModalOpen(false);
 
-          // OAuth 인증 직후 콜백(?connected=true)으로 들어온 경우 토스트 출력
+          // OAuth 인증 직후 콜백(?connected=true)으로 들어온 경우 성공 처리
           const isJustConnected = searchParams.get("connected") === "true";
+          // 추가: 깃허브 연동 승인과 함께 관리자 인증 세션도 함께 부여
           if (isJustConnected) {
+            sessionStorage.setItem("admin_authenticated", "true");
+            setIsAuthenticated(true);
+            setIsAuthModalOpen(false);
+
             triggerToast(`GitHub 계정이 성공적으로 연동되었습니다!`, "success");
             // URL Clean-up(쿼리 파라미터 제거)
             router.replace("/admin", { scroll: false });
@@ -160,8 +165,9 @@ export function useAdminPage() {
    */
   useEffect(() => {
     return () => {
-      if (typeof window !== 'undefined' && window.location.pathname !== '/admin') {
-        sessionStorage.removeItem('admin_authenticated');
+      if (typeof window !== "undefined" && pathname !== "/admin") {
+        sessionStorage.removeItem("admin_authenticated");
+        setIsAuthenticated(false);
       }
     };
   }, [pathname]);
