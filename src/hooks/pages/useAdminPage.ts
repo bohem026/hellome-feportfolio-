@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { INITIAL_PROJECTS, INITIAL_INQUIRIES } from "@/constants";
 import { Project, Inquiry, AdminTab } from "@/types";
@@ -10,6 +10,7 @@ import { ToastType } from "@/components/Toast";
 export function useAdminPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const supabase = createClient();
 
   // 추가: 세션 로딩 상태(관리자 인증 모달 점멸 현상 방지)
@@ -155,6 +156,17 @@ export function useAdminPage() {
   };
 
   /**
+   * /admin이 아닌 다른 주소로 이동하는 즉시 인증 세션 삭제
+   */
+  useEffect(() => {
+    return () => {
+      if (typeof window !== 'undefined' && window.location.pathname !== '/admin') {
+        sessionStorage.removeItem('admin_authenticated');
+      }
+    };
+  }, [pathname]);
+
+  /**
    * 인증 성공 처리
    */
   const handleAuthSuccess = () => {
@@ -165,6 +177,7 @@ export function useAdminPage() {
 
     setIsAuthenticated(true);
     setIsAuthModalOpen(false);
+
     if (isGithubConnected) {
       triggerToast("GitHub 계정이 성공적으로 연동되었습니다.", "success");
     }
