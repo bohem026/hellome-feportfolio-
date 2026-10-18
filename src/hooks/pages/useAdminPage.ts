@@ -159,9 +159,9 @@ export function useAdminPage() {
    */
   const handleAuthSuccess = () => {
     // 추가: 관리자 인증 성공 시 sessionStorage에 등록
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("admin_authenticated", "true");
-    }
+    // if (typeof window !== "undefined") {
+    //   sessionStorage.setItem("admin_authenticated", "true");
+    // }
 
     setIsAuthenticated(true);
     setIsAuthModalOpen(false);
