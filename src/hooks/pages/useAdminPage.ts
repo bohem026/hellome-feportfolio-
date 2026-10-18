@@ -10,19 +10,15 @@ import { ToastType } from "@/components/Toast";
 export function useAdminPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const pathname = usePathname();
+  // const pathname = usePathname();
   const supabase = createClient();
 
   // 추가: 세션 로딩 상태(관리자 인증 모달 점멸 현상 방지)
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   // 관리자 로그인 세션 확인_ sessionStorage 기반
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      return sessionStorage.getItem("admin_authenticated") === "true";
-    }
-    return false;
-  });
+  // 수정: 스토리지 참조 전면 제거
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
 
   // Github OAuth 연동 상태
@@ -80,12 +76,12 @@ export function useAdminPage() {
           const isJustConnected = searchParams.get("connected") === "true";
           // 추가: 깃허브 연동 승인과 함께 관리자 인증 세션도 함께 부여
           if (isJustConnected) {
-            // sessionStorage.setItem("admin_authenticated", "true");
+            sessionStorage.setItem("admin_authenticated", "true");
             setIsAuthenticated(true);
             setIsAuthModalOpen(false);
 
             triggerToast(`GitHub 계정이 성공적으로 연동되었습니다!`, "success");
-            // URL Clean-up(쿼리 파라미터 제거)
+            // URL 쿼리 파라미터 클린업(?connected=true 제거)
             router.replace("/admin", { scroll: false });
           }
         } else {
@@ -145,36 +141,19 @@ export function useAdminPage() {
 
     await supabase.auth.signOut({ scope: "global" });
 
-    // 세션 스토리지 클리어
-    if (typeof window !== "undefined") {
-      sessionStorage.clear();
-    }
-
     setIsGithubConnected(false);
     setGithubUser(null);
+    setIsAuthenticated(false);
+    setIsAuthModalOpen(true);
 
     triggerToast("GitHub 계정 연동이 해제되었습니다.", "success");
   };
 
   /**
-   * /admin이 아닌 다른 주소로 이동하는 즉시 인증 세션 삭제
-   */
-  useEffect(() => {
-    if (pathname !== "/admin" && typeof window !== "undefined") {
-      sessionStorage.removeItem("admin_authenticated");
-      setIsAuthenticated(false);
-    }
-  }, [pathname]);
-
-  /**
    * 인증 성공 처리
+   * 수정: 리엑트 메모리 상에서만 인증 상태 보관(sessionStorage 제거)
    */
   const handleAuthSuccess = () => {
-    // 추가: 관리자 인증 성공 시 sessionStorage에 등록
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("admin_authenticated", "true");
-    }
-
     setIsAuthenticated(true);
     setIsAuthModalOpen(false);
 
