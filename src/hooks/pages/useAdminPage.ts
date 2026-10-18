@@ -77,7 +77,7 @@ export function useAdminPage() {
           const isJustConnected = searchParams.get("connected") === "true";
           if (isJustConnected) {
             triggerToast(
-              `GitHub 계정(${username})이 성공적으로 연동되었습니다!`,
+              `GitHub 계정이 성공적으로 연동되었습니다!`,
               "success",
             );
             // URL Clean-up(쿼리 파라미터 제거)
@@ -143,7 +143,7 @@ export function useAdminPage() {
     setGithubUser(null);
 
     triggerToast(
-      "GitHub 계정 연동 및 자동 로그인 세션이 해제되었습니다.",
+      "GitHub 계정 연동이 해제되었습니다.",
       "success",
     );
   };

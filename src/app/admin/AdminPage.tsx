@@ -102,7 +102,7 @@ export function AdminPage() {
               {/* GitHub Status Badge */}
               {isGithubConnected ? (
                 <span className="github-badge connected">
-                  ● GITHUB: {githubUser} (CONNECTED)
+                  ● GITHUB: CONNECTED ({githubUser})
                 </span>
               ) : (
                 <span className="github-badge disconnected">
