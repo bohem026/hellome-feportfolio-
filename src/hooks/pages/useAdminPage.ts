@@ -80,7 +80,7 @@ export function useAdminPage() {
           const isJustConnected = searchParams.get("connected") === "true";
           // 추가: 깃허브 연동 승인과 함께 관리자 인증 세션도 함께 부여
           if (isJustConnected) {
-            sessionStorage.setItem("admin_authenticated", "true");
+            // sessionStorage.setItem("admin_authenticated", "true");
             setIsAuthenticated(true);
             setIsAuthModalOpen(false);
 
