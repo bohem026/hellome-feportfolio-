@@ -15,7 +15,13 @@ export function useAdminPage() {
   // 추가: 세션 로딩 상태(관리자 인증 모달 점멸 현상 방지)
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // 로그인 세션 확인_ 탭/브라우저 닫으면 자동 삭제됨
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("admin_authenticated") === "true";
+    }
+    return false;
+  });
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
 
   // Github OAuth 연동 상태
@@ -152,6 +158,11 @@ export function useAdminPage() {
    * 인증 성공 처리
    */
   const handleAuthSuccess = () => {
+    // 추가: 관리자 인증 성공 시 sessionStorage에 등록
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("admin_authenticated", "true");
+    }
+
     setIsAuthenticated(true);
     setIsAuthModalOpen(false);
     if (isGithubConnected) {
