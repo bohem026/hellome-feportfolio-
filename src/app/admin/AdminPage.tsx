@@ -13,6 +13,7 @@ export function AdminPage() {
     isAuthenticated,
     isAuthModalOpen,
     isGithubConnected,
+    isDataVisible,
     githubUser,
     isDisconnectModalOpen,
     toastState,
@@ -65,9 +66,7 @@ export function AdminPage() {
       />
 
       {/* 배경 레이아웃 (인증 미완료 시 스켈레톤 UI 적용) */}
-      <div
-        className={`admin-layout ${!isAuthenticated ? "skeleton-mode" : ""}`}
-      >
+      <div className={`admin-layout ${!isDataVisible ? "skeleton-mode" : ""}`}>
         {/* Sidebar */}
         <aside className="admin-sidebar">
           <span className="sidebar-title">CMS OPERATING CORE</span>
@@ -117,7 +116,7 @@ export function AdminPage() {
               {!isGithubConnected && isAuthenticated && (
                 <div className="speech-bubble">
                   <span className="bubble-arrow" />
-                  👈 계정을 연동하여 Repository 데이터를 활성화하세요!
+                  깃허브 계정을 연동하여 아카이빙을 시작
                 </div>
               )}
 
