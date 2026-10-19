@@ -112,14 +112,6 @@ export function AdminPage() {
             </div>
 
             <div className="console-actions">
-              {/* 연동 유도 말풍선 UI */}
-              {!isGithubConnected && isAuthenticated && (
-                <div className="speech-bubble">
-                  <span className="bubble-arrow" />
-                  깃허브 계정을 연동하여 아카이빙을 시작
-                </div>
-              )}
-
               {/* GitHub Connect/Disconnect Button */}
               {isGithubConnected ? (
                 <button
@@ -129,12 +121,21 @@ export function AdminPage() {
                   DISCONNECT GITHUB
                 </button>
               ) : (
-                <button
-                  className="btn-outline connect"
-                  onClick={handleConnectGithub}
-                >
-                  CONNECT GITHUB
-                </button>
+                <div className="connect-btn-wrapper">
+                  {/* 연동 유도 말풍선 UI */}
+                  {!isGithubConnected && isAuthenticated && (
+                    <div className="speech-bubble top">
+                      깃허브 계정을 연동하여 아카이빙을 시작
+                      <span className="bubble-arrow" />
+                    </div>
+                  )}
+                  <button
+                    className="btn-outline connect"
+                    onClick={handleConnectGithub}
+                  >
+                    CONNECT GITHUB
+                  </button>
+                </div>
               )}
 
               <button className="btn-solid" disabled={!isGithubConnected}>

@@ -169,79 +169,88 @@ body {
         }
 
         .console-actions {
-          position: relative;
           display: flex;
           align-items: center;
           gap: 12px;
 
-          /* 말풍선 연동 유도 UI */
-          .speech-bubble {
+          .connect-btn-wrapper {
             position: relative;
-            background: #000000;
-            color: #00ff66;
-            padding: 6px 12px;
-            font-size: 11px;
-            font-weight: 700;
-            border: 1px solid #000000;
-            white-space: nowrap;
-            animation: pulse 1.8s infinite ease-in-out;
+            display: inline-flex;
 
-            .bubble-arrow {
+            /* 말풍선 연동 유도 UI */
+            .speech-bubble {
               position: absolute;
-              right: -6px;
-              top: 50%;
-              transform: translateY(-50%);
-              width: 0;
-              height: 0;
-              border-top: 5px solid transparent;
-              border-bottom: 5px solid transparent;
-              border-left: 6px solid #000000;
+              bottom: calc(100% + 10px);
+              left: 50%;
+              transform: translateX(-50%);
+              background: #000000;
+              color: #00ff66;
+              padding: 6px 12px;
+              font-size: 11px;
+              font-weight: 700;
+              border: 1px solid #000000;
+              white-space: nowrap;
+              z-index: 10;
+              box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.15);
+              animation: bounce 1.6s infinite ease-in-out;
+
+              .bubble-arrow {
+                position: absolute;
+                right: -6px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 0;
+                height: 0;
+                border-top: 5px solid transparent;
+                border-bottom: 5px solid transparent;
+                border-left: 6px solid #000000;
+              }
             }
-          }
 
-          @keyframes pulse {
-            0%,
-            100% {
-              transform: scale(1);
-            }
-            50% {
-              transform: scale(1.03);
-            }
-          }
+            button {
+              padding: 8px 12px;
+              font-size: 10px;
+              font-weight: 800;
+              cursor: pointer;
+              border: 1px solid #000000;
+              transition: all 0.2s ease;
 
-          button {
-            padding: 8px 12px;
-            font-size: 10px;
-            font-weight: 800;
-            cursor: pointer;
-            border: 1px solid #000000;
-            transition: all 0.2s ease;
+              &.btn-outline {
+                background: transparent;
+                color: #000000;
 
-            &.btn-outline {
-              background: transparent;
-              color: #000000;
+                &.connect:hover {
+                  background: #000000;
+                  color: #ffffff;
+                }
 
-              &.connect:hover {
+                &.disconnect:hover {
+                  background: #dc2626;
+                  color: #ffffff;
+                  border-color: #dc2626;
+                }
+              }
+
+              &.btn-solid {
                 background: #000000;
                 color: #ffffff;
-              }
 
-              &.disconnect:hover {
-                background: #dc2626;
-                color: #ffffff;
-                border-color: #dc2626;
-              }
-            }
-
-            &.btn-solid {
-              background: #000000;
-              color: #ffffff;
-
-              &:disabled {
-                opacity: 0.4;
-                cursor: not-allowed;
+                &:disabled {
+                  opacity: 0.4;
+                  cursor: not-allowed;
+                }
               }
             }
+          }
+        }
+
+        @keyframes bounce {
+          0%,
+          100% {
+            transform: translate(-50%, 0);
+          }
+          50% {
+            transform: translate(-50%, -4px);
           }
         }
       }
