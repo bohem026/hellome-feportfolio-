@@ -149,25 +149,25 @@ export function AdminPage() {
           <div className="metrics-grid">
             <div className="metric-box">
               <span className="label">TOTAL IMPRESSIONS</span>
-              <div className="value">{isAuthenticated ? "48.2K" : "•••••"}</div>
+              <div className="value">{isDataVisible ? "48.2K" : "•••••"}</div>
               <span className="sub">↑ +14.8% TREND</span>
             </div>
             <div className="metric-box">
               <span className="label">ACTIVE CASE STUDIES</span>
               <div className="value">
-                {isAuthenticated ? projects.length : "••"}
+                {isDataVisible ? projects.length : "••"}
               </div>
               <span className="sub">INDEXED & PUBLISHED</span>
             </div>
             <div className="metric-box">
               <span className="label">PENDING INQUIRIES</span>
-              <div className="value">{isAuthenticated ? "07" : "••"}</div>
+              <div className="value">{isDataVisible ? "07" : "••"}</div>
               <span className="sub">NEEDS REVIEW</span>
             </div>
             <div className="metric-box">
               <span className="label">RECRUITER INQUIRIES</span>
               <div className="value">
-                {isAuthenticated ? inquiries.length : "••"}
+                {isDataVisible ? inquiries.length : "••"}
               </div>
               <span className="sub">JOB PROPOSALS</span>
             </div>
@@ -179,7 +179,7 @@ export function AdminPage() {
               <div className="section-title-bar">
                 <span>[LIBRARY DISPATCH]</span>
                 <span>
-                  {isAuthenticated
+                  {isDataVisible
                     ? `${projects.length} ITEMS RECORDED`
                     : "RESTRICTED"}
                 </span>
@@ -197,7 +197,7 @@ export function AdminPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {isAuthenticated
+                    {isDataVisible
                       ? projects.map((proj) => (
                           <tr key={proj.id}>
                             <td>
@@ -271,7 +271,7 @@ export function AdminPage() {
               </div>
 
               <div className="queue-list">
-                {isAuthenticated
+                {isDataVisible
                   ? inquiries.map((inq) => (
                       <div className="queue-card" key={inq.id}>
                         <div className="queue-top">
