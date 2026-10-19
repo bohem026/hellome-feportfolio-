@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { INITIAL_PROJECTS, INITIAL_INQUIRIES } from "@/constants";
-import { Project, Inquiry, AdminTab } from "@/types";
+import { Project, Inquiry, AdminTab, GithubRepo } from "@/types";
 import { ToastType } from "@/components/Toast";
 
 export function useAdminPage() {
@@ -25,8 +25,14 @@ export function useAdminPage() {
   const [isGithubConnected, setIsGithubConnected] = useState(false);
   const [githubUser, setGithubUser] = useState<string | null>(null);
 
-  // Github OAuth 연동 해제 모달 상태
+  // Github 관련 모달 상태
   const [isDisconnectModalOpen, setIsDisconnectModalOpen] = useState(false);
+  const [isRepoModalOpen, setIsRepoModalOpen] = useState(false);
+
+  // GitHub 레포지토리 데이터 관련 상태
+  const [repositories, setRepositories] = useState<GithubRepo[]>([]);
+  const [isRepoLoading, setIsRepoLoading] = useState(false);
+  const [selectedRepo, setSelectedRepo] = useState<GithubRepo | null>(null);
 
   // Toast 메세지 상태
   const [toastState, setToastState] = useState<{
@@ -101,6 +107,71 @@ export function useAdminPage() {
 
     checkGithubSession();
   }, [searchParams, router]);
+
+  // GitHub 레포지토리 목록 불러오기
+  const fetchGithubRepositories = async () => {
+    setIsRepoLoading(true);
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session || !session.provider_token) {
+        triggerToast("세션이 만료되었습니다. 다시 연동해 주세요.", "danger");
+        return;
+      }
+
+      const response = await fetch(
+        "https://api.github.com/user/repos?type=public&sort=updated&per_page=100",
+        {
+          headers: {
+            Authorization: `Bearer ${session.provider_token}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("레포지토리 목록을 불러오는 데 실패했습니다.");
+      }
+
+      const data: GithubRepo[] = await response.json();
+      setRepositories(data);
+      setIsRepoModalOpen(true);
+    } catch (error: any) {
+      triggerToast(
+        error.message || "레포지토리 목록 로드 중 오류가 발생했습니다.",
+        "danger",
+      );
+    } finally {
+      setIsRepoLoading(false);
+    }
+  };
+
+  // 레포지토리 선택 후 아카이빙(프로젝트 등록) 실행
+  const handleArchiveRepo = (repo: GithubRepo) => {
+    const newProject: Project = {
+      id: `proj_${Date.now()}`,
+      title: repo.name,
+      category: repo.language || "Web Application",
+      description:
+        repo.description || "GitHub 레포지토리로부터 임포트된 프로젝트입니다.",
+      image_url:
+        "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
+      status: "PUBLISHED",
+      visibility: "PUBLIC",
+      github_url: repo.html_url,
+      stars: repo.stargazers_count,
+    };
+
+    setProjects((prev) => [newProject, ...prev]);
+    setIsRepoModalOpen(false);
+    setSelectedRepo(null);
+    triggerToast(
+      `[${repo.name}] 레포지토리가 성공적으로 아카이빙되었습니다!`,
+      "success",
+    );
+  };
 
   /**
    * Github OAuth 연동 요청
@@ -220,6 +291,12 @@ export function useAdminPage() {
     isDataVisible,
     githubUser,
     isDisconnectModalOpen,
+    isRepoModalOpen,
+    setIsRepoModalOpen,
+    repositories,
+    isRepoLoading,
+    selectedRepo,
+    setSelectedRepo,
     toastState,
     projects,
     inquiries,
@@ -228,6 +305,8 @@ export function useAdminPage() {
     triggerToast,
     handleCloseToast,
     handleConnectGithub,
+    fetchGithubRepositories,
+    handleArchiveRepo,
     handleOpenDisconnectModal,
     handleCloseDisconnectModal,
     handleConfirmDisconnectGithub,

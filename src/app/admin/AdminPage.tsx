@@ -6,6 +6,7 @@ import { AdminAuthModal } from "@/components/AdminAuthModal";
 import { ConfirmModal } from "@/components/ConfirmModal";
 import { Toast } from "@/components/Toast";
 import "./AdminPage.scss";
+import { RepoImportModal } from "@/components/RepoImportModal";
 
 export function AdminPage() {
   const {
@@ -16,6 +17,10 @@ export function AdminPage() {
     isDataVisible,
     githubUser,
     isDisconnectModalOpen,
+    isRepoModalOpen,
+    setIsRepoModalOpen,
+    repositories,
+    isRepoLoading,
     toastState,
     projects,
     inquiries,
@@ -23,6 +28,8 @@ export function AdminPage() {
     setActiveTab,
     handleCloseToast,
     handleConnectGithub,
+    fetchGithubRepositories,
+    handleArchiveRepo,
     handleOpenDisconnectModal,
     handleCloseDisconnectModal,
     handleConfirmDisconnectGithub,
@@ -55,6 +62,15 @@ export function AdminPage() {
         type="danger"
         onConfirm={handleConfirmDisconnectGithub}
         onCancel={handleCloseDisconnectModal}
+      />
+
+      {/* 레포지토리 가져오기 모달 */}
+      <RepoImportModal
+        isOpen={isRepoModalOpen}
+        isLoading={isRepoLoading}
+        repositories={repositories}
+        onClose={() => setIsRepoModalOpen(false)}
+        onArchive={handleArchiveRepo}
       />
 
       {/* Toast 알림 */}
@@ -138,8 +154,12 @@ export function AdminPage() {
                 </div>
               )}
 
-              <button className="btn-solid" disabled={!isGithubConnected}>
-                + IMPORT FROM REPO
+              <button
+                className="btn-solid"
+                disabled={!isGithubConnected || isRepoLoading}
+                onClick={fetchGithubRepositories}
+              >
+                {isRepoLoading ? "LOADING..." : "+ IMPORT FROM REPO"}
               </button>
             </div>
           </div>
@@ -203,7 +223,7 @@ export function AdminPage() {
                           <tr key={proj.id}>
                             <td>
                               <img
-                                src={proj.imageUrl}
+                                src={proj.image_url}
                                 alt={proj.title}
                                 className="thumb"
                               />

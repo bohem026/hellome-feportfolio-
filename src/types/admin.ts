@@ -1,4 +1,6 @@
 export type ProjectStatus = "PUBLISHED" | "DRAFT" | "ARCHIVED";
+export type InquiryStatus = "NEW" | "SCHEDULED" | "RESPONDED";
+export type AdminTab = "overview" | "projects" | "inquiries";
 
 export interface Project {
   id: string;
@@ -6,10 +8,8 @@ export interface Project {
   category: string;
   status: ProjectStatus;
   visibility: string;
-  imageUrl: string;
+  image_url: string;
 }
-
-export type InquiryStatus = "NEW" | "SCHEDULED" | "RESPONDED";
 
 export interface Inquiry {
   id: string;
@@ -20,4 +20,14 @@ export interface Inquiry {
   status: InquiryStatus;
 }
 
-export type AdminTab = "overview" | "projects" | "inquiries";
+export interface GithubRepo {
+  id: number;
+  name: string;
+  full_name: string;
+  description: string | null;
+  html_url: string;
+  stargazers_count: number;
+  language: string | null;
+  updated_at: string;
+  topics?: string[];
+}
