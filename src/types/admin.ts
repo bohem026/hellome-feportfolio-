@@ -9,6 +9,9 @@ export interface Project {
   status: ProjectStatus;
   visibility: string;
   image_url: string;
+  description?: string;
+  github_url?: string;
+  stars?: number;
 }
 
 export interface Inquiry {
