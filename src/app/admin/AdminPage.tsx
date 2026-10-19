@@ -223,7 +223,7 @@ export function AdminPage() {
                           <tr key={proj.id}>
                             <td>
                               <img
-                                src={proj.image_url}
+                                src={proj.imageUrl}
                                 alt={proj.title}
                                 className="thumb"
                               />

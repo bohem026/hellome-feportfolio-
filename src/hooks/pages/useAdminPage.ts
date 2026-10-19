@@ -156,12 +156,12 @@ export function useAdminPage() {
       category: repo.language || "Web Application",
       description:
         repo.description || "GitHub 레포지토리로부터 임포트된 프로젝트입니다.",
-      image_url:
+      imageUrl:
         "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
       status: "PUBLISHED",
       visibility: "PUBLIC",
-      github_url: repo.html_url,
-      stars: repo.stargazers_count,
+      githubUrl: repo.htmlUrl,
+      stars: repo.stargazersCount,
     };
 
     setProjects((prev) => [newProject, ...prev]);

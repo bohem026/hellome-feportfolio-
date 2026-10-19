@@ -8,9 +8,9 @@ export interface Project {
   category: string;
   status: ProjectStatus;
   visibility: string;
-  image_url: string;
+  imageUrl: string;
   description?: string;
-  github_url?: string;
+  githubUrl?: string;
   stars?: number;
 }
 
@@ -26,11 +26,11 @@ export interface Inquiry {
 export interface GithubRepo {
   id: number;
   name: string;
-  full_name: string;
+  fullName: string;
   description: string | null;
-  html_url: string;
-  stargazers_count: number;
+  htmlUrl: string;
+  stargazersCount: number;
   language: string | null;
-  updated_at: string;
+  updatedAt: string;
   topics?: string[];
 }
