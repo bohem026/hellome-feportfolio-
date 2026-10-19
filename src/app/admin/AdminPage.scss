@@ -196,49 +196,49 @@ body {
 
               .bubble-arrow {
                 position: absolute;
-                right: -6px;
-                top: 50%;
-                transform: translateY(-50%);
+                bottom: -6px;
+                left: 50%;
+                transform: translateX(-50%);
                 width: 0;
                 height: 0;
-                border-top: 5px solid transparent;
-                border-bottom: 5px solid transparent;
-                border-left: 6px solid #000000;
+                border-left: 6px solid transparent;
+                border-right: 6px solid transparent;
+                border-top: 6px solid #000000;
+              }
+            }
+          }
+
+          button {
+            padding: 8px 12px;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            border: 1px solid #000000;
+            transition: all 0.2s ease;
+
+            &.btn-outline {
+              background: transparent;
+              color: #000000;
+
+              &.connect:hover {
+                background: #000000;
+                color: #ffffff;
+              }
+
+              &.disconnect:hover {
+                background: #dc2626;
+                color: #ffffff;
+                border-color: #dc2626;
               }
             }
 
-            button {
-              padding: 8px 12px;
-              font-size: 10px;
-              font-weight: 800;
-              cursor: pointer;
-              border: 1px solid #000000;
-              transition: all 0.2s ease;
+            &.btn-solid {
+              background: #000000;
+              color: #ffffff;
 
-              &.btn-outline {
-                background: transparent;
-                color: #000000;
-
-                &.connect:hover {
-                  background: #000000;
-                  color: #ffffff;
-                }
-
-                &.disconnect:hover {
-                  background: #dc2626;
-                  color: #ffffff;
-                  border-color: #dc2626;
-                }
-              }
-
-              &.btn-solid {
-                background: #000000;
-                color: #ffffff;
-
-                &:disabled {
-                  opacity: 0.4;
-                  cursor: not-allowed;
-                }
+              &:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
               }
             }
           }
