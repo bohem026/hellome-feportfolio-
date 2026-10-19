@@ -51,6 +51,9 @@ export function useAdminPage() {
     setToastState((prev) => ({ ...prev, isOpen: false }));
   };
 
+  // 실제 데이터 노출 조건: 관리자 인증 완료 & GitHub 연동 완료
+  const isDataVisible = isAuthenticated && isGithubConnected;
+
   /**
    * Supabase Auth 세션 체크
    * Github OAuth 연동 유무 확인
@@ -151,7 +154,7 @@ export function useAdminPage() {
 
   /**
    * 인증 성공 처리
-   * 수정: 리엑트 메모리 상에서만 인증 상태 보관(sessionStorage 제거)
+   * 수정: 리엑트 메모리 상에서만 인증 상태 보관 (sessionStorage 제거)
    */
   const handleAuthSuccess = () => {
     setIsAuthenticated(true);
@@ -214,6 +217,7 @@ export function useAdminPage() {
     isAuthenticated,
     isAuthModalOpen,
     isGithubConnected,
+    isDataVisible,
     githubUser,
     isDisconnectModalOpen,
     toastState,

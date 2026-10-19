@@ -48,7 +48,7 @@ export function AdminPage() {
       <ConfirmModal
         isOpen={isDisconnectModalOpen}
         title="GITHUB ACCOUNT DISCONNECT"
-        message="GitHub 연동이 해제됩니다. 연동이 해제되면 아카이빙 중인 레포지토리 목록 데이터 참조가 즉시 초기화됩니다. 계속 진행하시겠습니까?"
+        message="GitHub 연동이 해제됩니다. 연동이 해제되면 아카이빙 중인 레포지토리 목록도 즉시 초기화됩니다. 계속 진행하시겠습니까?"
         confirmText="UNLINK"
         cancelText="CANCEL"
         type="danger"
@@ -56,6 +56,7 @@ export function AdminPage() {
         onCancel={handleCloseDisconnectModal}
       />
 
+      {/* Toast 알림 */}
       <Toast
         open={toastState.isOpen}
         message={toastState.message}
@@ -112,6 +113,14 @@ export function AdminPage() {
             </div>
 
             <div className="console-actions">
+              {/* 연동 유도 말풍선 UI */}
+              {!isGithubConnected && isAuthenticated && (
+                <div className="speech-bubble">
+                  <span className="bubble-arrow" />
+                  👈 계정을 연동하여 Repository 데이터를 활성화하세요!
+                </div>
+              )}
+
               {/* GitHub Connect/Disconnect Button */}
               {isGithubConnected ? (
                 <button
@@ -255,6 +264,7 @@ export function AdminPage() {
               </div>
             </div>
 
+            {/* Inquiries Queue Section */}
             <div className="inquiries-queue-section">
               <div className="section-title-bar">
                 <span>[INQUIRIES QUEUE]</span>
