@@ -2,7 +2,7 @@ import { Project, Inquiry } from "@/types";
 
 export const INITIAL_PROJECTS: Project[] = [
   {
-    id: "01",
+    id: 1,
     title: "HUNTER YEANY RACING",
     category: "BRAND / WEB",
     status: "PUBLISHED",
@@ -10,7 +10,7 @@ export const INITIAL_PROJECTS: Project[] = [
       "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=400&q=80",
   },
   {
-    id: "02",
+    id: 2,
     title: "VELOCE OS",
     category: "UI/UX / MOTION",
     status: "PUBLISHED",
@@ -18,7 +18,7 @@ export const INITIAL_PROJECTS: Project[] = [
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=400&q=80",
   },
   {
-    id: "03",
+    id: 3,
     title: "WALKER AGENCY",
     category: "ART DIRECTION",
     status: "DRAFT",

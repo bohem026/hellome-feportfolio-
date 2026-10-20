@@ -157,7 +157,7 @@ export function useAdminPage() {
    */
   const handleArchiveRepo = async (repo: GithubRepo) => {
     const newProject: Project = {
-      id: `proj_${repo.id}_${Date.now()}`,
+      id: repo.id,
       title: repo.name,
       category: repo.language || "Web Application",
       description:
@@ -285,65 +285,11 @@ export function useAdminPage() {
     }
   };
 
-  // 2. [IMPORT FROM REPO] 실행 시 Supabase DB에 저장
-  // const handleArchiveRepo = async (repo: GithubRepo) => {
-  //   const newProjectData = {
-  //     id: `proj_${repo.id}_${Date.now()}`,
-  //     title: repo.name,
-  //     category: repo.language || "Web Application",
-  //     description:
-  //       repo.description || "GitHub 레포지토리로부터 임포트된 프로젝트입니다.",
-  //     image_url:
-  //       "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
-  //     status: "PUBLISHED",
-  //     visibility: "PUBLIC",
-  //     github_url: repo.html_url,
-  //     stars: repo.stargazers_count,
-  //   };
-
-  //   // Supabase DB에 Insert
-  //   const { error } = await supabase.from("projects").insert([newProjectData]);
-
-  //   if (error) {
-  //     triggerToast(`DB 저장 실패: ${error.message}`, "danger");
-  //     return;
-  //   }
-
-  //   // 성공 시 목록 재조회
-  //   await fetchProjectsFromSupabase();
-  //   setIsRepoModalOpen(false);
-  //   triggerToast(
-  //     `[${repo.name}] 레포지토리가 성공적으로 DB에 아카이빙되었습니다!`,
-  //     "success",
-  //   );
-  // };
-
-  // 3. DISCONNECT 시 Supabase DB 데이터 전체 삭제 (선택 사항)
-  // const handleConfirmDisconnectGithub = async () => {
-  //   setIsDisconnectModalOpen(false);
-
-  //   // Supabase DB 내 모든 프로젝트 데이터 삭제
-  //   await supabase.from("projects").delete().neq("id", "");
-
-  //   await supabase.auth.signOut({ scope: "global" });
-
-  //   setIsGithubConnected(false);
-  //   setGithubUser(null);
-  //   setIsAuthenticated(false);
-  //   setIsAuthModalOpen(true);
-  //   setProjects([]); // 프론트 상태 비우기
-
-  //   triggerToast(
-  //     "GitHub 계정 연동 및 아카이빙 데이터가 모두 초기화되었습니다.",
-  //     "success",
-  //   );
-  // };
-
   /**
    * 프로젝트 삭제 핸들러
    * @param id
    */
-  const handleDeleteProject = (id: string) => {
+  const handleDeleteProject = (id: number) => {
     setProjects((prev) => prev.filter((p) => p.id !== id));
     triggerToast("프로젝트가 삭제되었습니다.", "success");
   };
@@ -352,7 +298,7 @@ export function useAdminPage() {
    * 프로젝트 상태 토글 (PUBLISHED <-> DRAFT)
    * @param id
    */
-  const handleToggleStatus = (id: string) => {
+  const handleToggleStatus = (id: number) => {
     setProjects((prev) =>
       prev.map((p) => {
         if (p.id === id) {

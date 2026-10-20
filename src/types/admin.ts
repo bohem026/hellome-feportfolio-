@@ -3,7 +3,7 @@ export type InquiryStatus = "NEW" | "SCHEDULED" | "RESPONDED";
 export type AdminTab = "overview" | "projects" | "inquiries";
 
 export interface Project {
-  id: string;
+  id: number;
   title: string;
   category: string;
   status: ProjectStatus;
