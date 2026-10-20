@@ -170,7 +170,7 @@ export function useAdminPage() {
       image_url:
         "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
       status: "PUBLISHED",
-      github_url: repo.github_url,
+      github_url: repo.github_url || "",
       stars: repo.stargazers_count || 0,
     };
 
@@ -284,7 +284,7 @@ export function useAdminPage() {
         description: item.description,
         image_url: item.image_url,
         status: item.status || "PUBLISHED",
-        github_url: item.github_url,
+        github_url: item.github_url || "",
         stars: item.stars || 0,
       }));
       setProjects(formattedProjects);
