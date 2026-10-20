@@ -6,7 +6,6 @@ export const INITIAL_PROJECTS: Project[] = [
     title: "HUNTER YEANY RACING",
     category: "BRAND / WEB",
     status: "PUBLISHED",
-    visibility: "PUBLIC / TIER 1",
     imageUrl:
       "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=400&q=80",
   },
@@ -15,7 +14,6 @@ export const INITIAL_PROJECTS: Project[] = [
     title: "VELOCE OS",
     category: "UI/UX / MOTION",
     status: "PUBLISHED",
-    visibility: "PUBLIC / TIER 1",
     imageUrl:
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=400&q=80",
   },
@@ -24,7 +22,6 @@ export const INITIAL_PROJECTS: Project[] = [
     title: "WALKER AGENCY",
     category: "ART DIRECTION",
     status: "DRAFT",
-    visibility: "PRIVATE / UNLISTED",
     imageUrl:
       "https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=400&q=80",
   },
