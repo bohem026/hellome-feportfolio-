@@ -4,25 +4,25 @@ export const INITIAL_PROJECTS: Project[] = [
   {
     id: 1,
     title: "HUNTER YEANY RACING",
-    category: "BRAND / WEB",
+    categories: ["BRAND", "WEB"],
     status: "PUBLISHED",
-    imageUrl:
+    image_url:
       "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=400&q=80",
   },
   {
     id: 2,
     title: "VELOCE OS",
-    category: "UI/UX / MOTION",
+    categories: ["UI/UX", "MOTION"],
     status: "PUBLISHED",
-    imageUrl:
+    image_url:
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=400&q=80",
   },
   {
     id: 3,
     title: "WALKER AGENCY",
-    category: "ART DIRECTION",
+    categories: ["ART DIRECTION"],
     status: "DRAFT",
-    imageUrl:
+    image_url:
       "https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=400&q=80",
   },
 ];
