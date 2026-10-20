@@ -72,7 +72,7 @@ export function RepoImportModal({
                     <div className="repo-card-header">
                       <strong className="repo-title">{repo.name}</strong>
                       <span className="repo-stars">
-                        ★ {repo.stargazersCount}
+                        ★ {repo.stargazers_count}
                       </span>
                     </div>
 
@@ -83,11 +83,15 @@ export function RepoImportModal({
 
                     <div className="repo-meta">
                       <span className="repo-lang">
-                        ● {repo.language || "Plain Text"}
+                        ●{" "}
+                        {Array.isArray(repo.languages) &&
+                        repo.languages.length > 0
+                          ? repo.languages.slice(0, 3).join(", ")
+                          : "Plain Text"}
                       </span>
                       <span className="repo-date">
                         UPDATED:{" "}
-                        {new Date(repo.updatedAt).toLocaleDateString()}
+                        {new Date(repo.updated_at).toLocaleDateString()}
                       </span>
                     </div>
                   </div>

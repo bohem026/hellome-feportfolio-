@@ -5,11 +5,11 @@ export type AdminTab = "overview" | "projects" | "inquiries";
 export interface Project {
   id: number;
   title: string;
-  category: string;
+  categories: string[];
   status: ProjectStatus;
-  imageUrl: string;
+  image_url: string;
   description?: string;
-  githubUrl?: string;
+  github_url?: string;
   stars?: number;
 }
 
@@ -25,11 +25,9 @@ export interface Inquiry {
 export interface GithubRepo {
   id: number;
   name: string;
-  fullName: string;
   description: string | null;
-  htmlUrl: string;
-  stargazersCount: number;
-  language: string | null;
-  updatedAt: string;
-  topics?: string[];
+  github_url: string;
+  stargazers_count: number;
+  languages: string[];
+  updated_at: string;
 }

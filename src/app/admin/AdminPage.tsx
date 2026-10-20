@@ -223,7 +223,7 @@ export function AdminPage() {
                           <tr key={proj.id}>
                             <td>
                               <img
-                                src={proj.imageUrl}
+                                src={proj.image_url}
                                 alt={proj.title}
                                 className="thumb"
                               />
@@ -234,7 +234,16 @@ export function AdminPage() {
                                 ID: {proj.id} // {proj.status}
                               </span>
                             </td>
-                            <td>{proj.category}</td>
+                            <td>
+                              <div className="category-tags">
+                                {Array.isArray(proj.categories) &&
+                                  proj.categories.map((tag, idx) => (
+                                    <span key={idx} className="tag-badge">
+                                      {tag}
+                                    </span>
+                                  ))}
+                              </div>
+                            </td>
                             <td>
                               <span
                                 className={`status-badge-inline ${proj.status.toLowerCase()}`}

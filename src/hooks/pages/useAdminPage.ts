@@ -156,23 +156,29 @@ export function useAdminPage() {
    * @param repo
    */
   const handleArchiveRepo = async (repo: GithubRepo) => {
+    const categoryList: string[] = [];
+    if (repo.languages && repo.languages.length > 0) {
+      categoryList.push(...repo.languages.slice(0, 3));
+    }
+
     const newProject: Project = {
       id: repo.id,
       title: repo.name,
-      category: repo.language || "Web Application",
+      categories: categoryList.length > 0 ? categoryList : ["Web Application"],
       description:
         repo.description || "GitHub 레포지토리로부터 임포트된 프로젝트입니다.",
-      imageUrl:
+      image_url:
         "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
       status: "PUBLISHED",
-      githubUrl: repo.htmlUrl,
-      stars: repo.stargazersCount,
+      github_url: repo.github_url,
+      stars: repo.stargazers_count || 0,
     };
 
     // Supabase DB에 Insert
     const { error } = await supabase.from("projects").insert([newProject]);
 
     if (error) {
+      console.error("Supabase insert error:", error);
       triggerToast(`DB 저장 실패: ${error.message}`, "danger");
       return;
     }
@@ -274,11 +280,11 @@ export function useAdminPage() {
       const formattedProjects: Project[] = data.map((item) => ({
         id: item.id,
         title: item.title,
-        category: item.category,
+        categories: item.categories || ["Web Application"],
         description: item.description,
-        imageUrl: item.imageUrl,
+        image_url: item.image_url,
         status: item.status || "PUBLISHED",
-        githubUrl: item.githubUrl,
+        github_url: item.github_url,
         stars: item.stars || 0,
       }));
       setProjects(formattedProjects);
