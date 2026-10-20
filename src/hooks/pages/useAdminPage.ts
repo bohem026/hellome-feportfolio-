@@ -179,10 +179,7 @@ export function useAdminPage() {
 
     await fetchProjectsFromSupabase();
     setIsRepoModalOpen(false);
-    triggerToast(
-      `레포지토리가 성공적으로 아카이빙되었습니다!`,
-      "success",
-    );
+    triggerToast(`레포지토리가 성공적으로 아카이빙되었습니다!`, "success");
   };
 
   /**
@@ -227,7 +224,7 @@ export function useAdminPage() {
     setIsDisconnectModalOpen(false);
 
     // 추가
-    await supabase.from('projects').delete().neq('id', '');
+    await supabase.from("projects").delete().neq("id", "");
 
     await supabase.auth.signOut({ scope: "global" });
 
@@ -280,9 +277,9 @@ export function useAdminPage() {
         category: item.category,
         description: item.description,
         imageUrl: item.imageUrl,
-        status: item.isPublished,
+        status: item.status || "PUBLISHED",
         githubUrl: item.githubUrl,
-        stars: item.stars,
+        stars: item.stars || 0,
       }));
       setProjects(formattedProjects);
     }
