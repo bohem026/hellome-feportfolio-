@@ -108,7 +108,10 @@ export function useAdminPage() {
     checkGithubSession();
   }, [searchParams, router]);
 
-  // GitHub 레포지토리 목록 불러오기
+  /**
+   * GitHub 레포지토리 목록 불러오기
+   * @returns
+   */
   const fetchGithubRepositories = async () => {
     setIsRepoLoading(true);
     try {
@@ -148,10 +151,13 @@ export function useAdminPage() {
     }
   };
 
-  // 레포지토리 선택 후 아카이빙(프로젝트 등록) 실행
-  const handleArchiveRepo = (repo: GithubRepo) => {
+  /**
+   * 레포지토리 선택 후 아카이빙(프로젝트 등록) 실행
+   * @param repo
+   */
+  const handleArchiveRepo = async (repo: GithubRepo) => {
     const newProject: Project = {
-      id: `proj_${Date.now()}`,
+      id: `proj_${repo.id}_${Date.now()}`,
       title: repo.name,
       category: repo.language || "Web Application",
       description:
@@ -159,16 +165,22 @@ export function useAdminPage() {
       imageUrl:
         "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
       status: "PUBLISHED",
-      visibility: "PUBLIC",
       githubUrl: repo.htmlUrl,
       stars: repo.stargazersCount,
     };
 
-    setProjects((prev) => [newProject, ...prev]);
+    // Supabase DB에 Insert
+    const { error } = await supabase.from("projects").insert([newProject]);
+
+    if (error) {
+      triggerToast(`DB 저장 실패: ${error.message}`, "danger");
+      return;
+    }
+
+    await fetchProjectsFromSupabase();
     setIsRepoModalOpen(false);
-    setSelectedRepo(null);
     triggerToast(
-      `[${repo.name}] 레포지토리가 성공적으로 아카이빙되었습니다!`,
+      `레포지토리가 성공적으로 아카이빙되었습니다!`,
       "success",
     );
   };
@@ -209,9 +221,13 @@ export function useAdminPage() {
 
   /**
    * Github OAuth 연동 해제
+   * 추가: Supabase DB 내 프로젝트 데이터 전체 삭제 후 로그아웃 처리
    */
   const handleConfirmDisconnectGithub = async () => {
     setIsDisconnectModalOpen(false);
+
+    // 추가
+    await supabase.from('projects').delete().neq('id', '');
 
     await supabase.auth.signOut({ scope: "global" });
 
@@ -219,6 +235,7 @@ export function useAdminPage() {
     setGithubUser(null);
     setIsAuthenticated(false);
     setIsAuthModalOpen(true);
+    setProjects([]);
 
     triggerToast("GitHub 계정 연동이 해제되었습니다.", "success");
   };
@@ -246,6 +263,84 @@ export function useAdminPage() {
       router.push("/");
     }, 1200);
   };
+
+  /**
+   * Supabase DB로부터 프로젝트 목록 조회
+   */
+  const fetchProjectsFromSupabase = async () => {
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (!error && data) {
+      const formattedProjects: Project[] = data.map((item) => ({
+        id: item.id,
+        title: item.title,
+        category: item.category,
+        description: item.description,
+        imageUrl: item.imageUrl,
+        status: item.isPublished,
+        githubUrl: item.githubUrl,
+        stars: item.stars,
+      }));
+      setProjects(formattedProjects);
+    }
+  };
+
+  // 2. [IMPORT FROM REPO] 실행 시 Supabase DB에 저장
+  // const handleArchiveRepo = async (repo: GithubRepo) => {
+  //   const newProjectData = {
+  //     id: `proj_${repo.id}_${Date.now()}`,
+  //     title: repo.name,
+  //     category: repo.language || "Web Application",
+  //     description:
+  //       repo.description || "GitHub 레포지토리로부터 임포트된 프로젝트입니다.",
+  //     image_url:
+  //       "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
+  //     status: "PUBLISHED",
+  //     visibility: "PUBLIC",
+  //     github_url: repo.html_url,
+  //     stars: repo.stargazers_count,
+  //   };
+
+  //   // Supabase DB에 Insert
+  //   const { error } = await supabase.from("projects").insert([newProjectData]);
+
+  //   if (error) {
+  //     triggerToast(`DB 저장 실패: ${error.message}`, "danger");
+  //     return;
+  //   }
+
+  //   // 성공 시 목록 재조회
+  //   await fetchProjectsFromSupabase();
+  //   setIsRepoModalOpen(false);
+  //   triggerToast(
+  //     `[${repo.name}] 레포지토리가 성공적으로 DB에 아카이빙되었습니다!`,
+  //     "success",
+  //   );
+  // };
+
+  // 3. DISCONNECT 시 Supabase DB 데이터 전체 삭제 (선택 사항)
+  // const handleConfirmDisconnectGithub = async () => {
+  //   setIsDisconnectModalOpen(false);
+
+  //   // Supabase DB 내 모든 프로젝트 데이터 삭제
+  //   await supabase.from("projects").delete().neq("id", "");
+
+  //   await supabase.auth.signOut({ scope: "global" });
+
+  //   setIsGithubConnected(false);
+  //   setGithubUser(null);
+  //   setIsAuthenticated(false);
+  //   setIsAuthModalOpen(true);
+  //   setProjects([]); // 프론트 상태 비우기
+
+  //   triggerToast(
+  //     "GitHub 계정 연동 및 아카이빙 데이터가 모두 초기화되었습니다.",
+  //     "success",
+  //   );
+  // };
 
   /**
    * 프로젝트 삭제 핸들러

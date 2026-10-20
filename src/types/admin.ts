@@ -7,7 +7,6 @@ export interface Project {
   title: string;
   category: string;
   status: ProjectStatus;
-  visibility: string;
   imageUrl: string;
   description?: string;
   githubUrl?: string;

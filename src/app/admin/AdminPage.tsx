@@ -231,7 +231,7 @@ export function AdminPage() {
                             <td>
                               <strong className="title">{proj.title}</strong>
                               <span className="id">
-                                ID: {proj.id} // {proj.visibility}
+                                ID: {proj.id} // {proj.status}
                               </span>
                             </td>
                             <td>{proj.category}</td>
