@@ -11,6 +11,7 @@ export interface Project {
   description?: string;
   github_url?: string;
   stars?: number;
+  github_id?: string;
 }
 
 export interface Inquiry {

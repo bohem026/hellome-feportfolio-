@@ -81,6 +81,9 @@ export function useAdminPage() {
           setIsGithubConnected(true);
           setGithubUser(username);
 
+          // 추가: 세션 확인 직후 DB 목록 조회 실행
+          await fetchProjectsFromSupabase(username);
+
           // OAuth 인증 직후 콜백(?connected=true)으로 들어온 경우 성공 처리
           const isJustConnected = searchParams.get("connected") === "true";
           // 추가: 깃허브 연동 승인과 함께 관리자 인증 세션도 함께 부여
@@ -156,6 +159,14 @@ export function useAdminPage() {
    * @param repo
    */
   const handleArchiveRepo = async (repo: GithubRepo) => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    const currentGithubId =
+      session?.user?.user_metadata?.preferred_username ||
+      githubUser ||
+      "UNKNOWN";
+
     const categoryList: string[] = [];
     if (repo.languages && repo.languages.length > 0) {
       categoryList.push(...repo.languages.slice(0, 3));
@@ -172,6 +183,8 @@ export function useAdminPage() {
       status: "PUBLISHED",
       github_url: repo.github_url || "",
       stars: repo.stargazers_count || 0,
+      // 추가: 깃허브 계정 식별자
+      github_id: currentGithubId,
     };
 
     // Supabase DB에 Insert
@@ -183,7 +196,7 @@ export function useAdminPage() {
       return;
     }
 
-    await fetchProjectsFromSupabase();
+    await fetchProjectsFromSupabase(currentGithubId);
     setIsRepoModalOpen(false);
     triggerToast(`레포지토리가 성공적으로 아카이빙되었습니다!`, "success");
   };
@@ -251,7 +264,8 @@ export function useAdminPage() {
     setIsAuthenticated(true);
     setIsAuthModalOpen(false);
 
-    if (isGithubConnected) {
+    if (isGithubConnected && githubUser) {
+      fetchProjectsFromSupabase(githubUser);
       triggerToast("GitHub 계정이 성공적으로 연동되었습니다.", "success");
     }
   };
@@ -270,24 +284,39 @@ export function useAdminPage() {
   /**
    * Supabase DB로부터 프로젝트 목록 조회
    */
-  const fetchProjectsFromSupabase = async () => {
-    const { data, error } = await supabase
-      .from("projects")
-      .select("*")
-      .order("created_at", { ascending: false });
+  const fetchProjectsFromSupabase = async (targetGithubId: string) => {
+    const currentUser = targetGithubId || githubUser;
+    if (!currentUser) return;
 
-    if (!error && data) {
-      const formattedProjects: Project[] = data.map((item) => ({
-        id: item.id,
-        title: item.title,
-        categories: item.categories || ["Web Application"],
-        description: item.description,
-        image_url: item.image_url,
-        status: item.status || "PUBLISHED",
-        github_url: item.github_url || "",
-        stars: item.stars || 0,
-      }));
-      setProjects(formattedProjects);
+    try {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("*")
+        .eq("github_id", currentUser)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Supabase select error:", error);
+        return;
+      }
+
+      if (data) {
+        const formattedProjects: Project[] = data.map((item) => ({
+          id: item.id,
+          title: item.title,
+          categories: item.categories || ["Web Application"],
+          description: item.description,
+          image_url: item.image_url,
+          status: item.status || "PUBLISHED",
+          github_url: item.github_url || "",
+          stars: item.stars || 0,
+          github_id: currentUser,
+        }));
+
+        setProjects(formattedProjects);
+      }
+    } catch (error) {
+      console.error("Failed to fetch projects from Supabase:", error);
     }
   };
 
