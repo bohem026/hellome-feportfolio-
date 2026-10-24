@@ -81,15 +81,6 @@ export function useAdminPage() {
           setIsGithubConnected(true);
           setGithubUser(username);
 
-          // 깃허브 세션 확인 시 admin_users 테이블 동기화 (PK 에러 방지)
-          await supabase.from("admin_users").upsert([
-            {
-              github_id: username,
-              username: username,
-              avatar_url: session.user.user_metadata?.avatar_url || "",
-            },
-          ]);
-
           // 추가: 세션 확인 직후 DB 목록 조회 실행
           await fetchProjectsFromSupabase(username);
 
@@ -176,6 +167,21 @@ export function useAdminPage() {
       session?.user?.user_metadata?.preferred_username ||
       githubUser ||
       "UNKNOWN";
+
+    // 부모 테이블(admin_users) 외래키 사전 등록 (23503 에러: FK 누락 에러 방지)
+    const { error: userError } = await supabase.from("admin_users").upsert([
+      {
+        github_id: currentGithubId,
+        username: currentGithubId,
+        avatar_url: session?.user?.user_metadata?.avatar_url || "",
+      },
+    ]);
+
+    if (userError) {
+      console.error("admin_users upsert error:", userError);
+      triggerToast(`유저 등록 실패: ${userError.message}`, "danger");
+      return;
+    }
 
     const categoryList: string[] = [];
     if (repo.languages && repo.languages.length > 0) {
