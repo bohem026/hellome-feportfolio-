@@ -85,7 +85,7 @@ export function useAdminPage() {
           await supabase.from("admin_users").upsert([
             {
               github_id: username,
-              username: username,
+              github_name: username,
               avatar_url: session.user.user_metadata?.avatar_url || "",
             },
           ]);
@@ -181,7 +181,7 @@ export function useAdminPage() {
     const { error: userError } = await supabase.from("admin_users").upsert([
       {
         github_id: currentGithubId,
-        username: currentGithubId,
+        github_name: currentGithubId,
         avatar_url: session?.user?.user_metadata?.avatar_url || "",
       },
     ]);
