@@ -24,8 +24,12 @@ export function useAdminPage() {
   const [githubUser, setGithubUser] = useState<string | null>(null);
 
   // Github 관련 모달 상태
-  const [isGithubDisconnectModalOpen, setIsGithubDisconnectModalOpen] = useState(false);
+  const [isGithubDisconnectModalOpen, setIsGithubDisconnectModalOpen] =
+    useState(false);
   const [isRepoModalOpen, setIsRepoModalOpen] = useState(false);
+  // 추가: 깃허브 세션 만료 재인증 안내 모달 상태
+  const [isGithubSessionExpiredModalOpen, setIsGithubSessionExpiredModalOpen] =
+    useState(false);
 
   // GitHub 레포지토리 데이터 관련 상태
   const [repositories, setRepositories] = useState<GithubRepo[]>([]);
@@ -130,7 +134,7 @@ export function useAdminPage() {
       } = await supabase.auth.getSession();
 
       if (!session || !session.provider_token) {
-        triggerToast("세션이 만료되었습니다. 다시 연동해 주세요.", "danger");
+        setIsGithubSessionExpiredModalOpen(true);
         return;
       }
 
@@ -145,6 +149,12 @@ export function useAdminPage() {
       );
 
       if (!response.ok) {
+        // 추가: HTTP 401/403 등 토큰 만료 응답인 경우도 모달 출력
+        if (response.status === 401 || response.status === 403) {
+          setIsGithubSessionExpiredModalOpen(true);
+          return;
+        }
+
         throw new Error("레포지토리 목록을 불러오는 데 실패했습니다.");
       }
 
@@ -211,10 +221,11 @@ export function useAdminPage() {
     };
 
     // Supabase DB에 Insert
-    const { error } = await supabase.from("projects").insert([newProject]);
+    // 수정: .insert() 대신 .upsert() 사용하여 중복 레코드 처리
+    const { error } = await supabase.from("projects").upsert([newProject]);
 
     if (error) {
-      console.error("Supabase insert error:", error);
+      console.error("Supabase upsert error:", error);
       triggerToast(`DB 저장 실패: ${error.message}`, "danger");
       return;
     }
@@ -264,10 +275,8 @@ export function useAdminPage() {
    */
   const handleConfirmDisconnectGithub = async () => {
     setIsGithubDisconnectModalOpen(false);
-
     // 추가
     await supabase.from("projects").delete().neq("id", "");
-
     await supabase.auth.signOut({ scope: "global" });
 
     setIsGithubConnected(false);
@@ -277,6 +286,14 @@ export function useAdminPage() {
     setProjects([]);
 
     triggerToast("GitHub 계정 연동이 해제되었습니다.", "success");
+  };
+
+  /**
+   * 깃허브 세션 만료 모달 버튼 핸들러
+   */
+  const handleConfirmReconnectGithub = () => {
+    setIsGithubSessionExpiredModalOpen(false);
+    handleConnectGithub();
   };
 
   /**
