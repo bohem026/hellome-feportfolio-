@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { INITIAL_PROJECTS, INITIAL_INQUIRIES } from "@/constants";
 import { Project, Inquiry, AdminTab, GithubRepo } from "@/types";
@@ -10,12 +10,10 @@ import { ToastType } from "@/components/Toast";
 export function useAdminPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  // const pathname = usePathname();
   const supabase = createClient();
 
   // 추가: 세션 로딩 상태(관리자 인증 모달 점멸 현상 방지)
   const [isAuthLoading, setIsAuthLoading] = useState(true);
-
   // 관리자 로그인 세션 확인_ sessionStorage 기반
   // 수정: 스토리지 참조 전면 제거
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -26,7 +24,7 @@ export function useAdminPage() {
   const [githubUser, setGithubUser] = useState<string | null>(null);
 
   // Github 관련 모달 상태
-  const [isDisconnectModalOpen, setIsDisconnectModalOpen] = useState(false);
+  const [isGithubDisconnectModalOpen, setIsGithubDisconnectModalOpen] = useState(false);
   const [isRepoModalOpen, setIsRepoModalOpen] = useState(false);
 
   // GitHub 레포지토리 데이터 관련 상태
@@ -253,11 +251,11 @@ export function useAdminPage() {
   };
 
   const handleOpenDisconnectModal = () => {
-    setIsDisconnectModalOpen(true);
+    setIsGithubDisconnectModalOpen(true);
   };
 
   const handleCloseDisconnectModal = () => {
-    setIsDisconnectModalOpen(false);
+    setIsGithubDisconnectModalOpen(false);
   };
 
   /**
@@ -265,7 +263,7 @@ export function useAdminPage() {
    * 추가: Supabase DB 내 프로젝트 데이터 전체 삭제 후 로그아웃 처리
    */
   const handleConfirmDisconnectGithub = async () => {
-    setIsDisconnectModalOpen(false);
+    setIsGithubDisconnectModalOpen(false);
 
     // 추가
     await supabase.from("projects").delete().neq("id", "");
@@ -388,7 +386,7 @@ export function useAdminPage() {
     isGithubConnected,
     isDataVisible,
     githubUser,
-    isDisconnectModalOpen,
+    isGithubDisconnectModalOpen,
     isRepoModalOpen,
     setIsRepoModalOpen,
     repositories,
