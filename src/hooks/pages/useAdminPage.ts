@@ -289,11 +289,20 @@ export function useAdminPage() {
   };
 
   /**
-   * 깃허브 세션 만료 모달 버튼 핸들러
+   * 깃허브 세션 만료 모달 확인 버튼 핸들러
    */
   const handleConfirmReconnectGithub = () => {
     setIsGithubSessionExpiredModalOpen(false);
     handleConnectGithub();
+  };
+
+  /**
+   * 깃허브 세션 만료 모달 취소 버튼 핸들러
+   * 재인증을 거부했으므로 깃허브 연동 해제 진행
+   */
+  const handleCancelReconnectGithub = async () => {
+    setIsGithubSessionExpiredModalOpen(false);
+    await handleConfirmDisconnectGithub();
   };
 
   /**
@@ -404,6 +413,7 @@ export function useAdminPage() {
     isDataVisible,
     githubUser,
     isGithubDisconnectModalOpen,
+    isGithubSessionExpiredModalOpen,
     isRepoModalOpen,
     setIsRepoModalOpen,
     repositories,
@@ -423,6 +433,8 @@ export function useAdminPage() {
     handleOpenDisconnectModal,
     handleCloseDisconnectModal,
     handleConfirmDisconnectGithub,
+    handleConfirmReconnectGithub,
+    handleCancelReconnectGithub,
     handleAuthSuccess,
     handleAuthFailure,
     handleDeleteProject,

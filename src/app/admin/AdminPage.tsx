@@ -17,6 +17,7 @@ export function AdminPage() {
     isDataVisible,
     githubUser,
     isGithubDisconnectModalOpen,
+    isGithubSessionExpiredModalOpen,
     isRepoModalOpen,
     setIsRepoModalOpen,
     repositories,
@@ -33,6 +34,8 @@ export function AdminPage() {
     handleOpenDisconnectModal,
     handleCloseDisconnectModal,
     handleConfirmDisconnectGithub,
+    handleConfirmReconnectGithub,
+    handleCancelReconnectGithub,
     handleAuthSuccess,
     handleAuthFailure,
     handleDeleteProject,
@@ -63,6 +66,19 @@ export function AdminPage() {
         onConfirm={handleConfirmDisconnectGithub}
         onCancel={handleCloseDisconnectModal}
       />
+
+      {/* GitHub 세션 만료 재인증 안내 모달 */}
+      {isGithubSessionExpiredModalOpen && (
+        <ConfirmModal
+          isOpen={isGithubSessionExpiredModalOpen}
+          title="GITHUB SESSION EXPIRED"
+          message={`Github 세션이 만료되었습니다. 레포지토리 목록을 불러오기 위해 다시 인증을 진행하시겠습니까?`}
+          confirmText="CONTINUE"
+          cancelText="CANCEL"
+          onConfirm={handleConfirmReconnectGithub}
+          onCancel={handleCancelReconnectGithub}
+        />
+      )}
 
       {/* 레포지토리 가져오기 모달 */}
       <RepoImportModal
