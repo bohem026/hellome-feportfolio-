@@ -6,6 +6,7 @@ import "./WorksPage.scss";
 
 export function WorksPage() {
   const {
+    isLoading,
     selectedCategory,
     setSelectedCategory,
     searchTerm,
@@ -13,7 +14,7 @@ export function WorksPage() {
     viewMode,
     setViewMode,
     categories,
-    filteredWorks,
+    filteredProjects,
     totalCount,
   } = useWorksPage();
 
@@ -22,7 +23,7 @@ export function WorksPage() {
       {/* Main Title */}
       <section className="title-section">
         <div className="title-meta">
-          <span>● CATALOGUE // 2021 — 2026</span>
+          <span>● CATALOGUE // GITHUB REPOSITORY ARCHIVE</span>
         </div>
         <div className="title-wrap">
           <h1 className="main-title">
@@ -51,7 +52,7 @@ export function WorksPage() {
           <span className="search-icon">🔍</span>
           <input
             type="text"
-            placeholder="Filter by client, discipline, or year..."
+            placeholder="Filter by title, stack, or description..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -70,26 +71,46 @@ export function WorksPage() {
         </div>
       </section>
 
-      {/* Works Display (Grid Mode) */}
-      {viewMode === "grid" ? (
+      {/* 로딩 및 데이터 출력 조건부 렌더링 */}
+      {isLoading ? (
+        <div className="works-loading-skeleton">
+          <p>LOADING ARCHIVED PROJECTS FROM DATABASE...</p>
+        </div>
+      ) : filteredProjects.length === 0 ? (
+        <div className="works-empty">
+          <p>게시된 프로젝트가 없습니다.</p>
+        </div>
+      ) : viewMode === "grid" ? (
+        /* Works Display (Grid Mode) */
         <section className="works-grid">
-          {filteredWorks.map((work) => (
+          {filteredProjects.map((work) => (
             <article className="work-card" key={work.id}>
               <div className="card-top">
-                <span className="archive-num">{work.archiveNum}</span>
-                <span className="year">{work.year}</span>
+                <span className="archive-num">#{work.id}</span>
+                <span className="year">★ {work.stars}</span>
               </div>
               <div className="card-image-wrap">
-                <img src={work.imageUrl} alt={work.title} />
+                <img src={work.image_url} alt={work.title} />
               </div>
               <div className="card-bottom">
                 <div className="text-group">
-                  <span className="category-label">{work.categoryLabel}</span>
+                  <span className="category-label">
+                    {Array.isArray(work.categories)
+                      ? work.categories.join(", ")
+                      : work.categories}
+                  </span>
                   <h3 className="project-title">{work.title}</h3>
                 </div>
-                <a href={work.linkUrl} className="arrow-link">
-                  ↗
-                </a>
+                {work.github_url && (
+                  <a
+                    href={work.github_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="arrow-link"
+                  >
+                    ↗
+                  </a>
+                )}
               </div>
             </article>
           ))}
@@ -100,22 +121,36 @@ export function WorksPage() {
           <table>
             <thead>
               <tr>
-                <th>REF</th>
-                <th>YEAR</th>
+                <th>REF ID</th>
+                <th>STARS</th>
                 <th>PROJECT</th>
-                <th>DISCIPLINE</th>
-                <th>LINK</th>
+                <th>CATEGORIES</th>
+                <th>REPOSITORY</th>
               </tr>
             </thead>
             <tbody>
-              {filteredWorks.map((work) => (
+              {filteredProjects.map((work) => (
                 <tr key={work.id}>
-                  <td>{work.archiveNum}</td>
-                  <td>{work.year}</td>
+                  <td>#{work.id}</td>
+                  <td>★ {work.stars}</td>
                   <td className="bold">{work.title}</td>
-                  <td>{work.categoryLabel}</td>
                   <td>
-                    <a href={work.linkUrl}>EXPLORE ↗</a>
+                    {Array.isArray(work.categories)
+                      ? work.categories.join(", ")
+                      : work.categories}
+                  </td>
+                  <td>
+                    {work.github_url ? (
+                      <a
+                        href={work.github_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        EXPLORE ↗
+                      </a>
+                    ) : (
+                      "-"
+                    )}
                   </td>
                 </tr>
               ))}
@@ -133,8 +168,8 @@ export function WorksPage() {
           </div>
           <div className="metrics-summary">
             <div className="summary-item">
-              <span className="label">TOTAL CLIENTS</span>
-              <span className="value">28</span>
+              <span className="label">TOTAL REPOS</span>
+              <span className="value">{totalCount}</span>
             </div>
             <div className="summary-item">
               <span className="label">GLOBAL REGIONS</span>
