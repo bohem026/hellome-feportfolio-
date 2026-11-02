@@ -4,36 +4,36 @@
 
 /* 세부 페이지 활성화 시 html, body 및 상단 글로벌 헤더 전체 스타일 강제 지정 */
 :global(html.force-light-page),
-:global(body.force-light-page) {
+:global(body.force-light-page),
+:global(body.force-light-page #__next),
+:global(body.force-light-page main),
+:global(body.force-light-page .layout-wrapper) {
   background-color: #ffffff !important;
   color: #09090b !important;
 }
 
 /* 상단 글로벌 네비게이션 바 / Header 텍스트 및 배경 강제 라이트 톤 전환 */
 :global(body.force-light-page) {
-  /* 상단 글로벌 Header 영역 (프로젝트 내 실제 header 태그나 클래스명에 맞춰 지정) */
   header,
   nav,
-  .global-header,
-  .navbar,
-  .nav-container {
+  [class*="header"],
+  [class*="nav"],
+  [class*="Header"],
+  [class*="Nav"] {
     background-color: #ffffff !important;
     color: #09090b !important;
     border-color: #000000 !important;
 
-    /* 네비게이션 내부 모든 글자 및 링크 검은색 고정 */
+    * {
+      color: #09090b !important;
+    }
+
     a,
     span,
     p,
     div,
     button {
       color: #09090b !important;
-    }
-
-    /* 네비게이션 내부 버튼 배경이 흰색일 경우 글자색 보장 */
-    button,
-    .nav-btn {
-      border-color: #000000 !important;
     }
   }
 }
@@ -50,17 +50,6 @@
   --text-main: #09090b;
   --text-muted: #475569;
   --text-subtle: #334155;
-
-  --issue-bg: #fff1f2;
-  --issue-border: #e11d48;
-  --issue-text: #9f1239;
-
-  --solution-bg: #f0fdf4;
-  --solution-border: #16a34a;
-  --solution-text: #14532d;
-
-  --btn-bg: #000000;
-  --btn-text: #ffffff;
 
   width: 100%;
   max-width: 1280px;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import "./DetailPage.scss";
 
@@ -83,6 +83,17 @@ export function DetailPage() {
   const [activeTab, setActiveTab] = useState<
     "overview" | "trouble" | "commits"
   >("overview");
+
+  // 💡 세부 페이지 진입 시 전체 body / html 및 최상위 레이아웃을 라이트모드로 강제
+  useEffect(() => {
+    document.documentElement.classList.add("force-light-page");
+    document.body.classList.add("force-light-page");
+
+    return () => {
+      document.documentElement.classList.remove("force-light-page");
+      document.body.classList.remove("force-light-page");
+    };
+  }, []);
 
   return (
     <article className="detail-container">
