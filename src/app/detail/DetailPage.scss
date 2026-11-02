@@ -1,74 +1,55 @@
 /* ==========================================================================
-   DETAIL PAGE SCSS (Dark Mode Enhanced & Brutalist Aesthetic)
+   DETAIL PAGE SCSS (High-Contrast Light Background for Dark Mode)
    ========================================================================== */
 
-/* 1. 글로벌 테마 변수 설정 (라이트/다크 대응) */
+/* 1. 고대비 변수 설정 (다크모드에서도 라이트 테마 기반 고대비 글자/배경 유지) */
 .detail-container {
+  // 다크모드/라이트모드 공통: 글자색은 다크 톤, 배경은 밝은 톤으로 강제 지정
   --bg-primary: #ffffff;
   --bg-secondary: #f8fafc;
   --bg-tertiary: #f1f5f9;
+
   --border-color: #000000;
   --border-subtle: #cbd5e1;
-  --text-main: #111111;
-  --text-muted: #64748b;
-  --text-subtle: #475569;
+
+  --text-main: #09090b; // 최상위 선명한 블랙
+  --text-muted: #475569; // 보조 텍스트 (다크 슬레이트)
+  --text-subtle: #334155; // 설명 텍스트
 
   --issue-bg: #fff1f2;
-  --issue-border: #f43f5e;
+  --issue-border: #e11d48;
   --issue-text: #9f1239;
 
   --solution-bg: #f0fdf4;
-  --solution-border: #22c55e;
+  --solution-border: #16a34a;
   --solution-text: #14532d;
 
   --btn-bg: #000000;
   --btn-text: #ffffff;
 
-  /* 다크 모드 감지 (시스템 설정 또는 .dark 클래스) */
+  /* 다크 모드 감지 시에도 글자 시독성을 위해 배경을 흰색/밝은 톤으로 고정 */
   @media (prefers-color-scheme: dark) {
-    --bg-primary: #0a0a0a;
-    --bg-secondary: #141414;
-    --bg-tertiary: #1e1e1e;
-    --border-color: #3f3f46; // 다크모드에서 선명하게 보이는 테두리색
-    --border-subtle: #27272a;
-    --text-main: #f4f4f5;
-    --text-muted: #a1a1aa;
-    --text-subtle: #d4d4d8;
-
-    --issue-bg: #2c0b0e;
-    --issue-border: #fb7185;
-    --issue-text: #fecdd3;
-
-    --solution-bg: #052e16;
-    --solution-border: #4ade80;
-    --solution-text: #dcfce7;
-
-    --btn-bg: #f4f4f5;
-    --btn-text: #09090b;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --border-color: #000000;
+    --border-subtle: #cbd5e1;
+    --text-main: #09090b;
+    --text-muted: #475569;
+    --text-subtle: #334155;
   }
 }
 
-/* 다크모드 전용 명시적 클래스(.dark) 지원 */
+/* 다크모드 클래스(.dark) 중첩 시에도 라이트 배경 & 다크 글자색 강제 적용 */
 :global(.dark) .detail-container {
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #141414;
-  --bg-tertiary: #1e1e1e;
-  --border-color: #3f3f46;
-  --border-subtle: #27272a;
-  --text-main: #f4f4f5;
-  --text-muted: #a1a1aa;
-  --text-subtle: #d4d4d8;
-
-  --issue-bg: #2c0b0e;
-  --issue-border: #fb7185;
-  --issue-text: #fecdd3;
-
-  --solution-bg: #052e16;
-  --solution-border: #4ade80;
-  --solution-text: #dcfce7;
-
-  --btn-bg: #f4f4f5;
-  --btn-text: #09090b;
+  --bg-primary: #ffffff !important;
+  --bg-secondary: #f8fafc !important;
+  --bg-tertiary: #f1f5f9 !important;
+  --border-color: #000000 !important;
+  --border-subtle: #cbd5e1 !important;
+  --text-main: #09090b !important;
+  --text-muted: #475569 !important;
+  --text-subtle: #334155 !important;
 }
 
 /* 2. 본문 레이아웃 */
@@ -79,28 +60,25 @@
   background-color: var(--bg-primary);
   color: var(--text-main);
   font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
-  transition:
-    background-color 0.2s,
-    color 0.2s;
 
-  /* 2-1. 상단 네비게이션 */
+  /* 2-1. 상단 네비게이션 (로고 및 문구 고대비 보장) */
   .detail-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-bottom: 24px;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
 
     .back-link {
       font-size: 0.875rem;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 0.05em;
       text-decoration: none;
-      color: var(--text-main);
+      color: var(--text-main) !important; // 상위 스타일 덮어쓰기 방지
       transition: opacity 0.2s;
 
       &:hover {
-        opacity: 0.7;
+        opacity: 0.6;
       }
     }
 
@@ -111,28 +89,28 @@
       .action-btn {
         padding: 8px 16px;
         font-size: 0.8rem;
-        font-weight: 700;
+        font-weight: 800;
         letter-spacing: 0.05em;
         text-decoration: none;
-        border: 1px solid var(--border-color);
+        border: 2px solid var(--border-color);
         transition: all 0.2s ease;
 
         &.demo-btn {
-          background-color: var(--btn-bg);
-          color: var(--btn-text);
+          background-color: #000000;
+          color: #ffffff !important;
 
           &:hover {
-            opacity: 0.85;
+            background-color: #333333;
           }
         }
 
         &.github-btn {
-          background-color: var(--bg-primary);
-          color: var(--text-main);
+          background-color: #ffffff;
+          color: #000000 !important;
 
           &:hover {
-            background-color: var(--btn-bg);
-            color: var(--btn-text);
+            background-color: #000000;
+            color: #ffffff !important;
           }
         }
       }
@@ -147,7 +125,7 @@
       display: flex;
       gap: 16px;
       font-size: 0.75rem;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 0.1em;
       color: var(--text-muted);
       margin-bottom: 16px;
@@ -164,7 +142,7 @@
       line-height: 1.1;
       margin-bottom: 12px;
       text-transform: uppercase;
-      color: var(--text-main);
+      color: var(--text-main) !important;
     }
 
     .hero-subtitle {
@@ -172,6 +150,7 @@
       color: var(--text-subtle);
       margin-bottom: 24px;
       line-height: 1.5;
+      font-weight: 500;
     }
 
     .stack-tags {
@@ -182,8 +161,8 @@
       .tag-chip {
         padding: 4px 10px;
         font-size: 0.75rem;
-        font-weight: 600;
-        background-color: var(--bg-secondary);
+        font-weight: 700;
+        background-color: var(--bg-tertiary);
         border: 1px solid var(--border-color);
         border-radius: 2px;
         color: var(--text-main);
@@ -206,7 +185,7 @@
       width: 100%;
       height: 420px;
       background-color: var(--bg-secondary);
-      border: 1px solid var(--border-color);
+      border: 2px solid var(--border-color);
       overflow: hidden;
 
       img {
@@ -219,13 +198,13 @@
     .metrics-grid {
       display: grid;
       grid-template-columns: 1fr;
-      border-top: 1px solid var(--border-color);
+      border-top: 2px solid var(--border-color);
 
       .metric-card {
         padding: 20px;
-        border-bottom: 1px solid var(--border-color);
-        border-left: 1px solid var(--border-color);
-        border-right: 1px solid var(--border-color);
+        border-bottom: 2px solid var(--border-color);
+        border-left: 2px solid var(--border-color);
+        border-right: 2px solid var(--border-color);
         background-color: var(--bg-secondary);
         display: flex;
         flex-direction: column;
@@ -233,7 +212,7 @@
 
         .label {
           font-size: 0.7rem;
-          font-weight: 700;
+          font-weight: 800;
           letter-spacing: 0.1em;
           color: var(--text-muted);
           margin-bottom: 4px;
@@ -241,7 +220,7 @@
 
         .val {
           font-size: 0.95rem;
-          font-weight: 700;
+          font-weight: 800;
           color: var(--text-main);
         }
       }
@@ -271,8 +250,8 @@
         border-bottom: 3px solid transparent;
 
         &.active {
-          color: var(--text-main);
-          border-bottom-color: var(--text-main);
+          color: var(--text-main) !important;
+          border-bottom-color: var(--border-color);
           background-color: var(--bg-secondary);
         }
 
@@ -289,8 +268,8 @@
       &.overview-panel {
         .ai-summary-box {
           background-color: var(--bg-secondary);
-          border: 1px solid var(--border-color);
-          border-left: 5px solid var(--text-main);
+          border: 2px solid var(--border-color);
+          border-left: 6px solid var(--border-color);
           padding: 24px;
           margin-bottom: 40px;
 
@@ -299,16 +278,17 @@
             font-size: 0.7rem;
             font-weight: 800;
             letter-spacing: 0.1em;
-            background-color: var(--btn-bg);
-            color: var(--btn-text);
-            padding: 2px 8px;
+            background-color: #000000;
+            color: #ffffff;
+            padding: 3px 8px;
             margin-bottom: 12px;
           }
 
           .summary-text {
             font-size: 1.05rem;
             line-height: 1.7;
-            color: var(--text-subtle);
+            color: var(--text-main);
+            font-weight: 500;
           }
         }
 
@@ -333,6 +313,7 @@
               border-bottom: 1px solid var(--border-subtle);
               font-size: 0.95rem;
               color: var(--text-subtle);
+              font-weight: 500;
 
               .bullet {
                 font-size: 0.6rem;
@@ -344,14 +325,14 @@
         }
       }
 
-      /* 트러블슈팅 탭 (다크모드 색상 대비 강조) */
+      /* 트러블슈팅 탭 */
       &.trouble-panel {
         display: flex;
         flex-direction: column;
         gap: 24px;
 
         .trouble-card {
-          border: 1px solid var(--border-color);
+          border: 2px solid var(--border-color);
           background-color: var(--bg-secondary);
           padding: 24px;
 
@@ -366,9 +347,8 @@
             .trouble-id {
               font-size: 0.75rem;
               font-weight: 900;
-              background-color: var(--bg-tertiary);
-              color: var(--text-main);
-              border: 1px solid var(--border-color);
+              background-color: #000000;
+              color: #ffffff;
               padding: 4px 8px;
             }
 
@@ -393,11 +373,13 @@
               font-size: 0.75rem;
               letter-spacing: 0.08em;
               margin-bottom: 8px;
+              font-weight: 800;
             }
 
             p {
               font-size: 0.9rem;
               line-height: 1.6;
+              font-weight: 500;
             }
 
             .issue-box {
@@ -453,6 +435,7 @@
             &.date {
               font-size: 0.8rem;
               color: var(--text-muted);
+              font-weight: 600;
               width: 120px;
             }
 
@@ -461,9 +444,8 @@
               font-size: 0.7rem;
               font-weight: 800;
               padding: 2px 6px;
-              background-color: var(--btn-bg);
-              color: var(--btn-text);
-              border: 1px solid var(--border-color);
+              background-color: #000000;
+              color: #ffffff;
             }
 
             &.msg {
@@ -481,9 +463,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    color: var(--text-main);
+    background-color: #000000;
+    color: #ffffff;
     padding: 40px;
 
     @media (max-width: 768px) {
@@ -495,28 +476,27 @@
     .sub-label {
       font-size: 0.75rem;
       letter-spacing: 0.1em;
-      color: var(--text-muted);
+      color: #a1a1aa;
     }
 
     h2 {
       font-size: 1.5rem;
       font-weight: 900;
       margin-top: 4px;
-      color: var(--text-main);
+      color: #ffffff;
     }
 
     .cta-btn {
       padding: 14px 28px;
       font-size: 0.85rem;
       font-weight: 800;
-      background-color: var(--btn-bg);
-      color: var(--btn-text);
+      background-color: #ffffff;
+      color: #000000 !important;
       text-decoration: none;
-      border: 1px solid var(--border-color);
-      transition: opacity 0.2s;
+      transition: background-color 0.2s;
 
       &:hover {
-        opacity: 0.85;
+        background-color: #e4e4e7;
       }
     }
   }
