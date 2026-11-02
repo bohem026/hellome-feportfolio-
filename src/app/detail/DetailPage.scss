@@ -1,8 +1,7 @@
 /* ==========================================================================
-   DETAIL PAGE SCSS (ContactPage Pattern Applied)
+   DETAIL PAGE SCSS (Using Common Header/Footer Pattern)
    ========================================================================== */
 
-// 1. Sass 고정 변수 선언 (다크모드 영향 안 받음)
 $bg-primary: #ffffff;
 $bg-secondary: #f8fafc;
 $bg-tertiary: #f1f5f9;
@@ -20,33 +19,31 @@ $solution-bg: #f0fdf4;
 $solution-border: #16a34a;
 $solution-text: #14532d;
 
-// 2. body 전체 배경 및 기본 글자색 고정 (ContactPage 핵심 방식)
 body {
   background-color: $bg-primary !important;
   color: $text-main !important;
 }
 
-// 3. Detail Page 컨테이너
 .detail-container {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 40px 24px 120px;
+  padding: 24px 24px 120px;
   background-color: $bg-primary;
   color: $text-main;
   font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
 
-  /* 3-1. 상단 네비게이션 바 */
-  .detail-nav {
+  /* 1. 세부 페이지 서브 액션 바 */
+  .sub-action-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 0 20px;
+    padding: 16px 0;
     border-bottom: 1px solid $border-color;
 
     .back-link {
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.05em;
       text-decoration: none;
       color: $text-main;
@@ -90,9 +87,9 @@ body {
     }
   }
 
-  /* 3-2. 히어로 헤더 */
+  /* 2. 히어로 헤더 */
   .detail-hero-header {
-    padding: 48px 0 32px;
+    padding: 40px 0 32px;
 
     .hero-meta {
       display: flex;
@@ -143,7 +140,7 @@ body {
     }
   }
 
-  /* 3-3. 비주얼 썸네일 & 메트릭스 격자 */
+  /* 3. 비주얼 썸네일 & 메트릭스 격자 */
   .detail-visual-section {
     display: grid;
     grid-template-columns: 2.5fr 1fr;
@@ -200,7 +197,7 @@ body {
     }
   }
 
-  /* 3-4. 탭 네비게이션 컨트롤 */
+  /* 4. 탭 네비게이션 컨트롤 */
   .detail-tab-section {
     margin-bottom: 80px;
 
@@ -428,7 +425,7 @@ body {
     }
   }
 
-  /* 3-5. 하단 CTA 배너 */
+  /* 5. 하단 CTA 배너 */
   .detail-footer-banner {
     display: flex;
     justify-content: space-between;

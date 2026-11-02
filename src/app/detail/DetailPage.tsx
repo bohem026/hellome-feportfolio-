@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import "./DetailPage.scss";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 // 💡 세부 페이지 전용 목업 데이터
 const MOCK_PROJECT_DETAIL = {
@@ -85,189 +87,194 @@ export function DetailPage() {
   >("overview");
 
   return (
-    <article className="detail-container">
-      {/* 1. 상단 브레드크럼 & 액션 바 */}
-      <nav className="detail-nav">
-        <Link href="/works" className="back-link">
-          ← BACK TO INDEX
-        </Link>
+    <>
+      {/* 💡 공통 헤더 컴포넌트 호출 */}
+      <Header />
 
-        <div className="action-group">
-          {project.demoUrl && (
+      <article className="detail-container">
+        {/* 1. 세부 페이지 전용 서브 액션 바 */}
+        <div className="sub-action-bar">
+          <Link href="/works" className="back-link">
+            ← BACK TO INDEX
+          </Link>
+
+          <div className="action-group">
+            {project.demoUrl && (
+              <a
+                href={project.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="action-btn demo-btn"
+              >
+                LIVE DEMO ↗
+              </a>
+            )}
             <a
-              href={project.demoUrl}
+              href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="action-btn demo-btn"
+              className="action-btn github-btn"
             >
-              LIVE DEMO ↗
+              GITHUB REPO ↗
             </a>
-          )}
-          <a
-            href={project.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="action-btn github-btn"
-          >
-            GITHUB REPO ↗
-          </a>
-        </div>
-      </nav>
-
-      {/* 2. 히어로 헤더 섹션 */}
-      <header className="detail-hero-header">
-        <div className="hero-meta">
-          <span className="ref-badge">SPECIMEN NO. #{project.id}</span>
-          <span className="star-badge">
-            ★ {project.stars} STARS / {project.forks} FORKS
-          </span>
+          </div>
         </div>
 
-        <h1 className="hero-title">{project.title}</h1>
-        <p className="hero-subtitle">{project.subtitle}</p>
-
-        <div className="stack-tags">
-          {project.categoryTags.map((tag, idx) => (
-            <span key={idx} className="tag-chip">
-              {tag}
+        {/* 2. 히어로 헤더 섹션 */}
+        <header className="detail-hero-header">
+          <div className="hero-meta">
+            <span className="ref-badge">SPECIMEN NO. #{project.id}</span>
+            <span className="star-badge">
+              ★ {project.stars} STARS / {project.forks} FORKS
             </span>
-          ))}
-        </div>
-      </header>
-
-      {/* 3. 썸네일 & 퀵 메트릭스 격자 */}
-      <section className="detail-visual-section">
-        <div className="image-frame">
-          <img src={project.heroImage} alt={project.title} />
-        </div>
-
-        <div className="metrics-grid">
-          <div className="metric-card">
-            <span className="label">LAST UPDATED</span>
-            <span className="val">{project.updatedAt}</span>
           </div>
-          <div className="metric-card">
-            <span className="label">PRIMARY ENGINE</span>
-            <span className="val">OpenAI / Supabase</span>
-          </div>
-          <div className="metric-card">
-            <span className="label">VISIBILITY</span>
-            <span className="val">{project.status}</span>
-          </div>
-          <div className="metric-card">
-            <span className="label">ARCHIVE DATE</span>
-            <span className="val">{project.createdAt}</span>
-          </div>
-        </div>
-      </section>
 
-      {/* 4. 탭 네비게이션 컨트롤 */}
-      <section className="detail-tab-section">
-        <div className="tab-buttons">
-          <button
-            className={`tab-btn ${activeTab === "overview" ? "active" : ""}`}
-            onClick={() => setActiveTab("overview")}
-          >
-            01 // OVERVIEW & FEATURES
-          </button>
-          <button
-            className={`tab-btn ${activeTab === "trouble" ? "active" : ""}`}
-            onClick={() => setActiveTab("trouble")}
-          >
-            02 // TROUBLESHOOTING ({project.troubleshooting.length})
-          </button>
-          <button
-            className={`tab-btn ${activeTab === "commits" ? "active" : ""}`}
-            onClick={() => setActiveTab("commits")}
-          >
-            03 // COMMIT HISTORY
-          </button>
-        </div>
+          <h1 className="hero-title">{project.title}</h1>
+          <p className="hero-subtitle">{project.subtitle}</p>
 
-        {/* 탭 1: 개요 및 핵심 기능 */}
-        {activeTab === "overview" && (
-          <div className="tab-content overview-panel">
-            <div className="ai-summary-box">
-              <div className="box-badge">AI INSIGHT SUMMARY</div>
-              <p className="summary-text">{project.aiOverview.summary}</p>
-            </div>
-
-            <div className="features-list-box">
-              <h3>KEY IMPLEMENTATION FEATURES</h3>
-              <ul>
-                {project.aiOverview.keyFeatures.map((feat, idx) => (
-                  <li key={idx}>
-                    <span className="bullet">●</span>
-                    <span>{feat}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        )}
-
-        {/* 탭 2: 트러블슈팅 (STAR 패턴) */}
-        {activeTab === "trouble" && (
-          <div className="tab-content trouble-panel">
-            {project.troubleshooting.map((item) => (
-              <div className="trouble-card" key={item.id}>
-                <div className="trouble-header">
-                  <span className="trouble-id">{item.id}</span>
-                  <h4 className="trouble-title">{item.title}</h4>
-                </div>
-
-                <div className="trouble-body">
-                  <div className="issue-box">
-                    <strong>[PROBLEM / ISSUE]</strong>
-                    <p>{item.issue}</p>
-                  </div>
-                  <div className="solution-box">
-                    <strong>[RESOLUTION / TECH SOLUTION]</strong>
-                    <p>{item.solution}</p>
-                  </div>
-                </div>
-              </div>
+          <div className="stack-tags">
+            {project.categoryTags.map((tag, idx) => (
+              <span key={idx} className="tag-chip">
+                {tag}
+              </span>
             ))}
           </div>
-        )}
+        </header>
 
-        {/* 탭 3: 커밋 이력 돋보기 */}
-        {activeTab === "commits" && (
-          <div className="tab-content commits-panel">
-            <table className="commit-table">
-              <thead>
-                <tr>
-                  <th>DATE</th>
-                  <th>TYPE</th>
-                  <th>COMMIT MESSAGE</th>
-                </tr>
-              </thead>
-              <tbody>
-                {project.commitHighlights.map((c, idx) => (
-                  <tr key={idx}>
-                    <td className="date">{c.date}</td>
-                    <td>
-                      <span className="commit-tag">{c.tag}</span>
-                    </td>
-                    <td className="msg">{c.msg}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* 3. 썸네일 & 퀵 메트릭스 격자 */}
+        <section className="detail-visual-section">
+          <div className="image-frame">
+            <img src={project.heroImage} alt={project.title} />
           </div>
-        )}
-      </section>
 
-      {/* 5. 푸터 넥스트 프로젝트 바너 */}
-      <footer className="detail-footer-banner">
-        <div className="banner-info">
-          <span className="sub-label">CONTINUE EXPLORING</span>
-          <h2>READY TO SEE MORE WORKS?</h2>
-        </div>
-        <Link href="/works" className="cta-btn">
-          RETURN TO WORKS INDEX →
-        </Link>
-      </footer>
-    </article>
+          <div className="metrics-grid">
+            <div className="metric-card">
+              <span className="label">LAST UPDATED</span>
+              <span className="val">{project.updatedAt}</span>
+            </div>
+            <div className="metric-card">
+              <span className="label">PRIMARY ENGINE</span>
+              <span className="val">OpenAI / Supabase</span>
+            </div>
+            <div className="metric-card">
+              <span className="label">VISIBILITY</span>
+              <span className="val">{project.status}</span>
+            </div>
+            <div className="metric-card">
+              <span className="label">ARCHIVE DATE</span>
+              <span className="val">{project.createdAt}</span>
+            </div>
+          </div>
+        </section>
+
+        {/* 4. 탭 네비게이션 컨트롤 */}
+        <section className="detail-tab-section">
+          <div className="tab-buttons">
+            <button
+              className={`tab-btn ${activeTab === "overview" ? "active" : ""}`}
+              onClick={() => setActiveTab("overview")}
+            >
+              01 // OVERVIEW & FEATURES
+            </button>
+            <button
+              className={`tab-btn ${activeTab === "trouble" ? "active" : ""}`}
+              onClick={() => setActiveTab("trouble")}
+            >
+              02 // TROUBLESHOOTING ({project.troubleshooting.length})
+            </button>
+            <button
+              className={`tab-btn ${activeTab === "commits" ? "active" : ""}`}
+              onClick={() => setActiveTab("commits")}
+            >
+              03 // COMMIT HISTORY
+            </button>
+          </div>
+
+          {activeTab === "overview" && (
+            <div className="tab-content overview-panel">
+              <div className="ai-summary-box">
+                <div className="box-badge">AI INSIGHT SUMMARY</div>
+                <p className="summary-text">{project.aiOverview.summary}</p>
+              </div>
+
+              <div className="features-list-box">
+                <h3>KEY IMPLEMENTATION FEATURES</h3>
+                <ul>
+                  {project.aiOverview.keyFeatures.map((feat, idx) => (
+                    <li key={idx}>
+                      <span className="bullet">●</span>
+                      <span>{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "trouble" && (
+            <div className="tab-content trouble-panel">
+              {project.troubleshooting.map((item) => (
+                <div className="trouble-card" key={item.id}>
+                  <div className="trouble-header">
+                    <span className="trouble-id">{item.id}</span>
+                    <h4 className="trouble-title">{item.title}</h4>
+                  </div>
+
+                  <div className="trouble-body">
+                    <div className="issue-box">
+                      <strong>[PROBLEM / ISSUE]</strong>
+                      <p>{item.issue}</p>
+                    </div>
+                    <div className="solution-box">
+                      <strong>[RESOLUTION / TECH SOLUTION]</strong>
+                      <p>{item.solution}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {activeTab === "commits" && (
+            <div className="tab-content commits-panel">
+              <table className="commit-table">
+                <thead>
+                  <tr>
+                    <th>DATE</th>
+                    <th>TYPE</th>
+                    <th>COMMIT MESSAGE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {project.commitHighlights.map((c, idx) => (
+                    <tr key={idx}>
+                      <td className="date">{c.date}</td>
+                      <td>
+                        <span className="commit-tag">{c.tag}</span>
+                      </td>
+                      <td className="msg">{c.msg}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+
+        {/* 5. 하단 CTA 배너 */}
+        <section className="detail-footer-banner">
+          <div className="banner-info">
+            <span className="sub-label">CONTINUE EXPLORING</span>
+            <h2>READY TO SEE MORE WORKS?</h2>
+          </div>
+          <Link href="/works" className="cta-btn">
+            RETURN TO WORKS INDEX →
+          </Link>
+        </section>
+      </article>
+
+      {/* 💡 공통 푸터 컴포넌트 호출 */}
+      <Footer />
+    </>
   );
 }
