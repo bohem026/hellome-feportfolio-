@@ -2,9 +2,44 @@
    DETAIL PAGE SCSS (High-Contrast Light Background for Dark Mode)
    ========================================================================== */
 
-/* 1. 고대비 변수 설정 (다크모드에서도 라이트 테마 기반 고대비 글자/배경 유지) */
+/* 세부 페이지 활성화 시 html, body 및 상단 글로벌 헤더 전체 스타일 강제 지정 */
+:global(html.force-light-page),
+:global(body.force-light-page) {
+  background-color: #ffffff !important;
+  color: #09090b !important;
+}
+
+/* 상단 글로벌 네비게이션 바 / Header 텍스트 및 배경 강제 라이트 톤 전환 */
+:global(body.force-light-page) {
+  /* 상단 글로벌 Header 영역 (프로젝트 내 실제 header 태그나 클래스명에 맞춰 지정) */
+  header,
+  nav,
+  .global-header,
+  .navbar,
+  .nav-container {
+    background-color: #ffffff !important;
+    color: #09090b !important;
+    border-color: #000000 !important;
+
+    /* 네비게이션 내부 모든 글자 및 링크 검은색 고정 */
+    a,
+    span,
+    p,
+    div,
+    button {
+      color: #09090b !important;
+    }
+
+    /* 네비게이션 내부 버튼 배경이 흰색일 경우 글자색 보장 */
+    button,
+    .nav-btn {
+      border-color: #000000 !important;
+    }
+  }
+}
+
+/* 본문 레이아웃 */
 .detail-container {
-  // 다크모드/라이트모드 공통: 글자색은 다크 톤, 배경은 밝은 톤으로 강제 지정
   --bg-primary: #ffffff;
   --bg-secondary: #f8fafc;
   --bg-tertiary: #f1f5f9;
@@ -12,9 +47,9 @@
   --border-color: #000000;
   --border-subtle: #cbd5e1;
 
-  --text-main: #09090b; // 최상위 선명한 블랙
-  --text-muted: #475569; // 보조 텍스트 (다크 슬레이트)
-  --text-subtle: #334155; // 설명 텍스트
+  --text-main: #09090b;
+  --text-muted: #475569;
+  --text-subtle: #334155;
 
   --issue-bg: #fff1f2;
   --issue-border: #e11d48;
@@ -27,38 +62,12 @@
   --btn-bg: #000000;
   --btn-text: #ffffff;
 
-  /* 다크 모드 감지 시에도 글자 시독성을 위해 배경을 흰색/밝은 톤으로 고정 */
-  @media (prefers-color-scheme: dark) {
-    --bg-primary: #ffffff;
-    --bg-secondary: #f8fafc;
-    --bg-tertiary: #f1f5f9;
-    --border-color: #000000;
-    --border-subtle: #cbd5e1;
-    --text-main: #09090b;
-    --text-muted: #475569;
-    --text-subtle: #334155;
-  }
-}
-
-/* 다크모드 클래스(.dark) 중첩 시에도 라이트 배경 & 다크 글자색 강제 적용 */
-:global(.dark) .detail-container {
-  --bg-primary: #ffffff !important;
-  --bg-secondary: #f8fafc !important;
-  --bg-tertiary: #f1f5f9 !important;
-  --border-color: #000000 !important;
-  --border-subtle: #cbd5e1 !important;
-  --text-main: #09090b !important;
-  --text-muted: #475569 !important;
-  --text-subtle: #334155 !important;
-}
-
-/* 2. 본문 레이아웃 */
-.detail-container {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
   padding: 40px 24px 120px;
-  background-color: var(--bg-primary);
-  color: var(--text-main);
+  background-color: #ffffff !important;
+  color: #09090b !important;
   font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
 
   /* 2-1. 상단 네비게이션 (로고 및 문구 고대비 보장) */
