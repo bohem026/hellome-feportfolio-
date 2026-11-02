@@ -1,0 +1,420 @@
+/* ==========================================================================
+   DETAIL PAGE SCSS (Catalogue / Brutalist Monochrome Aesthetic)
+   ========================================================================== */
+
+.detail-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 120px;
+  color: #111;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
+
+  /* 1. 상단 네비게이션 */
+  .detail-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e2e8f0;
+
+    .back-link {
+      font-size: 0.875rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      color: #000;
+      transition: opacity 0.2s;
+
+      &:hover {
+        opacity: 0.6;
+      }
+    }
+
+    .action-group {
+      display: flex;
+      gap: 12px;
+
+      .action-btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-decoration: none;
+        border: 1px solid #000;
+        transition: all 0.2s ease;
+
+        &.demo-btn {
+          background-color: #000;
+          color: #fff;
+
+          &:hover {
+            background-color: #333;
+          }
+        }
+
+        &.github-btn {
+          background-color: #fff;
+          color: #000;
+
+          &:hover {
+            background-color: #000;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+
+  /* 2. 히어로 헤더 */
+  .detail-hero-header {
+    padding: 48px 0 32px;
+
+    .hero-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #666;
+      margin-bottom: 16px;
+
+      .ref-badge {
+        color: #000;
+      }
+    }
+
+    .hero-title {
+      font-size: 2.75rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .hero-subtitle {
+      font-size: 1.125rem;
+      color: #4a5568;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .stack-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+
+      .tag-chip {
+        padding: 4px 10px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background-color: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 2px;
+        color: #334155;
+      }
+    }
+  }
+
+  /* 3. 비주얼 썸네일 & 메트릭스 */
+  .detail-visual-section {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr;
+    gap: 24px;
+    margin-bottom: 60px;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
+
+    .image-frame {
+      width: 100%;
+      height: 420px;
+      background-color: #f8fafc;
+      border: 1px solid #000;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      border-top: 1px solid #000;
+
+      .metric-card {
+        padding: 20px;
+        border-bottom: 1px solid #000;
+        border-left: 1px solid #000;
+        border-right: 1px solid #000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .label {
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          color: #64748b;
+          margin-bottom: 4px;
+        }
+
+        .val {
+          font-size: 0.95rem;
+          font-weight: 700;
+          color: #000;
+        }
+      }
+    }
+  }
+
+  /* 4. 탭 콘텐츠 영역 */
+  .detail-tab-section {
+    margin-bottom: 80px;
+
+    .tab-buttons {
+      display: flex;
+      border-bottom: 2px solid #000;
+      gap: 2px;
+      margin-bottom: 32px;
+      overflow-x: auto;
+
+      .tab-btn {
+        padding: 14px 24px;
+        font-size: 0.85rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #64748b;
+        border-bottom: 3px solid transparent;
+
+        &.active {
+          color: #000;
+          border-bottom-color: #000;
+          background-color: #f8fafc;
+        }
+
+        &:hover:not(.active) {
+          color: #000;
+        }
+      }
+    }
+
+    .tab-content {
+      padding: 8px 0;
+
+      /* 개요 탭 */
+      &.overview-panel {
+        .ai-summary-box {
+          background-color: #f8fafc;
+          border-left: 4px solid #000;
+          padding: 24px;
+          margin-bottom: 40px;
+
+          .box-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            background-color: #000;
+            color: #fff;
+            padding: 2px 8px;
+            margin-bottom: 12px;
+          }
+
+          .summary-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #1e293b;
+          }
+        }
+
+        .features-list-box {
+          h3 {
+            font-size: 0.9rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            margin-bottom: 20px;
+          }
+
+          ul {
+            list-style: none;
+            padding: 0;
+
+            li {
+              display: flex;
+              align-items: flex-start;
+              gap: 12px;
+              padding: 12px 0;
+              border-bottom: 1px solid #f1f5f9;
+              font-size: 0.95rem;
+
+              .bullet {
+                font-size: 0.6rem;
+                margin-top: 6px;
+              }
+            }
+          }
+        }
+      }
+
+      /* 트러블슈팅 탭 */
+      &.trouble-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        .trouble-card {
+          border: 1px solid #000;
+          padding: 24px;
+
+          .trouble-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #cbd5e1;
+
+            .trouble-id {
+              font-size: 0.75rem;
+              font-weight: 900;
+              background-color: #e2e8f0;
+              padding: 4px 8px;
+            }
+
+            .trouble-title {
+              font-size: 1.05rem;
+              font-weight: 800;
+            }
+          }
+
+          .trouble-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+
+            @media (max-width: 768px) {
+              grid-template-columns: 1fr;
+            }
+
+            strong {
+              display: block;
+              font-size: 0.75rem;
+              letter-spacing: 0.08em;
+              color: #475569;
+              margin-bottom: 6px;
+            }
+
+            p {
+              font-size: 0.9rem;
+              line-height: 1.6;
+              color: #334155;
+            }
+
+            .issue-box {
+              background-color: #fff1f2;
+              padding: 16px;
+              border-left: 3px solid #f43f5e;
+            }
+
+            .solution-box {
+              background-color: #f0fdf4;
+              padding: 16px;
+              border-left: 3px solid #22c55e;
+            }
+          }
+        }
+      }
+
+      /* 커밋 테이블 탭 */
+      &.commits-panel {
+        .commit-table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 0.9rem;
+
+          th {
+            text-align: left;
+            padding: 12px;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            border-bottom: 2px solid #000;
+          }
+
+          td {
+            padding: 16px 12px;
+            border-bottom: 1px solid #e2e8f0;
+
+            &.date {
+              font-size: 0.8rem;
+              color: #64748b;
+              width: 120px;
+            }
+
+            .commit-tag {
+              display: inline-block;
+              font-size: 0.7rem;
+              font-weight: 800;
+              padding: 2px 6px;
+              background-color: #000;
+              color: #fff;
+            }
+
+            &.msg {
+              font-weight: 600;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /* 5. 하단 CTA 배너 */
+  .detail-footer-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #000;
+    color: #fff;
+    padding: 40px;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .sub-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: #a1a1aa;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin-top: 4px;
+    }
+
+    .cta-btn {
+      padding: 14px 28px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      background-color: #fff;
+      color: #000;
+      text-decoration: none;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #e4e4e7;
+      }
+    }
+  }
+}
