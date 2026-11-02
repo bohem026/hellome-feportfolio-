@@ -89,7 +89,7 @@ export function DetailPage() {
   return (
     <>
       {/* 💡 공통 헤더 컴포넌트 호출 */}
-      <Header />
+      {/* <Header /> */}
 
       <article className="detail-container">
         {/* 1. 세부 페이지 전용 서브 액션 바 */}
@@ -274,7 +274,7 @@ export function DetailPage() {
       </article>
 
       {/* 💡 공통 푸터 컴포넌트 호출 */}
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
