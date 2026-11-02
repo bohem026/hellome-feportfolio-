@@ -1,79 +1,55 @@
 /* ==========================================================================
-   DETAIL PAGE SCSS (High-Contrast Light Background for Dark Mode)
+   DETAIL PAGE SCSS (ContactPage Pattern Applied)
    ========================================================================== */
 
-/* 세부 페이지 활성화 시 html, body 및 상단 글로벌 헤더 전체 스타일 강제 지정 */
-:global(html.force-light-page),
-:global(body.force-light-page),
-:global(body.force-light-page #__next),
-:global(body.force-light-page main),
-:global(body.force-light-page .layout-wrapper) {
-  background-color: #ffffff !important;
-  color: #09090b !important;
+// 1. Sass 고정 변수 선언 (다크모드 영향 안 받음)
+$bg-primary: #ffffff;
+$bg-secondary: #f8fafc;
+$bg-tertiary: #f1f5f9;
+$border-color: #000000;
+$border-subtle: #cbd5e1;
+$text-main: #09090b;
+$text-muted: #475569;
+$text-subtle: #334155;
+
+$issue-bg: #fff1f2;
+$issue-border: #e11d48;
+$issue-text: #9f1239;
+
+$solution-bg: #f0fdf4;
+$solution-border: #16a34a;
+$solution-text: #14532d;
+
+// 2. body 전체 배경 및 기본 글자색 고정 (ContactPage 핵심 방식)
+body {
+  background-color: $bg-primary !important;
+  color: $text-main !important;
 }
 
-/* 상단 글로벌 네비게이션 바 / Header 텍스트 및 배경 강제 라이트 톤 전환 */
-:global(body.force-light-page) {
-  header,
-  nav,
-  [class*="header"],
-  [class*="nav"],
-  [class*="Header"],
-  [class*="Nav"] {
-    background-color: #ffffff !important;
-    color: #09090b !important;
-    border-color: #000000 !important;
-
-    * {
-      color: #09090b !important;
-    }
-
-    a,
-    span,
-    p,
-    div,
-    button {
-      color: #09090b !important;
-    }
-  }
-}
-
-/* 본문 레이아웃 */
+// 3. Detail Page 컨테이너
 .detail-container {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-
-  --border-color: #000000;
-  --border-subtle: #cbd5e1;
-
-  --text-main: #09090b;
-  --text-muted: #475569;
-  --text-subtle: #334155;
-
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
   padding: 40px 24px 120px;
-  background-color: #ffffff !important;
-  color: #09090b !important;
+  background-color: $bg-primary;
+  color: $text-main;
   font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
 
-  /* 2-1. 상단 네비게이션 (로고 및 문구 고대비 보장) */
+  /* 3-1. 상단 네비게이션 바 */
   .detail-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-bottom: 24px;
-    border-bottom: 2px solid var(--border-color);
+    border-bottom: 2px solid $border-color;
 
     .back-link {
       font-size: 0.875rem;
       font-weight: 800;
       letter-spacing: 0.05em;
       text-decoration: none;
-      color: var(--text-main) !important; // 상위 스타일 덮어쓰기 방지
-      transition: opacity 0.2s;
+      color: $text-main;
 
       &:hover {
         opacity: 0.6;
@@ -90,12 +66,11 @@
         font-weight: 800;
         letter-spacing: 0.05em;
         text-decoration: none;
-        border: 2px solid var(--border-color);
-        transition: all 0.2s ease;
+        border: 2px solid $border-color;
 
         &.demo-btn {
           background-color: #000000;
-          color: #ffffff !important;
+          color: #ffffff;
 
           &:hover {
             background-color: #333333;
@@ -104,18 +79,18 @@
 
         &.github-btn {
           background-color: #ffffff;
-          color: #000000 !important;
+          color: #000000;
 
           &:hover {
             background-color: #000000;
-            color: #ffffff !important;
+            color: #ffffff;
           }
         }
       }
     }
   }
 
-  /* 2-2. 히어로 헤더 */
+  /* 3-2. 히어로 헤더 */
   .detail-hero-header {
     padding: 48px 0 32px;
 
@@ -125,11 +100,11 @@
       font-size: 0.75rem;
       font-weight: 800;
       letter-spacing: 0.1em;
-      color: var(--text-muted);
+      color: $text-muted;
       margin-bottom: 16px;
 
       .ref-badge {
-        color: var(--text-main);
+        color: $text-main;
       }
     }
 
@@ -140,12 +115,12 @@
       line-height: 1.1;
       margin-bottom: 12px;
       text-transform: uppercase;
-      color: var(--text-main) !important;
+      color: $text-main;
     }
 
     .hero-subtitle {
       font-size: 1.125rem;
-      color: var(--text-subtle);
+      color: $text-subtle;
       margin-bottom: 24px;
       line-height: 1.5;
       font-weight: 500;
@@ -160,15 +135,15 @@
         padding: 4px 10px;
         font-size: 0.75rem;
         font-weight: 700;
-        background-color: var(--bg-tertiary);
-        border: 1px solid var(--border-color);
+        background-color: $bg-tertiary;
+        border: 1px solid $border-color;
         border-radius: 2px;
-        color: var(--text-main);
+        color: $text-main;
       }
     }
   }
 
-  /* 2-3. 비주얼 썸네일 & 메트릭스 격자 */
+  /* 3-3. 비주얼 썸네일 & 메트릭스 격자 */
   .detail-visual-section {
     display: grid;
     grid-template-columns: 2.5fr 1fr;
@@ -182,8 +157,8 @@
     .image-frame {
       width: 100%;
       height: 420px;
-      background-color: var(--bg-secondary);
-      border: 2px solid var(--border-color);
+      background-color: $bg-secondary;
+      border: 2px solid $border-color;
       overflow: hidden;
 
       img {
@@ -196,14 +171,14 @@
     .metrics-grid {
       display: grid;
       grid-template-columns: 1fr;
-      border-top: 2px solid var(--border-color);
+      border-top: 2px solid $border-color;
 
       .metric-card {
         padding: 20px;
-        border-bottom: 2px solid var(--border-color);
-        border-left: 2px solid var(--border-color);
-        border-right: 2px solid var(--border-color);
-        background-color: var(--bg-secondary);
+        border-bottom: 2px solid $border-color;
+        border-left: 2px solid $border-color;
+        border-right: 2px solid $border-color;
+        background-color: $bg-secondary;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -212,26 +187,26 @@
           font-size: 0.7rem;
           font-weight: 800;
           letter-spacing: 0.1em;
-          color: var(--text-muted);
+          color: $text-muted;
           margin-bottom: 4px;
         }
 
         .val {
           font-size: 0.95rem;
           font-weight: 800;
-          color: var(--text-main);
+          color: $text-main;
         }
       }
     }
   }
 
-  /* 2-4. 탭 네비게이션 컨트롤 */
+  /* 3-4. 탭 네비게이션 컨트롤 */
   .detail-tab-section {
     margin-bottom: 80px;
 
     .tab-buttons {
       display: flex;
-      border-bottom: 2px solid var(--border-color);
+      border-bottom: 2px solid $border-color;
       gap: 4px;
       margin-bottom: 32px;
       overflow-x: auto;
@@ -244,17 +219,17 @@
         background: none;
         border: none;
         cursor: pointer;
-        color: var(--text-muted);
+        color: $text-muted;
         border-bottom: 3px solid transparent;
 
         &.active {
-          color: var(--text-main) !important;
-          border-bottom-color: var(--border-color);
-          background-color: var(--bg-secondary);
+          color: $text-main;
+          border-bottom-color: $border-color;
+          background-color: $bg-secondary;
         }
 
         &:hover:not(.active) {
-          color: var(--text-main);
+          color: $text-main;
         }
       }
     }
@@ -262,12 +237,11 @@
     .tab-content {
       padding: 8px 0;
 
-      /* 개요 탭 */
       &.overview-panel {
         .ai-summary-box {
-          background-color: var(--bg-secondary);
-          border: 2px solid var(--border-color);
-          border-left: 6px solid var(--border-color);
+          background-color: $bg-secondary;
+          border: 2px solid $border-color;
+          border-left: 6px solid $border-color;
           padding: 24px;
           margin-bottom: 40px;
 
@@ -285,7 +259,7 @@
           .summary-text {
             font-size: 1.05rem;
             line-height: 1.7;
-            color: var(--text-main);
+            color: $text-main;
             font-weight: 500;
           }
         }
@@ -296,7 +270,7 @@
             font-weight: 800;
             letter-spacing: 0.08em;
             margin-bottom: 20px;
-            color: var(--text-main);
+            color: $text-main;
           }
 
           ul {
@@ -308,30 +282,29 @@
               align-items: flex-start;
               gap: 12px;
               padding: 14px 0;
-              border-bottom: 1px solid var(--border-subtle);
+              border-bottom: 1px solid $border-subtle;
               font-size: 0.95rem;
-              color: var(--text-subtle);
+              color: $text-subtle;
               font-weight: 500;
 
               .bullet {
                 font-size: 0.6rem;
                 margin-top: 6px;
-                color: var(--text-main);
+                color: $text-main;
               }
             }
           }
         }
       }
 
-      /* 트러블슈팅 탭 */
       &.trouble-panel {
         display: flex;
         flex-direction: column;
         gap: 24px;
 
         .trouble-card {
-          border: 2px solid var(--border-color);
-          background-color: var(--bg-secondary);
+          border: 2px solid $border-color;
+          background-color: $bg-secondary;
           padding: 24px;
 
           .trouble-header {
@@ -340,7 +313,7 @@
             gap: 12px;
             margin-bottom: 16px;
             padding-bottom: 12px;
-            border-bottom: 1px dashed var(--border-color);
+            border-bottom: 1px dashed $border-color;
 
             .trouble-id {
               font-size: 0.75rem;
@@ -353,7 +326,7 @@
             .trouble-title {
               font-size: 1.05rem;
               font-weight: 800;
-              color: var(--text-main);
+              color: $text-main;
             }
           }
 
@@ -381,35 +354,34 @@
             }
 
             .issue-box {
-              background-color: var(--issue-bg);
-              border-left: 4px solid var(--issue-border);
+              background-color: $issue-bg;
+              border-left: 4px solid $issue-border;
               padding: 16px;
 
               strong {
-                color: var(--issue-border);
+                color: $issue-border;
               }
               p {
-                color: var(--issue-text);
+                color: $issue-text;
               }
             }
 
             .solution-box {
-              background-color: var(--solution-bg);
-              border-left: 4px solid var(--solution-border);
+              background-color: $solution-bg;
+              border-left: 4px solid $solution-border;
               padding: 16px;
 
               strong {
-                color: var(--solution-border);
+                color: $solution-border;
               }
               p {
-                color: var(--solution-text);
+                color: $solution-text;
               }
             }
           }
         }
       }
 
-      /* 커밋 테이블 탭 */
       &.commits-panel {
         .commit-table {
           width: 100%;
@@ -421,18 +393,18 @@
             padding: 14px 12px;
             font-size: 0.75rem;
             letter-spacing: 0.08em;
-            color: var(--text-muted);
-            border-bottom: 2px solid var(--border-color);
+            color: $text-muted;
+            border-bottom: 2px solid $border-color;
           }
 
           td {
             padding: 16px 12px;
-            border-bottom: 1px solid var(--border-subtle);
-            color: var(--text-main);
+            border-bottom: 1px solid $border-subtle;
+            color: $text-main;
 
             &.date {
               font-size: 0.8rem;
-              color: var(--text-muted);
+              color: $text-muted;
               font-weight: 600;
               width: 120px;
             }
@@ -448,7 +420,7 @@
 
             &.msg {
               font-weight: 600;
-              color: var(--text-main);
+              color: $text-main;
             }
           }
         }
@@ -456,7 +428,7 @@
     }
   }
 
-  /* 2-5. 하단 CTA 배너 */
+  /* 3-5. 하단 CTA 배너 */
   .detail-footer-banner {
     display: flex;
     justify-content: space-between;
@@ -489,7 +461,7 @@
       font-size: 0.85rem;
       font-weight: 800;
       background-color: #ffffff;
-      color: #000000 !important;
+      color: #000000;
       text-decoration: none;
       transition: background-color 0.2s;
 
