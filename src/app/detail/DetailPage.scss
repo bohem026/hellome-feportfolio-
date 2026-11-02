@@ -1,7 +1,8 @@
 /* ==========================================================================
-   DETAIL PAGE SCSS (Using Common Header/Footer Pattern)
+   DETAIL PAGE SCSS (Scoped strictly to .detail-container)
    ========================================================================== */
 
+// 1. Sass 고정 변수 선언
 $bg-primary: #ffffff;
 $bg-secondary: #f8fafc;
 $bg-tertiary: #f1f5f9;
@@ -19,11 +20,7 @@ $solution-bg: #f0fdf4;
 $solution-border: #16a34a;
 $solution-text: #14532d;
 
-body {
-  background-color: $bg-primary !important;
-  color: $text-main !important;
-}
-
+// 2. Detail Page 컨테이너 내부로만 모든 스타일 범위(Scope) 제한
 .detail-container {
   width: 100%;
   max-width: 1280px;
@@ -33,7 +30,7 @@ body {
   color: $text-main;
   font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
 
-  /* 1. 세부 페이지 서브 액션 바 */
+  /* 2-1. 세부 페이지 서브 액션 바 */
   .sub-action-bar {
     display: flex;
     justify-content: space-between;
@@ -87,7 +84,7 @@ body {
     }
   }
 
-  /* 2. 히어로 헤더 */
+  /* 2-2. 히어로 헤더 */
   .detail-hero-header {
     padding: 40px 0 32px;
 
@@ -140,7 +137,7 @@ body {
     }
   }
 
-  /* 3. 비주얼 썸네일 & 메트릭스 격자 */
+  /* 2-3. 비주얼 썸네일 & 메트릭스 격자 */
   .detail-visual-section {
     display: grid;
     grid-template-columns: 2.5fr 1fr;
@@ -197,7 +194,7 @@ body {
     }
   }
 
-  /* 4. 탭 네비게이션 컨트롤 */
+  /* 2-4. 탭 네비게이션 컨트롤 */
   .detail-tab-section {
     margin-bottom: 80px;
 
@@ -425,7 +422,7 @@ body {
     }
   }
 
-  /* 5. 하단 CTA 배너 */
+  /* 2-5. 하단 CTA 배너 */
   .detail-footer-banner {
     display: flex;
     justify-content: space-between;
