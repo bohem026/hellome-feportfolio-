@@ -18,6 +18,14 @@ $font-sans:
   Roboto,
   sans-serif;
 
+$issue-bg: #fff1f2;
+$issue-border: #e11d48;
+$issue-text: #9f1239;
+
+$solution-bg: #f0fdf4;
+$solution-border: #16a34a;
+$solution-text: #14532d;
+
 // 부모 / 공통 body 스타일 동기화
 body {
   background-color: $bg-primary;
