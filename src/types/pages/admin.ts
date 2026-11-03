@@ -1,19 +1,5 @@
-export type ProjectStatus = "PUBLISHED" | "DRAFT" | "ARCHIVED";
 export type InquiryStatus = "NEW" | "SCHEDULED" | "RESPONDED";
 export type AdminTab = "overview" | "projects" | "inquiries";
-
-export interface Project {
-  id: number;
-  title: string;
-  categories: string[];
-  status: ProjectStatus;
-  image_url: string;
-  description?: string;
-  github_url?: string;
-  stars?: number;
-  github_id?: string;
-  pushed_at?: string;
-}
 
 export interface Inquiry {
   id: string;
