@@ -51,12 +51,12 @@ export function DetailPage({ id }: DetailPageProps) {
     );
   }
 
-//   const formattedCreatedDate = project.created_at
-//     ? new Date(project.created_at).toISOString().split("T")[0]
-//     : "-";
-//   const formattedUpdatedDate = project.updated_at
-//     ? new Date(project.updated_at).toISOString().split("T")[0]
-//     : "-";
+  //   const formattedCreatedDate = project.created_at
+  //     ? new Date(project.created_at).toISOString().split("T")[0]
+  //     : "-";
+  const formattedUpdatedDate = project.pushed_at
+    ? new Date(project.pushed_at).toISOString().split("T")[0]
+    : "-";
 
   return (
     <>
@@ -107,10 +107,10 @@ export function DetailPage({ id }: DetailPageProps) {
           </div>
 
           <div className="metrics-grid">
-            {/* <div className="metric-card">
+            <div className="metric-card">
               <span className="label">LAST UPDATED</span>
               <span className="val">{formattedUpdatedDate}</span>
-            </div> */}
+            </div>
             <div className="metric-card">
               <span className="label">ARCHIVE STATUS</span>
               <span className="val">{project.status}</span>

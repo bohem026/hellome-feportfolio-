@@ -12,6 +12,7 @@ export interface Project {
   github_url?: string;
   stars?: number;
   github_id?: string;
+  pushed_at?: string;
 }
 
 export interface Inquiry {
