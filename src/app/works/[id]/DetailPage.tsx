@@ -21,13 +21,11 @@ export function DetailPage({ id }: DetailPageProps) {
   if (isLoading) {
     return (
       <>
-        <Header />
         <div className="detail-container">
           <div className="detail-loading">
             <p>LOADING PROJECT SPECIMEN #{id}...</p>
           </div>
         </div>
-        <Footer />
       </>
     );
   }
