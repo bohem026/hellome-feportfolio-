@@ -36,7 +36,6 @@ export function DetailPage({ id }: DetailPageProps) {
   if (error || !project) {
     return (
       <>
-        <Header />
         <div className="detail-container">
           <div className="sub-action-bar">
             <Link href="/works" className="back-link">
@@ -48,7 +47,6 @@ export function DetailPage({ id }: DetailPageProps) {
             <p>{error || "요청하신 프로젝트 정보를 찾을 수 없습니다."}</p>
           </div>
         </div>
-        <Footer />
       </>
     );
   }
@@ -62,8 +60,6 @@ export function DetailPage({ id }: DetailPageProps) {
 
   return (
     <>
-      <Header />
-
       <article className="detail-container">
         {/* 1. 세부 페이지 전용 서브 액션 바 */}
         <div className="sub-action-bar">
@@ -224,8 +220,6 @@ export function DetailPage({ id }: DetailPageProps) {
           </Link>
         </section>
       </article>
-
-      <Footer />
     </>
   );
 }
