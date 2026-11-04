@@ -3,14 +3,23 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
-import { INITIAL_PROJECTS, INITIAL_INQUIRIES } from "@/constants";
+import { INITIAL_INQUIRIES } from "@/constants";
 import { Project, Inquiry, AdminTab, GithubRepo } from "@/types";
+import { useProjects } from "@/hooks";
 import { ToastType } from "@/components/Toast";
 
 export function useAdminPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const supabase = createClient();
+
+  // 수정: useProjects 훅을 통해 프로젝트 상태 관리
+  const {
+    projects,
+    setProjects,
+    isLoading: isProjectsLoading,
+    refetchProjects,
+  } = useProjects({ autoFetch: false });
 
   // 추가: 세션 로딩 상태(관리자 인증 모달 점멸 현상 방지)
   const [isAuthLoading, setIsAuthLoading] = useState(true);
@@ -47,7 +56,6 @@ export function useAdminPage() {
     type: "success",
   });
 
-  const [projects, setProjects] = useState<Project[]>(INITIAL_PROJECTS);
   const [inquiries, setInquiries] = useState<Inquiry[]>(INITIAL_INQUIRIES);
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
 
@@ -93,7 +101,8 @@ export function useAdminPage() {
           ]);
 
           // 추가: 세션 확인 직후 DB 목록 조회 실행
-          await fetchProjectsFromSupabase(username);
+          // 수정: 공통 훅의 refetchProjects()로 대체
+          await refetchProjects();
 
           // OAuth 인증 직후 콜백(?connected=true)으로 들어온 경우 성공 처리
           const isJustConnected = searchParams.get("connected") === "true";
@@ -120,7 +129,7 @@ export function useAdminPage() {
     };
 
     checkGithubSession();
-  }, [searchParams, router]);
+  }, [searchParams, router, refetchProjects]);
 
   /**
    * GitHub 레포지토리 목록 불러오기
@@ -128,6 +137,7 @@ export function useAdminPage() {
    */
   const fetchGithubRepositories = async () => {
     setIsRepoLoading(true);
+
     try {
       const {
         data: { session },
@@ -230,7 +240,7 @@ export function useAdminPage() {
       return;
     }
 
-    await fetchProjectsFromSupabase(currentGithubId);
+    await refetchProjects();
     setIsRepoModalOpen(false);
     triggerToast(`레포지토리가 성공적으로 아카이빙되었습니다!`, "success");
   };
@@ -275,6 +285,7 @@ export function useAdminPage() {
    */
   const handleConfirmDisconnectGithub = async () => {
     setIsGithubDisconnectModalOpen(false);
+
     // 추가
     await supabase.from("projects").delete().neq("id", "");
     await supabase.auth.signOut({ scope: "global" });
@@ -314,7 +325,7 @@ export function useAdminPage() {
     setIsAuthModalOpen(false);
 
     if (isGithubConnected && githubUser) {
-      fetchProjectsFromSupabase(githubUser);
+      refetchProjects();
       triggerToast("GitHub 계정이 성공적으로 연동되었습니다.", "success");
     }
   };
@@ -331,69 +342,58 @@ export function useAdminPage() {
   };
 
   /**
-   * Supabase DB로부터 프로젝트 목록 조회
-   */
-  const fetchProjectsFromSupabase = async (targetGithubId: string) => {
-    const currentUser = targetGithubId || githubUser;
-    if (!currentUser) return;
-
-    try {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("*")
-        .eq("github_id", currentUser)
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        console.error("Supabase select error:", error);
-        return;
-      }
-
-      if (data) {
-        const formattedProjects: Project[] = data.map((item) => ({
-          id: item.id,
-          title: item.title,
-          categories: item.categories || ["Web Application"],
-          description: item.description,
-          image_url: item.image_url,
-          status: item.status || "PUBLISHED",
-          github_url: item.github_url || "",
-          stars: item.stars || 0,
-          github_id: currentUser,
-        }));
-
-        setProjects(formattedProjects);
-      }
-    } catch (error) {
-      console.error("Failed to fetch projects from Supabase:", error);
-    }
-  };
-
-  /**
    * 프로젝트 삭제 핸들러
    * @param id
    */
-  const handleDeleteProject = (id: number) => {
-    setProjects((prev) => prev.filter((p) => p.id !== id));
-    triggerToast("프로젝트가 삭제되었습니다.", "success");
+  const handleDeleteProject = async (id: number) => {
+    try {
+      // Supabase DB에서 프로젝트 삭제
+      const { error } = await supabase.from("projects").delete().eq("id", id);
+      if (error) {
+        throw error;
+      }
+
+      // 프론트엔드 상태에서도 삭제
+      setProjects((prev) => prev.filter((p) => p.id !== id));
+      triggerToast("프로젝트가 삭제되었습니다.", "success");
+
+      // DB 최신화
+      await refetchProjects();
+    } catch (error: any) {
+      console.error("Failed to delete project:", error);
+      triggerToast(error.message || "프로젝트 삭제 실패", "danger");
+    }
   };
 
   /**
    * 프로젝트 상태 토글 (PUBLISHED <-> DRAFT)
    * @param id
    */
-  const handleToggleStatus = (id: number) => {
-    setProjects((prev) =>
-      prev.map((p) => {
-        if (p.id === id) {
-          const nextStatus = p.status === "PUBLISHED" ? "DRAFT" : "PUBLISHED";
-          return { ...p, status: nextStatus };
-        }
-        return p;
-      }),
-    );
+  const handleToggleStatus = async (id: number) => {
+    const targetProject = projects.find((p) => p.id === id);
+    if (!targetProject) {
+      return;
+    }
 
-    triggerToast("프로젝트 게시 상태가 변경되었습니다.", "success");
+    const nextStatus =
+      targetProject.status === "PUBLISHED" ? "DRAFT" : "PUBLISHED";
+
+    try {
+      // DB 상태 업데이트
+      const { error } = await supabase
+        .from("projects")
+        .update({ status: nextStatus })
+        .eq("id", id);
+
+      if (error) throw error;
+
+      // UI 및 공통 훅 데이터 재갱신
+      await refetchProjects();
+      triggerToast("프로젝트 게시 상태가 변경되었습니다.", "success");
+    } catch (error: any) {
+      console.error("Failed to toggle status:", error);
+      triggerToast("게시 상태 변경 실패", "danger");
+    }
   };
 
   /**
@@ -422,6 +422,7 @@ export function useAdminPage() {
     setSelectedRepo,
     toastState,
     projects,
+    isProjectsLoading,
     inquiries,
     activeTab,
     setActiveTab,
@@ -440,5 +441,6 @@ export function useAdminPage() {
     handleDeleteProject,
     handleToggleStatus,
     handleRemoveInquiry,
+    refetchProjects,
   };
 }
