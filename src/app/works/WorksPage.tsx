@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useWorksPage } from "@/hooks";
+import { useWorksPage } from "@/hooks/pages/useWorksPage";
 import "./WorksPage.scss";
 
 export function WorksPage() {

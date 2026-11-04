@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import { useAdminPage } from "@/hooks";
+import { useAdminPage } from "@/hooks/pages/useAdminPage";
 import { AdminAuthModal } from "@/components/AdminAuthModal";
 import { ConfirmModal } from "@/components/ConfirmModal";
 import { Toast } from "@/components/Toast";
-import "./AdminPage.scss";
 import { RepoImportModal } from "@/components/RepoImportModal";
+import "./AdminPage.scss";
 
 export function AdminPage() {
   const {
