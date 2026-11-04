@@ -73,10 +73,16 @@ export function useProjects(options: UseProjectsOptions = { autoFetch: true }) {
     setError(null);
 
     try {
+      // 오류 수정: string으로 넘어온 id를 Number 타입으로 변환
+      const numericId = typeof id === "string" ? parseInt(id) : id;
+      if (isNaN(numericId)) {
+        throw new Error("유효하지 않은 프로젝트 ID입니다.");
+      }
+
       const { data, error: dbError } = await supabase
         .from("projects")
         .select("*")
-        .eq("id", id)
+        .eq("id", numericId)
         .single();
 
       if (dbError) {
@@ -100,13 +106,12 @@ export function useProjects(options: UseProjectsOptions = { autoFetch: true }) {
           github_id: data.github_id,
           pushed_at: data.pushed_at || data.updated_at,
         } as Project;
+        return formattedProject;
       }
-
       return null;
     } catch (err: any) {
       console.error(`Error fetching project #${id}:`, err);
       setError(err.message || "프로젝트 세부 정보를 불러오는 데 실패했습니다.");
-
       return null;
     } finally {
       setIsLoading(false);
