@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useProjects } from "@/hooks/common/useProjects";
-import { useDebounce } from "../common/useDebounce";
+import { useProjects, useDebounce } from "@/hooks";
 import { ViewMode } from "@/types";
 
 export function useWorksPage() {
