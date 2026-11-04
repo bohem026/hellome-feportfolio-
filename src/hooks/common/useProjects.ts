@@ -10,6 +10,9 @@ interface UseProjectsOptions {
 }
 
 export function useProjects(options: UseProjectsOptions = { autoFetch: true }) {
+  const status = options?.status;
+  const autoFetch = options?.autoFetch ?? true;
+
   const supabase = createClient();
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -26,8 +29,8 @@ export function useProjects(options: UseProjectsOptions = { autoFetch: true }) {
         .select("*")
         .order("created_at", { ascending: false });
 
-      if (options.status) {
-        query = query.eq("status", options.status);
+      if (status) {
+        query = query.ilike("status", status);
       }
 
       const { data, error: dbError } = await query;
@@ -62,7 +65,7 @@ export function useProjects(options: UseProjectsOptions = { autoFetch: true }) {
     } finally {
       setIsLoading(false);
     }
-  }, [options.status]);
+  }, [status]);
 
   // 2. 단건(ID) 프로젝트 Fetch
   const fetchProjectById = useCallback(async (id: string | number) => {
@@ -96,13 +99,14 @@ export function useProjects(options: UseProjectsOptions = { autoFetch: true }) {
           stars: data.stars || 0,
           github_id: data.github_id,
           pushed_at: data.pushed_at || data.updated_at,
-        };
-        return formattedProject;
+        } as Project;
       }
+
       return null;
     } catch (err: any) {
       console.error(`Error fetching project #${id}:`, err);
       setError(err.message || "프로젝트 세부 정보를 불러오는 데 실패했습니다.");
+
       return null;
     } finally {
       setIsLoading(false);
@@ -110,13 +114,14 @@ export function useProjects(options: UseProjectsOptions = { autoFetch: true }) {
   }, []);
 
   useEffect(() => {
-    if (options.autoFetch) {
+    if (autoFetch) {
       fetchProjects();
     }
-  }, [options.autoFetch, fetchProjects]);
+  }, [autoFetch, fetchProjects]);
 
   return {
     projects,
+    setProjects,
     isLoading,
     error,
     refetchProjects: fetchProjects,
