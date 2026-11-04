@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useWorksPage } from "@/hooks/pages/useWorksPage";
+import { useWorksPage } from "@/hooks";
 import "./WorksPage.scss";
 
 export function WorksPage() {
@@ -16,6 +16,7 @@ export function WorksPage() {
     categories,
     filteredProjects,
     totalCount,
+    handleCardClick,
   } = useWorksPage();
 
   return (
@@ -71,7 +72,7 @@ export function WorksPage() {
         </div>
       </section>
 
-      {/* 로딩 및 데이터 출력 조건부 렌더링 */}
+      {/* Display List */}
       {isLoading ? (
         <div className="works-loading-skeleton">
           <p>LOADING ARCHIVED PROJECTS FROM DATABASE...</p>
@@ -84,7 +85,12 @@ export function WorksPage() {
         /* Works Display (Grid Mode) */
         <section className="works-grid">
           {filteredProjects.map((work) => (
-            <article className="work-card" key={work.id}>
+            <article
+              className="work-card"
+              key={work.id}
+              onClick={() => handleCardClick(work.id)}
+              style={{ cursor: "pointer" }}
+            >
               <div className="card-top">
                 <span className="archive-num">#{work.id}</span>
                 <span className="year">★ {work.stars}</span>
@@ -107,6 +113,8 @@ export function WorksPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="arrow-link"
+                    // 이벤트 버블링 방지: 외부 링크 (깃허브) 클릭 시
+                    onClick={(e) => e.stopPropagation()}
                   >
                     ↗
                   </a>
@@ -130,7 +138,11 @@ export function WorksPage() {
             </thead>
             <tbody>
               {filteredProjects.map((work) => (
-                <tr key={work.id}>
+                <tr
+                  key={work.id}
+                  onClick={() => handleCardClick(work.id)}
+                  style={{ cursor: "pointer" }}
+                >
                   <td>#{work.id}</td>
                   <td>★ {work.stars}</td>
                   <td className="bold">{work.title}</td>
@@ -145,6 +157,8 @@ export function WorksPage() {
                         href={work.github_url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        // 이벤트 버블링 방지
+                        onClick={(e) => e.stopPropagation()}
                       >
                         EXPLORE ↗
                       </a>

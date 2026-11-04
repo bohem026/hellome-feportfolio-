@@ -1,11 +1,15 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { useProjects, useDebounce } from "@/hooks";
 import { ViewMode } from "@/types";
 
 export function useWorksPage() {
+  const router = useRouter();
+
   // Supabase 실시간 데이터 및 로딩
+  // PUBLISHED 상태의 프로젝트만 가져오기
   const { projects, isLoading, error } = useProjects({ status: "PUBLISHED" });
 
   // 필터링 & UX
@@ -48,6 +52,11 @@ export function useWorksPage() {
     });
   }, [projects, selectedCategory, debouncedSearchTerm]);
 
+  // 클릭 이벤트 추가 (세부 페이지로 이동)
+  const handleCardClick = (id: number | string) => {
+    router.push(`/works/${id}`);
+  };
+
   return {
     isLoading,
     error,
@@ -61,5 +70,6 @@ export function useWorksPage() {
     viewMode,
     setViewMode,
     totalCount: projects.length,
+    handleCardClick,
   };
 }
