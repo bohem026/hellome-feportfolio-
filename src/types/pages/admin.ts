@@ -9,13 +9,3 @@ export interface Inquiry {
   timeAgo: string;
   status: InquiryStatus;
 }
-
-export interface GithubRepo {
-  id: number;
-  name: string;
-  description: string | null;
-  github_url: string;
-  stargazers_count: number;
-  languages: string[];
-  updated_at: string;
-}

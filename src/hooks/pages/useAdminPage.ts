@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { INITIAL_INQUIRIES } from "@/constants";
-import { Project, Inquiry, AdminTab, GithubRepo } from "@/types";
+import { Project, ProjectStatus, GithubRepo, Inquiry, AdminTab } from "@/types";
 import { useProjects } from "@/hooks";
 import { ToastType } from "@/components/Toast";
 
@@ -132,6 +132,54 @@ export function useAdminPage() {
   }, [searchParams, router, refetchProjects]);
 
   /**
+   * GitHub 레포지토리의 상세 정보 가져오기
+   * @param owner
+   * @param repoName
+   * @param token
+   * @returns
+   */
+  const fetchGithubRepoDetails = async (
+    owner: string,
+    repoName: string,
+    token: string,
+  ) => {
+    try {
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/vnd.github.v3+json",
+      };
+
+      // 레포지토리 단건 조회 (description, url 등 상세 데이터 포함)
+      const repoRes = await fetch(
+        `https://api.github.com/repos/${owner}/${repoName}`,
+        { headers },
+      );
+      const repoData = await repoRes.json();
+
+      // 주요 사용 언어 목록 조회 (GET /repos/{owner}/{repo}/languages)
+      const langRes = await fetch(
+        `https://api.github.com/repos/${owner}/${repoName}/languages`,
+        { headers },
+      );
+      const langData = await langRes.json();
+      // 객체의 열거 가능한 문자열 속성 반환: 배열
+      // e.g. ["TypeScript", "SCSS", "HTML"]
+      const languages = Object.keys(langData);
+
+      return {
+        pushed_at: repoData.pushed_at || repoData.updated_at,
+        stars: repoData.stargazers_count || 0,
+        description: repoData.description || "",
+        languages: languages.length > 0 ? languages : ["Web Application"],
+        github_url: repoData.github_url,
+      };
+    } catch (error) {
+      console.error("Failed to fetch repo details:", error);
+      return null;
+    }
+  };
+
+  /**
    * GitHub 레포지토리 목록 불러오기
    * @returns
    */
@@ -190,6 +238,12 @@ export function useAdminPage() {
       data: { session },
     } = await supabase.auth.getSession();
 
+    // 추가: 세션 만료 시 재인증 유도
+    if (!session || !session.provider_token) {
+      setIsGithubSessionExpiredModalOpen(true);
+      return;
+    }
+
     const currentGithubId =
       session?.user?.user_metadata?.preferred_username ||
       githubUser ||
@@ -210,24 +264,37 @@ export function useAdminPage() {
       return;
     }
 
+    // 선택한 레포지토리의 상세 데이터 패치
+    const repoDetails = await fetchGithubRepoDetails(
+      currentGithubId,
+      repo.name,
+      session.provider_token,
+    );
+
     const categoryList: string[] = [];
-    if (repo.languages && repo.languages.length > 0) {
-      categoryList.push(...repo.languages.slice(0, 3));
+    if (repoDetails?.languages && repoDetails.languages.length > 0) {
+      categoryList.push(...repoDetails.languages.slice(0, 3));
+    } else {
+      categoryList.push("Web Application");
     }
 
+    // 실제 Github API에서 가져온 데이터를 기반으로 Project 객체 생성
     const newProject: Project = {
       id: repo.id,
       title: repo.name,
-      categories: categoryList.length > 0 ? categoryList : ["Web Application"],
+      categories: categoryList,
       description:
-        repo.description || "GitHub 레포지토리로부터 임포트된 프로젝트입니다.",
+        repoDetails?.description ||
+        "GitHub 레포지토리로부터 임포트된 프로젝트입니다.",
       image_url:
         "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
-      status: "PUBLISHED",
-      github_url: repo.github_url || "",
-      stars: repo.stargazers_count || 0,
+      status: "PUBLISHED" as ProjectStatus,
+      github_url: repoDetails?.github_url || "",
+      stars: repoDetails?.stars || 0,
       // 추가: 깃허브 계정 식별자
       github_id: currentGithubId,
+      // 추가: GitHub REST API에서 제공하는 최근 커밋 시각
+      pushed_at: repoDetails?.pushed_at || new Date().toISOString(),
     };
 
     // Supabase DB에 Insert

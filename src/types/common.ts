@@ -12,3 +12,13 @@ export interface Project {
   github_id?: string;
   pushed_at?: string;
 }
+
+export interface GithubRepo {
+  id: number;
+  name: string;
+  languages: string[];
+  description: string | null;
+  github_url: string;
+  stargazers_count: number;
+  pushed_at: string;
+}
