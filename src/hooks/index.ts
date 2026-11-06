@@ -2,6 +2,7 @@
 export * from "./common/useDebounce";
 export * from "./common/useHeader";
 export * from "./common/useProjects";
+export * from "./common/useGithubRepo";
 
 // Page-specific Hooks
 export * from "./pages/useAboutPage";

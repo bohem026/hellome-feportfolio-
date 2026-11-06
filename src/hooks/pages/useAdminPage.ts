@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { INITIAL_INQUIRIES } from "@/constants";
 import { Project, ProjectStatus, GithubRepo, Inquiry, AdminTab } from "@/types";
-import { useProjects } from "@/hooks";
+import { useProjects, useGithubRepo } from "@/hooks";
 import { ToastType } from "@/components/Toast";
 
 export function useAdminPage() {
@@ -20,6 +20,8 @@ export function useAdminPage() {
     isLoading: isProjectsLoading,
     refetchProjects,
   } = useProjects({ autoFetch: false });
+  const { isRepoLoading, fetchGithubRepositories, fetchGithubRepoDetails } =
+    useGithubRepo();
 
   // 추가: 세션 로딩 상태(관리자 인증 모달 점멸 현상 방지)
   const [isAuthLoading, setIsAuthLoading] = useState(true);
@@ -42,7 +44,6 @@ export function useAdminPage() {
 
   // GitHub 레포지토리 데이터 관련 상태
   const [repositories, setRepositories] = useState<GithubRepo[]>([]);
-  const [isRepoLoading, setIsRepoLoading] = useState(false);
   const [selectedRepo, setSelectedRepo] = useState<GithubRepo | null>(null);
 
   // Toast 메세지 상태
@@ -138,6 +139,7 @@ export function useAdminPage() {
    * @param token
    * @returns
    */
+  /**
   const fetchGithubRepoDetails = async (
     owner: string,
     repoName: string,
@@ -178,11 +180,13 @@ export function useAdminPage() {
       return null;
     }
   };
+   */
 
   /**
    * GitHub 레포지토리 목록 불러오기
    * @returns
    */
+  /**
   const fetchGithubRepositories = async () => {
     setIsRepoLoading(true);
 
@@ -228,6 +232,7 @@ export function useAdminPage() {
       setIsRepoLoading(false);
     }
   };
+   */
 
   /**
    * 레포지토리 선택 후 아카이빙(프로젝트 등록) 실행
@@ -285,22 +290,23 @@ export function useAdminPage() {
       categories: categoryList,
       description:
         repoDetails?.description ||
+        repo.description ||
         "GitHub 레포지토리로부터 임포트된 프로젝트입니다.",
       image_url:
         "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
       status: "PUBLISHED" as ProjectStatus,
-      github_url: repoDetails?.github_url || "",
-      stars: repoDetails?.stars || 0,
+      github_url: repoDetails?.github_url || repo.github_url || "",
+      stars: repoDetails?.stargazers_count ?? repo.stargazers_count ?? 0,
       // 추가: 깃허브 계정 식별자
       github_id: currentGithubId,
       // 추가: GitHub REST API에서 제공하는 최근 커밋 시각
-      pushed_at: repoDetails?.pushed_at || new Date().toISOString(),
+      pushed_at:
+        repoDetails?.pushed_at || repo.pushed_at || new Date().toISOString(),
     };
 
     // Supabase DB에 Insert
     // 수정: .insert() 대신 .upsert() 사용하여 중복 레코드 처리
     const { error } = await supabase.from("projects").upsert([newProject]);
-
     if (error) {
       console.error("Supabase upsert error:", error);
       triggerToast(`DB 저장 실패: ${error.message}`, "danger");
