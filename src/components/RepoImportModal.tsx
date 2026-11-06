@@ -91,7 +91,7 @@ export function RepoImportModal({
                       </span>
                       <span className="repo-date">
                         UPDATED:{" "}
-                        {new Date(repo.updated_at).toLocaleDateString()}
+                        {new Date(repo.pushed_at).toLocaleDateString()}
                       </span>
                     </div>
                   </div>
