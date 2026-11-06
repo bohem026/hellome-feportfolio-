@@ -319,6 +319,20 @@ export function useAdminPage() {
   };
 
   /**
+   * GitHub 레포지토리 목록 불러오기 후 레포 목록 모달 오픈
+   */
+  const handleFetchAndOpenRepoModal = async () => {
+    const data = await fetchGithubRepositories();
+    if (data) {
+      setRepositories(data);
+      setIsRepoModalOpen(true);
+    } else {
+      // 세션이 만료되었거나 불러오기 실패 시 세션 만료 모달 띄우기
+      setIsGithubSessionExpiredModalOpen(true);
+    }
+  };
+
+  /**
    * Github OAuth 연동 요청
    * 추가: 재연동 시 모달 강제 팝업
    */
@@ -502,7 +516,7 @@ export function useAdminPage() {
     triggerToast,
     handleCloseToast,
     handleConnectGithub,
-    fetchGithubRepositories,
+    fetchGithubRepositories: handleFetchAndOpenRepoModal,
     handleArchiveRepo,
     handleOpenDisconnectModal,
     handleCloseDisconnectModal,

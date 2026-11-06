@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { useAdminPage } from "@/hooks/pages/useAdminPage";
+import { useAdminPage } from "@/hooks";
 import { AdminAuthModal } from "@/components/AdminAuthModal";
 import { ConfirmModal } from "@/components/ConfirmModal";
-import { Toast } from "@/components/Toast";
 import { RepoImportModal } from "@/components/RepoImportModal";
+import { Toast } from "@/components/Toast";
 import "./AdminPage.scss";
 
 export function AdminPage() {
@@ -124,7 +124,7 @@ export function AdminPage() {
           </ul>
         </aside>
 
-        {/* Main Content Dashboard */}
+        {/* Main Dashboard Panel */}
         <main className="admin-main">
           {/* Console Bar */}
           <div className="console-bar">
@@ -154,13 +154,12 @@ export function AdminPage() {
                 </button>
               ) : (
                 <div className="connect-btn-wrapper">
-                  {/* 연동 유도 말풍선 UI */}
-                  {!isGithubConnected && isAuthenticated && (
+                  {/* {!isGithubConnected && isAuthenticated && (
                     <div className="speech-bubble top">
                       깃허브 계정을 연동하여 아카이빙을 시작
                       <span className="bubble-arrow" />
                     </div>
-                  )}
+                  )} */}
                   <button
                     className="btn-outline connect"
                     onClick={handleConnectGithub}
@@ -210,7 +209,7 @@ export function AdminPage() {
             </div>
           </div>
 
-          {/* Content Split: Projects Table & Inquiries Queue */}
+          {/* Content Split: Projects Management & Inquiries Queue */}
           <div className="content-split">
             <div className="projects-management-section">
               <div className="section-title-bar">
