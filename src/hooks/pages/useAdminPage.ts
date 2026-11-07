@@ -231,7 +231,7 @@ export function useAdminPage() {
     // 수정: .insert() 대신 .upsert() 사용하여 중복 레코드 처리
     const { error: projectError } = await supabase
       .from("projects")
-      .upsert([projectPayload]);
+      .upsert([projectPayload], { onConflict: "id" });
 
     if (projectError) {
       console.error("Supabase upsert error:", projectError);
@@ -253,7 +253,7 @@ export function useAdminPage() {
 
     const { error: repoError } = await supabase
       .from("repositories")
-      .upsert([repositoryPayload]);
+      .upsert([repositoryPayload], { onConflict: "id" });
 
     if (repoError) {
       console.error("repositories upsert error:", repoError);
