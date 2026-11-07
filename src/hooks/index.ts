@@ -8,5 +8,6 @@ export * from "./common/useGithubRepo";
 export * from "./pages/useAboutPage";
 export * from "./pages/useAdminPage";
 export * from "./pages/useContactPage";
+export * from "./pages/useDetailPage";
 export * from "./pages/useMainPage";
 export * from "./pages/useWorksPage";
