@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { GithubRepo } from "@/types";
+import { GithubRepo, GithubCommit } from "@/types";
 
 export function useGithubRepo() {
   const supabase = createClient();
@@ -40,12 +40,12 @@ export function useGithubRepo() {
       const data = await response.json();
       return data.map((repo: any) => ({
         id: repo.id,
-        name: repo.name,
+        repo_name: repo.name,
+        repo_url: repo.html_url || "",
+        stars: repo.stargazers_count || 0,
         languages: [],
-        description: repo.description || null,
-        github_url: repo.html_url || "",
-        stargazers_count: repo.stargazers_count || 0,
-        pushed_at: repo.pushed_at || repo.updated_at,
+        pushed_at:
+          repo.pushed_at || repo.updated_at || new Date().toISOString(),
       }));
     } catch (error) {
       console.error("fetchGithubRepositories error:", error);
@@ -90,11 +90,10 @@ export function useGithubRepo() {
 
         return {
           id: repoData.id,
-          name: repoData.name,
+          repo_name: repoData.name,
+          repo_url: repoData.html_url || "",
+          stars: repoData.stargazers_count || 0,
           languages: languages.length > 0 ? languages : ["Web Application"],
-          description: repoData.description || null,
-          github_url: repoData.html_url || "",
-          stargazers_count: repoData.stargazers_count || 0,
           pushed_at:
             repoData.pushed_at ||
             repoData.updated_at ||
@@ -108,9 +107,48 @@ export function useGithubRepo() {
     [],
   );
 
+  /**
+   * 특정 레포지토리의 최근 커밋 불러오기
+   */
+  const fetchGithubRepoCommits = useCallback(
+    async (
+      owner: string,
+      repoName: string,
+      token: string,
+    ): Promise<GithubCommit[]> => {
+      try {
+        const response = await fetch(
+          `https://api.github.com/repos/${owner}/${repoName}/commits?per_page=10`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/vnd.github.v3+json",
+            },
+          },
+        );
+
+        if (!response.ok) return [];
+
+        const data = await response.json();
+        return data.map((item: any) => ({
+          sha: item.sha.substring(0, 7),
+          message: item.commit.message,
+          date: item.commit.committer?.date || item.commit.author?.date,
+          author: item.commit.author?.name || item.author?.login || "Unknown",
+          url: item.html_url,
+        }));
+      } catch (error) {
+        console.error("fetchGithubRepoCommits error:", error);
+        return [];
+      }
+    },
+    [],
+  );
+
   return {
     isRepoLoading,
     fetchGithubRepositories,
     fetchGithubRepoDetails,
+    fetchGithubRepoCommits,
   };
 }
