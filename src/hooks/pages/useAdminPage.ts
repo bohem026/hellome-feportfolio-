@@ -4,7 +4,14 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { INITIAL_INQUIRIES } from "@/constants";
-import { Project, ProjectStatus, GithubRepo, Inquiry, AdminTab } from "@/types";
+import {
+  Project,
+  ProjectStatus,
+  GithubRepo,
+  GithubCommit,
+  Inquiry,
+  AdminTab,
+} from "@/types";
 import { useProjects, useGithubRepo } from "@/hooks";
 import { ToastType } from "@/components/Toast";
 
@@ -133,108 +140,6 @@ export function useAdminPage() {
   }, [searchParams, router, refetchProjects]);
 
   /**
-   * GitHub 레포지토리의 상세 정보 가져오기
-   * @param owner
-   * @param repoName
-   * @param token
-   * @returns
-   */
-  /**
-  const fetchGithubRepoDetails = async (
-    owner: string,
-    repoName: string,
-    token: string,
-  ) => {
-    try {
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/vnd.github.v3+json",
-      };
-
-      // 레포지토리 단건 조회 (description, url 등 상세 데이터 포함)
-      const repoRes = await fetch(
-        `https://api.github.com/repos/${owner}/${repoName}`,
-        { headers },
-      );
-      const repoData = await repoRes.json();
-
-      // 주요 사용 언어 목록 조회 (GET /repos/{owner}/{repo}/languages)
-      const langRes = await fetch(
-        `https://api.github.com/repos/${owner}/${repoName}/languages`,
-        { headers },
-      );
-      const langData = await langRes.json();
-      // 객체의 열거 가능한 문자열 속성 반환: 배열
-      // e.g. ["TypeScript", "SCSS", "HTML"]
-      const languages = Object.keys(langData);
-
-      return {
-        pushed_at: repoData.pushed_at || repoData.updated_at,
-        stars: repoData.stargazers_count || 0,
-        description: repoData.description || "",
-        languages: languages.length > 0 ? languages : ["Web Application"],
-        github_url: repoData.github_url,
-      };
-    } catch (error) {
-      console.error("Failed to fetch repo details:", error);
-      return null;
-    }
-  };
-   */
-
-  /**
-   * GitHub 레포지토리 목록 불러오기
-   * @returns
-   */
-  /**
-  const fetchGithubRepositories = async () => {
-    setIsRepoLoading(true);
-
-    try {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (!session || !session.provider_token) {
-        setIsGithubSessionExpiredModalOpen(true);
-        return;
-      }
-
-      const response = await fetch(
-        "https://api.github.com/user/repos?type=public&sort=updated&per_page=100",
-        {
-          headers: {
-            Authorization: `Bearer ${session.provider_token}`,
-            Accept: "application/vnd.github.v3+json",
-          },
-        },
-      );
-
-      if (!response.ok) {
-        // 추가: HTTP 401/403 등 토큰 만료 응답인 경우도 모달 출력
-        if (response.status === 401 || response.status === 403) {
-          setIsGithubSessionExpiredModalOpen(true);
-          return;
-        }
-
-        throw new Error("레포지토리 목록을 불러오는 데 실패했습니다.");
-      }
-
-      const data: GithubRepo[] = await response.json();
-      setRepositories(data);
-      setIsRepoModalOpen(true);
-    } catch (error: any) {
-      triggerToast(
-        error.message || "레포지토리 목록 로드 중 오류가 발생했습니다.",
-        "danger",
-      );
-    } finally {
-      setIsRepoLoading(false);
-    }
-  };
-   */
-
-  /**
    * 레포지토리 선택 후 아카이빙(프로젝트 등록) 실행
    * @param repo
    */
@@ -269,13 +174,43 @@ export function useAdminPage() {
       return;
     }
 
-    // 선택한 레포지토리의 상세 데이터 패치
-    const repoDetails = await fetchGithubRepoDetails(
-      currentGithubId,
-      repo.name,
-      session.provider_token,
-    );
+    // 1. 레포 상세 메타데이터 및 커밋 이력 패치
+    const targetRepoName = repo.repo_name;
+    const [repoDetails, commitHistory] = await Promise.all([
+      fetchGithubRepoDetails(
+        currentGithubId,
+        targetRepoName,
+        session.provider_token,
+      ),
+      fetchGithubRepoCommits(
+        currentGithubId,
+        targetRepoName,
+        session.provider_token,
+      ),
+    ]);
 
+    // 2. repositories 테이블 저장 (GithubRepo 매핑)
+    const repositoryPayload: GithubRepo = {
+      id: repo.id,
+      repo_name: repoDetails?.repo_name || targetRepoName,
+      repo_url: repoDetails?.repo_url || repo.repo_url || "",
+      stars: repoDetails?.stars ?? repo.stars ?? 0,
+      languages: repoDetails?.languages || ["Web Application"],
+      pushed_at:
+        repoDetails?.pushed_at || repo.pushed_at || new Date().toISOString(),
+      commit_history: commitHistory,
+    };
+
+    const { error: repoError } = await supabase
+      .from("repositories")
+      .upsert([repositoryPayload]);
+    if (repoError) {
+      console.error("repositories upsert error:", repoError);
+      triggerToast(`레포지토리 DB 저장 실패: ${repoError.message}`, "danger");
+      return;
+    }
+
+    // 3. projects 테이블 저장 (Project 매핑)
     const categoryList: string[] = [];
     if (repoDetails?.languages && repoDetails.languages.length > 0) {
       categoryList.push(...repoDetails.languages.slice(0, 3));
@@ -283,33 +218,25 @@ export function useAdminPage() {
       categoryList.push("Web Application");
     }
 
-    // 실제 Github API에서 가져온 데이터를 기반으로 Project 객체 생성
-    const newProject: Project = {
+    const projectPayload: Project = {
       id: repo.id,
-      title: repo.name,
+      github_id: currentGithubId,
+      title: repoDetails?.repo_name || targetRepoName,
+      description: "GitHub 레포지토리로부터 임포트된 프로젝트입니다.",
       categories: categoryList,
-      description:
-        repoDetails?.description ||
-        repo.description ||
-        "GitHub 레포지토리로부터 임포트된 프로젝트입니다.",
       image_url:
         "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
       status: "PUBLISHED" as ProjectStatus,
-      github_url: repoDetails?.github_url || repo.github_url || "",
-      stars: repoDetails?.stargazers_count ?? repo.stargazers_count ?? 0,
-      // 추가: 깃허브 계정 식별자
-      github_id: currentGithubId,
-      // 추가: GitHub REST API에서 제공하는 최근 커밋 시각
-      pushed_at:
-        repoDetails?.pushed_at || repo.pushed_at || new Date().toISOString(),
     };
 
     // Supabase DB에 Insert
     // 수정: .insert() 대신 .upsert() 사용하여 중복 레코드 처리
-    const { error } = await supabase.from("projects").upsert([newProject]);
-    if (error) {
-      console.error("Supabase upsert error:", error);
-      triggerToast(`DB 저장 실패: ${error.message}`, "danger");
+    const { error: projectError } = await supabase
+      .from("projects")
+      .upsert([projectPayload]);
+    if (projectError) {
+      console.error("Supabase upsert error:", projectError);
+      triggerToast(`프로젝트 DB 저장 실패: ${projectError.message}`, "danger");
       return;
     }
 
