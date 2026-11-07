@@ -211,6 +211,34 @@ export function useAdminPage() {
       );
     }
 
+    // 4. projects 테이블 데이터 매핑
+    const categoryList: string[] = repoDetails?.languages?.slice(0, 3) || [
+      "Web Application",
+    ];
+
+    const projectPayload: Project = {
+      id: repo.id,
+      github_id: currentGithubId,
+      title: repoDetails?.repo_name || targetRepoName,
+      description: "GitHub 레포지토리로부터 임포트된 프로젝트입니다.",
+      categories: categoryList,
+      image_url:
+        "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
+      status: "PUBLISHED" as ProjectStatus,
+    };
+
+    // Supabase DB에 Insert
+    // 수정: .insert() 대신 .upsert() 사용하여 중복 레코드 처리
+    const { error: projectError } = await supabase
+      .from("projects")
+      .upsert([projectPayload]);
+
+    if (projectError) {
+      console.error("Supabase upsert error:", projectError);
+      triggerToast(`프로젝트 DB 저장 실패: ${projectError.message}`, "danger");
+      return;
+    }
+
     // 3. repositories 테이블 데이터 매핑
     const repositoryPayload: GithubRepo = {
       id: repo.id,
@@ -233,34 +261,6 @@ export function useAdminPage() {
         `레포지토리 DB 저장 실패: ${repoError.message} ${repoError.details || ""})`,
         "danger",
       );
-      return;
-    }
-
-    // 4. projects 테이블 데이터 매핑
-    const categoryList: string[] = repoDetails?.languages?.slice(0, 3) || [
-      "Web Application",
-    ];
-
-    const projectPayload: Project = {
-      id: repo.id,
-      github_id: currentGithubId,
-      title: repoDetails?.repo_name || targetRepoName,
-      description: "GitHub 레포지토리로부터 임포트된 프로젝트입니다.",
-      categories: categoryList,
-      image_url:
-        "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
-      status: "PUBLISHED" as ProjectStatus,
-    };
-
-    // Supabase DB에 Insert
-    // 수정: .insert() 대신 .upsert() 사용하여 중복 레코드 처리
-    const { error: projectError } = await supabase
-      .from("projects")
-      .upsert([projectPayload]);
-      
-    if (projectError) {
-      console.error("Supabase upsert error:", projectError);
-      triggerToast(`프로젝트 DB 저장 실패: ${projectError.message}`, "danger");
       return;
     }
 
