@@ -211,7 +211,7 @@ export function useAdminPage() {
       );
     }
 
-    // 4. projects 테이블 데이터 매핑
+    // 3. projects 테이블 데이터 매핑
     const categoryList: string[] = repoDetails?.languages?.slice(0, 3) || [
       "Web Application",
     ];
@@ -234,14 +234,15 @@ export function useAdminPage() {
       .upsert([projectPayload], { onConflict: "id" });
 
     if (projectError) {
-      console.error("Supabase upsert error:", projectError);
+      console.error("projects upsert error:", projectError);
       triggerToast(`프로젝트 DB 저장 실패: ${projectError.message}`, "danger");
       return;
     }
 
-    // 3. repositories 테이블 데이터 매핑
-    const repositoryPayload: GithubRepo = {
+    // 4. repositories 테이블 데이터 매핑
+    const repositoryPayload = {
       id: repo.id,
+      github_id: currentGithubId,
       repo_name: repoDetails?.repo_name || targetRepoName,
       repo_url: repoDetails?.repo_url || repo.repo_url || "",
       stars: repoDetails?.stars ?? repo.stars ?? 0,
@@ -256,7 +257,12 @@ export function useAdminPage() {
       .upsert([repositoryPayload], { onConflict: "id" });
 
     if (repoError) {
-      console.error("repositories upsert error:", repoError);
+      console.error("repositories upsert error details:", {
+        message: repoError.message,
+        details: repoError.details,
+        hint: repoError.hint,
+        code: repoError.code,
+      });
       triggerToast(
         `레포지토리 DB 저장 실패: ${repoError.message} ${repoError.details || ""})`,
         "danger",
