@@ -130,6 +130,7 @@ export function useGithubRepo() {
         if (!response.ok) return [];
 
         const data = await response.json();
+
         return data.map((item: any) => ({
           sha: item.sha.substring(0, 7),
           message: item.commit.message,

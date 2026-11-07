@@ -163,6 +163,13 @@ export function useAdminPage() {
       githubUser ||
       "UNKNOWN";
 
+    // 1. 레포 상세 메타데이터 및 커밋 이력 패치
+    const targetRepoName = repo.repo_name || (repo as any).name;
+    if (!targetRepoName) {
+      triggerToast("레포지토리 이름을 찾을 수 없습니다.", "danger");
+      return;
+    }
+
     // admin_users 테이블 외래키 사전 등록 (FK 23503 에러 방지)
     const { error: userError } = await supabase.from("admin_users").upsert([
       {
@@ -178,22 +185,33 @@ export function useAdminPage() {
       return;
     }
 
-    // 1. 레포 상세 메타데이터 및 커밋 이력 패치
-    const targetRepoName = repo.repo_name;
-    const [repoDetails, commitHistory] = await Promise.all([
-      fetchGithubRepoDetails(
-        currentGithubId,
-        targetRepoName,
-        session.provider_token,
-      ),
-      fetchGithubRepoCommits(
-        currentGithubId,
-        targetRepoName,
-        session.provider_token,
-      ),
-    ]);
-
     // 2. repositories 테이블 저장 (GithubRepo 매핑)
+    let repoDetails = null;
+    let commitHistory: GithubCommit[] = [];
+
+    try {
+      const [detailsResult, commitsResult] = await Promise.all([
+        fetchGithubRepoDetails(
+          currentGithubId,
+          targetRepoName,
+          session.provider_token,
+        ),
+        fetchGithubRepoCommits(
+          currentGithubId,
+          targetRepoName,
+          session.provider_token,
+        ),
+      ]);
+      repoDetails = detailsResult;
+      commitHistory = commitsResult || [];
+    } catch (apiError) {
+      console.warn(
+        "GitHub API Fetch Warning (Proceeding with defaults):",
+        apiError,
+      );
+    }
+
+    // 3. repositories 테이블 데이터 매핑
     const repositoryPayload: GithubRepo = {
       id: repo.id,
       repo_name: repoDetails?.repo_name || targetRepoName,
@@ -208,19 +226,20 @@ export function useAdminPage() {
     const { error: repoError } = await supabase
       .from("repositories")
       .upsert([repositoryPayload]);
+
     if (repoError) {
       console.error("repositories upsert error:", repoError);
-      triggerToast(`레포지토리 DB 저장 실패: ${repoError.message}`, "danger");
+      triggerToast(
+        `레포지토리 DB 저장 실패: ${repoError.message} ${repoError.details || ""})`,
+        "danger",
+      );
       return;
     }
 
-    // 3. projects 테이블 저장 (Project 매핑)
-    const categoryList: string[] = [];
-    if (repoDetails?.languages && repoDetails.languages.length > 0) {
-      categoryList.push(...repoDetails.languages.slice(0, 3));
-    } else {
-      categoryList.push("Web Application");
-    }
+    // 4. projects 테이블 데이터 매핑
+    const categoryList: string[] = repoDetails?.languages?.slice(0, 3) || [
+      "Web Application",
+    ];
 
     const projectPayload: Project = {
       id: repo.id,
@@ -238,6 +257,7 @@ export function useAdminPage() {
     const { error: projectError } = await supabase
       .from("projects")
       .upsert([projectPayload]);
+      
     if (projectError) {
       console.error("Supabase upsert error:", projectError);
       triggerToast(`프로젝트 DB 저장 실패: ${projectError.message}`, "danger");
