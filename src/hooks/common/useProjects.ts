@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { Project, ProjectStatus } from "@/types";
+import { Project, ProjectStatus, ProjectWithRepo } from "@/types";
 
 interface UseProjectsOptions {
   status?: ProjectStatus;
@@ -14,7 +14,7 @@ export function useProjects(options: UseProjectsOptions = { autoFetch: true }) {
   const autoFetch = options?.autoFetch ?? true;
 
   const supabase = createClient();
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<ProjectWithRepo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 

@@ -84,44 +84,50 @@ export function WorksPage() {
       ) : viewMode === "grid" ? (
         /* Works Display (Grid Mode) */
         <section className="works-grid">
-          {filteredProjects.map((work) => (
-            <article
-              className="work-card"
-              key={work.id}
-              onClick={() => handleCardClick(work.id)}
-              style={{ cursor: "pointer" }}
-            >
-              <div className="card-top">
-                <span className="archive-num">#{work.id}</span>
-                <span className="year">★ {work.stars}</span>
-              </div>
-              <div className="card-image-wrap">
-                <img src={work.image_url} alt={work.title} />
-              </div>
-              <div className="card-bottom">
-                <div className="text-group">
-                  <span className="category-label">
-                    {Array.isArray(work.categories)
-                      ? work.categories.join(", ")
-                      : work.categories}
-                  </span>
-                  <h3 className="project-title">{work.title}</h3>
+          {filteredProjects.map((work) => {
+            const repo = work.repository;
+            const stars = repo?.stars ?? 0;
+            const githubUrl = repo?.repo_url || "";
+
+            return (
+              <article
+                className="work-card"
+                key={work.id}
+                onClick={() => handleCardClick(work.id)}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="card-top">
+                  <span className="archive-num">#{work.id}</span>
+                  <span className="year">★ {stars}</span>
                 </div>
-                {work.github_url && (
-                  <a
-                    href={work.github_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="arrow-link"
-                    // 이벤트 버블링 방지: 외부 링크 (깃허브) 클릭 시
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    ↗
-                  </a>
-                )}
-              </div>
-            </article>
-          ))}
+                <div className="card-image-wrap">
+                  <img src={work.image_url} alt={work.title} />
+                </div>
+                <div className="card-bottom">
+                  <div className="text-group">
+                    <span className="category-label">
+                      {Array.isArray(work.categories)
+                        ? work.categories.join(", ")
+                        : work.categories}
+                    </span>
+                    <h3 className="project-title">{work.title}</h3>
+                  </div>
+                  {githubUrl && (
+                    <a
+                      href={githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="arrow-link"
+                      // 이벤트 버블링 방지
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      ↗
+                    </a>
+                  )}
+                </div>
+              </article>
+            );
+          })}
         </section>
       ) : (
         /* Works Display (Table Mode) */
@@ -137,37 +143,44 @@ export function WorksPage() {
               </tr>
             </thead>
             <tbody>
-              {filteredProjects.map((work) => (
-                <tr
-                  key={work.id}
-                  onClick={() => handleCardClick(work.id)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <td>#{work.id}</td>
-                  <td>★ {work.stars}</td>
-                  <td className="bold">{work.title}</td>
-                  <td>
-                    {Array.isArray(work.categories)
-                      ? work.categories.join(", ")
-                      : work.categories}
-                  </td>
-                  <td>
-                    {work.github_url ? (
-                      <a
-                        href={work.github_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        // 이벤트 버블링 방지
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        EXPLORE ↗
-                      </a>
-                    ) : (
-                      "-"
-                    )}
-                  </td>
-                </tr>
-              ))}
+              {filteredProjects.map((work) => {
+                // 💡 테이블 모드에서도 repository 하위 메타데이터 추출
+                const repo = work.repository;
+                const stars = repo?.stars ?? 0;
+                const githubUrl = repo?.repo_url || "";
+
+                return (
+                  <tr
+                    key={work.id}
+                    onClick={() => handleCardClick(work.id)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <td>#{work.id}</td>
+                    <td>★ {stars}</td>
+                    <td className="bold">{work.title}</td>
+                    <td>
+                      {Array.isArray(work.categories)
+                        ? work.categories.join(", ")
+                        : work.categories}
+                    </td>
+                    <td>
+                      {githubUrl ? (
+                        <a
+                          href={githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          // 이벤트 버블링 방지
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          EXPLORE ↗
+                        </a>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </section>
