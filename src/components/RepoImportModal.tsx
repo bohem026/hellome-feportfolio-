@@ -26,9 +26,11 @@ export function RepoImportModal({
 
   const filteredRepos = repositories.filter(
     (repo) =>
-      repo.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (repo.description &&
-        repo.description.toLowerCase().includes(searchQuery.toLowerCase())),
+      repo.repo_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ((repo as any).description &&
+        (repo as any).description
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())),
   );
 
   return (
@@ -63,6 +65,7 @@ export function RepoImportModal({
             <div className="repo-list">
               {filteredRepos.map((repo) => {
                 const isSelected = selectedRepo?.id === repo.id;
+
                 return (
                   <div
                     key={repo.id}
@@ -70,14 +73,12 @@ export function RepoImportModal({
                     onClick={() => setSelectedRepo(repo)}
                   >
                     <div className="repo-card-header">
-                      <strong className="repo-title">{repo.name}</strong>
-                      <span className="repo-stars">
-                        ★ {repo.stargazers_count}
-                      </span>
+                      <strong className="repo-title">{repo.repo_name}</strong>
+                      <span className="repo-stars">★ {repo.stars}</span>
                     </div>
 
                     <p className="repo-desc">
-                      {repo.description ||
+                      {(repo as any).description ||
                         "설명이 제공되지 않은 레포지토리입니다."}
                     </p>
 
@@ -90,8 +91,7 @@ export function RepoImportModal({
                           : "Plain Text"}
                       </span>
                       <span className="repo-date">
-                        UPDATED:{" "}
-                        {new Date(repo.pushed_at).toLocaleDateString()}
+                        UPDATED: {new Date(repo.pushed_at).toLocaleDateString()}
                       </span>
                     </div>
                   </div>

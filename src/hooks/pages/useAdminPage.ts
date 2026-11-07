@@ -27,8 +27,12 @@ export function useAdminPage() {
     isLoading: isProjectsLoading,
     refetchProjects,
   } = useProjects({ autoFetch: false });
-  const { isRepoLoading, fetchGithubRepositories, fetchGithubRepoDetails } =
-    useGithubRepo();
+  const {
+    isRepoLoading,
+    fetchGithubRepositories,
+    fetchGithubRepoDetails,
+    fetchGithubRepoCommits,
+  } = useGithubRepo();
 
   // 추가: 세션 로딩 상태(관리자 인증 모달 점멸 현상 방지)
   const [isAuthLoading, setIsAuthLoading] = useState(true);

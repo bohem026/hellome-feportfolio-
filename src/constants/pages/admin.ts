@@ -3,27 +3,32 @@ import { Project, Inquiry } from "@/types";
 export const INITIAL_PROJECTS: Project[] = [
   {
     id: 1,
-    title: "HUNTER YEANY RACING",
-    categories: ["BRAND", "WEB"],
+    title: "EST Camp Renewal Main Page",
+    description:
+      "Eastsoft 국비 IT 부트캠프 홍보 메인 페이지 리뉴얼 프로젝트입니다.",
+    categories: ["HTML5", "CSS3", "JavaScript"],
     status: "PUBLISHED",
     image_url:
-      "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: 2,
-    title: "VELOCE OS",
-    categories: ["UI/UX", "MOTION"],
+    title: "Gitkkal-naneun Recipe",
+    description: "AI 기반 맞춤형 레시피 생성 및 일주일 식단 관리 플랫폼입니다.",
+    categories: ["React", "TypeScript", "Supabase"],
     status: "PUBLISHED",
     image_url:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: 3,
-    title: "WALKER AGENCY",
-    categories: ["ART DIRECTION"],
+    title: "Developer Portfolio V4",
+    description:
+      "Next.js 및 Supabase 기반의 브루탈리즘 컨셉 개발자 포트폴리오입니다.",
+    categories: ["Next.js", "SCSS", "TypeScript"],
     status: "DRAFT",
     image_url:
-      "https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
   },
 ];
 
