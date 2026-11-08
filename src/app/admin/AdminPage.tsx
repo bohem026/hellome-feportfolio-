@@ -5,6 +5,7 @@ import { useAdminPage } from "@/hooks";
 import { AdminAuthModal } from "@/components/AdminAuthModal";
 import { ConfirmModal } from "@/components/ConfirmModal";
 import { RepoImportModal } from "@/components/RepoImportModal";
+import { ProjectEditModal } from "@/components/ProjectEditModal";
 import { Toast } from "@/components/Toast";
 import "./AdminPage.scss";
 
@@ -41,6 +42,12 @@ export function AdminPage() {
     handleDeleteProject,
     handleToggleStatus,
     handleRemoveInquiry,
+    // 추가: 프로젝트 수정 모달 관련 핸들러
+    isEditModalOpen,
+    editingProject,
+    handleOpenEditModal,
+    handleCloseEditModal,
+    handleUpdateProject,
   } = useAdminPage();
 
   return (
@@ -87,6 +94,14 @@ export function AdminPage() {
         repositories={repositories}
         onClose={() => setIsRepoModalOpen(false)}
         onArchive={handleArchiveRepo}
+      />
+
+      {/* 프로젝트 수정 모달 */}
+      <ProjectEditModal
+        isOpen={isEditModalOpen}
+        project={editingProject}
+        onClose={handleCloseEditModal}
+        onSave={handleUpdateProject}
       />
 
       {/* Toast 알림 */}
@@ -234,55 +249,64 @@ export function AdminPage() {
                   </thead>
                   <tbody>
                     {isDataVisible
-                      ? projects.map((proj) => (
-                          <tr key={proj.id}>
-                            <td>
-                              <img
-                                src={proj.image_url}
-                                alt={proj.title}
-                                className="thumb"
-                              />
-                            </td>
-                            <td>
-                              <strong className="title">{proj.title}</strong>
-                              <span className="id">
-                                ID: {proj.id} // {proj.status}
-                              </span>
-                            </td>
-                            <td>
-                              <div className="category-tags">
-                                {Array.isArray(proj.categories) &&
-                                  proj.categories.map((tag, idx) => (
-                                    <span key={idx} className="tag-badge">
-                                      {tag}
-                                    </span>
-                                  ))}
-                              </div>
-                            </td>
-                            <td>
-                              <span
-                                className={`status-badge-inline ${proj.status.toLowerCase()}`}
-                              >
-                                ● {proj.status}
-                              </span>
-                            </td>
-                            <td>
-                              <div className="action-btns">
-                                <button
-                                  onClick={() => handleToggleStatus(proj.id)}
+                      ? projects.map((proj) => {
+                          // 카테고리 쉼표 + 공백으로 구분
+                          const formattedCategories = Array.isArray(
+                            proj.categories,
+                          )
+                            ? proj.categories.join(", ")
+                            : proj.categories || "-";
+
+                          return (
+                            <tr key={proj.id}>
+                              <td>
+                                <img
+                                  src={proj.image_url}
+                                  alt={proj.title}
+                                  className="thumb"
+                                />
+                              </td>
+                              <td>
+                                <strong className="title">{proj.title}</strong>
+                                <span className="id">
+                                  ID: {proj.id} // {proj.status}
+                                </span>
+                              </td>
+                              <td>
+                                {/* 카테고리 쉼표 텍스트 출력 */}
+                                <div className="category-tags">
+                                  <span className="tag-badge-text">
+                                    {formattedCategories}
+                                  </span>
+                                </div>
+                              </td>
+                              <td>
+                                <span
+                                  className={`status-badge-inline ${proj.status.toLowerCase()}`}
                                 >
-                                  상태변경
-                                </button>
-                                <button
-                                  className="delete"
-                                  onClick={() => handleDeleteProject(proj.id)}
-                                >
-                                  삭제
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))
+                                  ● {proj.status}
+                                </span>
+                              </td>
+                              <td>
+                                <div className="action-btns">
+                                  {/* 수정: 상태 변경 버튼 -> 수정 모달 오픈 버튼 */}
+                                  <button
+                                    className="edit-btn"
+                                    onClick={() => handleOpenEditModal(proj)}
+                                  >
+                                    수정
+                                  </button>
+                                  <button
+                                    className="delete"
+                                    onClick={() => handleDeleteProject(proj.id)}
+                                  >
+                                    삭제
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })
                       : [1, 2, 3].map((idx) => (
                           <tr key={idx} className="skeleton-row">
                             <td>
