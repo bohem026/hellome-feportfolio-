@@ -68,6 +68,11 @@ export function useAdminPage() {
     type: "success",
   });
 
+  // 프로젝트 수정 모달 상태
+  // 수정 중인 프로젝트 상태
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+
   const [inquiries, setInquiries] = useState<Inquiry[]>(INITIAL_INQUIRIES);
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
 
@@ -241,7 +246,7 @@ export function useAdminPage() {
       );
       return;
     }
-    
+
     // 3. projects 테이블 데이터 매핑
     const categoryList: string[] = repoDetails?.languages?.slice(0, 3) || [
       "Web Application",
@@ -330,7 +335,6 @@ export function useAdminPage() {
   const handleConfirmDisconnectGithub = async () => {
     setIsGithubDisconnectModalOpen(false);
 
-    // 추가
     await supabase.from("projects").delete().neq("id", "");
     await supabase.auth.signOut({ scope: "global" });
 
@@ -383,6 +387,48 @@ export function useAdminPage() {
       triggerToast(`${errorMsg}\n메인 페이지로 이동합니다.`, "warning");
       router.push("/");
     }, 1200);
+  };
+
+  /**
+   * 프로젝트 수정 모달 오픈 핸들러
+   * @param project
+   */
+  const handleOpenEditModal = (project: Project) => {
+    setEditingProject(project);
+    setIsEditModalOpen(true);
+  };
+
+  /**
+   * 프로젝트 수정 모달 닫기 핸들러
+   */
+  const handleCloseEditModal = () => {
+    setEditingProject(null);
+    setIsEditModalOpen(false);
+  };
+
+  // 프로젝트 수정 핸들러 (Supabase DB 저장)
+  const handleUpdateProject = async (updatedProject: Project) => {
+    try {
+      const { error } = await supabase
+        .from("projects")
+        .update({
+          title: updatedProject.title,
+          description: updatedProject.description,
+          categories: updatedProject.categories,
+          image_url: updatedProject.image_url,
+          status: updatedProject.status,
+          demo_url: updatedProject.demo_url,
+        })
+        .eq("id", updatedProject.id);
+
+      if (error) throw error;
+
+      triggerToast("프로젝트 수정이 완료되었습니다.", "success");
+      await refetchProjects();
+    } catch (err: any) {
+      console.error("Failed to update project:", err);
+      triggerToast(`수정 실패: ${err.message}`, "danger");
+    }
   };
 
   /**
@@ -464,6 +510,8 @@ export function useAdminPage() {
     isRepoLoading,
     selectedRepo,
     setSelectedRepo,
+    isEditModalOpen,
+    editingProject,
     toastState,
     projects,
     isProjectsLoading,
@@ -482,6 +530,9 @@ export function useAdminPage() {
     handleCancelReconnectGithub,
     handleAuthSuccess,
     handleAuthFailure,
+    handleOpenEditModal,
+    handleCloseEditModal,
+    handleUpdateProject,
     handleDeleteProject,
     handleToggleStatus,
     handleRemoveInquiry,
