@@ -69,9 +69,13 @@ export function ProjectEditModal({
         "generate-ai-description",
         {
           body: {
-            repoName: formData.title,
-            categories: formData.categories,
-            description: formData.description,
+            // 수정: 엣지 함수에서 파싱하는 데이터 구조에 맞게 변경
+            repoData: {
+              title: formData.title,
+              categories: formData.categories,
+              currentDescription: formData.description || "",
+              demoUrl: formData.demo_url || "",
+            },
           },
         },
       );
