@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { createClient } from "@/utils/supabase/client";
 import { Project, ProjectStatus } from "@/types";
-import "./ProjectEditModal.scss"; // 프로젝트 스타일 파일에 맞게 지정
+import "./ProjectEditModal.scss";
 
 interface ProjectEditModalProps {
   isOpen: boolean;
@@ -17,8 +18,10 @@ export function ProjectEditModal({
   onClose,
   onSave,
 }: ProjectEditModalProps) {
+  const supabase = createClient();
   const [formData, setFormData] = useState<Project | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAiLoading, setIsAiLoading] = useState(false);
 
   useEffect(() => {
     if (project) {
@@ -31,6 +34,10 @@ export function ProjectEditModal({
 
   if (!isOpen || !formData) return null;
 
+  /**
+   * 변경 사항 반영
+   * @param e
+   */
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -49,6 +56,53 @@ export function ProjectEditModal({
     );
   };
 
+  /**
+   * AI description 생성 버튼 핸들러
+   * @returns
+   */
+  const handleGenerateAiDescription = async () => {
+    if (!formData) return;
+    setIsAiLoading(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke(
+        "generate-ai-description",
+        {
+          body: {
+            repoName: formData.title,
+            categories: formData.categories,
+            description: formData.description,
+          },
+        },
+      );
+
+      if (error) throw error;
+
+      // OpenAI 응답 메시지 추출 후 바인딩
+      const aiText =
+        data?.choices?.[0]?.message?.content ||
+        data?.summary ||
+        data?.description ||
+        data;
+
+      if (typeof aiText === "string" && aiText.trim() !== "") {
+        setFormData((prev) =>
+          prev ? { ...prev, description: aiText.trim() } : null,
+        );
+      }
+    } catch (err: any) {
+      console.error("AI Description generation failed:", err);
+      alert(`AI 요약 생성 중 오류가 발생했습니다: ${err.message || err}`);
+    } finally {
+      setIsAiLoading(false);
+    }
+  };
+
+  /**
+   * 변경 사항 db에 저장
+   * @param e
+   * @returns
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData) return;
@@ -87,7 +141,7 @@ export function ProjectEditModal({
           </div>
 
           <div className="form-group">
-            <label>IMAGE URL (THUMBNAIL)</label>
+            <label>THUMBNAIL URL</label>
             <input
               type="text"
               name="image_url"
@@ -97,7 +151,7 @@ export function ProjectEditModal({
           </div>
 
           <div className="form-group">
-            <label>CATEGORIES (COMMA SEPARATED)</label>
+            <label>CATEGORIES</label>
             <input
               type="text"
               name="categories"
@@ -131,13 +185,25 @@ export function ProjectEditModal({
             />
           </div>
 
+          {/* Description: 원클릭 AI 요약 버튼 */}
           <div className="form-group">
-            <label>DESCRIPTION</label>
+            <div className="label-with-action">
+              <label>DESCRIPTION</label>
+              <button
+                type="button"
+                className="ai-gen-btn"
+                onClick={handleGenerateAiDescription}
+                disabled={isAiLoading}
+              >
+                {isAiLoading ? "GENERATING..." : "✨ AI AUTO SUMMARY"}
+              </button>
+            </div>
             <textarea
               name="description"
               rows={4}
               value={formData.description || ""}
               onChange={handleChange}
+              placeholder="프로젝트 요약 설명을 입력하세요..."
             />
           </div>
 
@@ -146,14 +212,14 @@ export function ProjectEditModal({
               type="button"
               className="cancel-btn"
               onClick={onClose}
-              disabled={isSubmitting}
+              disabled={isSubmitting || isAiLoading}
             >
               CANCEL
             </button>
             <button
               type="submit"
               className="submit-btn"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isAiLoading}
             >
               {isSubmitting ? "SAVING..." : "SAVE CHANGES"}
             </button>
