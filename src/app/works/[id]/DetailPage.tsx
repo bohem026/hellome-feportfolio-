@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import Link from "next/link";
 import { useDetailPage } from "@/hooks";
 import "./DetailPage.scss";
@@ -93,7 +95,7 @@ export function DetailPage({ id }: DetailPageProps) {
           </div>
 
           <h1 className="hero-title">{project.title}</h1>
-          <p className="hero-subtitle">{project.description}</p>
+          {/* <p className="hero-subtitle">{project.description}</p> */}
 
           <div className="stack-tags">
             {project.categories.map((tag, idx) => (
@@ -154,7 +156,13 @@ export function DetailPage({ id }: DetailPageProps) {
             <div className="tab-content overview-panel">
               <div className="ai-summary-box">
                 <div className="box-badge">PROJECT DESCRIPTION</div>
-                <p className="summary-text">{project.description}</p>
+
+                {/* 추가: 마크다운 렌더링 적용 */}
+                <div className="summary-text markdown-body">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {project.description || "No description registered."}
+                  </ReactMarkdown>
+                </div>
               </div>
 
               <div className="features-list-box">

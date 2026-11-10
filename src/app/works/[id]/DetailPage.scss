@@ -261,6 +261,36 @@ body {
             line-height: 1.6;
             color: $text-main;
           }
+
+          .summary-text.markdown-body {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: inherit;
+
+            p {
+              margin-bottom: 0.75rem;
+              &:last-child {
+                margin-bottom: 0;
+              }
+            }
+
+            strong {
+              font-weight: 800;
+            }
+
+            ul,
+            ol {
+              padding-left: 1.2rem;
+              margin-bottom: 0.75rem;
+            }
+
+            code {
+              background-color: #f1f1f1;
+              padding: 0.15rem 0.35rem;
+              border: 1px solid #000;
+              font-size: 0.85em;
+            }
+          }
         }
 
         .features-list-box {
