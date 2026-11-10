@@ -94,6 +94,44 @@
       flex-direction: column;
       gap: 0.5rem;
 
+      .label-with-action {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        label {
+          font-size: 0.8rem;
+          font-weight: 800;
+          letter-spacing: 0.05em;
+          color: #000000;
+          text-transform: uppercase;
+        }
+
+        /* AI 자동 요약 버튼 */
+        .ai-gen-btn {
+          background-color: #000000;
+          color: #ffffff;
+          border: 2px solid #000000;
+          font-size: 0.72rem;
+          font-weight: 800;
+          letter-spacing: 0.05em;
+          padding: 0.25rem 0.6rem;
+          cursor: pointer;
+          transition: all 0.15s ease;
+
+          &:hover:not(:disabled) {
+            background-color: #ffffff;
+            color: #000000;
+            box-shadow: 2px 2px 0px #000000;
+          }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+      }
+
       label {
         font-size: 0.8rem;
         font-weight: 800;
