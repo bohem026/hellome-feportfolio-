@@ -185,23 +185,93 @@ export function DetailPage({ id }: DetailPageProps) {
             </div>
           )}
 
-          {/* 탭 2: 트러블슈팅 (AI 요약 파이프라인 연결 예정) */}
+          {/* 탭 2: AI 트러블슈팅 */}
           {activeTab === "trouble" && (
             <div className="tab-content trouble-panel">
-              <div className="trouble-card">
-                <div className="trouble-header">
-                  <span className="trouble-id">AI ANALYZING</span>
-                  <h4 className="trouble-title">
-                    기술적 도전 과제 및 트러블슈팅 파이프라인 대기 중
-                  </h4>
-                </div>
-                <div className="trouble-body">
-                  <p>
-                    OpenAI API 분석을 통해 이 레포지토리의 커밋 이력 및 이슈
-                    분석 데이터가 자동으로 채워질 예정입니다.
-                  </p>
-                </div>
-              </div>
+              {(() => {
+                const aiSummary = project.ai_summary;
+                const hasData = aiSummary?.hasData ?? false;
+
+                if (!aiSummary || !hasData) {
+                  return (
+                    <div className="ai-summary-box">
+                      <div className="box-badge">SYSTEM NOTICE</div>
+                      <p className="summary-text">
+                        {aiSummary?.message ||
+                          "이 프로젝트는 등록된 트러블슈팅 커밋 이력이 없어 AI 분석서가 생성되지 않았습니다."}
+                      </p>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div className="trouble-card">
+                    <div className="trouble-header">
+                      <span className="trouble-id">FACT-BASED AI ANALYSIS</span>
+                      <h4 className="trouble-title">
+                        {aiSummary.issue_title ||
+                          "TECHNICAL TROUBLESHOOTING REPORT"}
+                      </h4>
+                    </div>
+
+                    <div className="trouble-body">
+                      {/* 1. 도전 과제 */}
+                      {aiSummary.challenges &&
+                        aiSummary.challenges.length > 0 && (
+                          <div className="trouble-section">
+                            <h5>[TECHNICAL CHALLENGES]</h5>
+                            <ul>
+                              {aiSummary.challenges.map(
+                                (item: string, idx: number) => (
+                                  <li key={idx}>
+                                    <span className="bullet">●</span>
+                                    <span>{item}</span>
+                                  </li>
+                                ),
+                              )}
+                            </ul>
+                          </div>
+                        )}
+
+                      {/* 2. 해결 방안 */}
+                      {aiSummary.solutions &&
+                        aiSummary.solutions.length > 0 && (
+                          <div className="trouble-section">
+                            <h5>[SOLUTIONS & ARCHITECTURE]</h5>
+                            <ul>
+                              {aiSummary.solutions.map(
+                                (item: string, idx: number) => (
+                                  <li key={idx}>
+                                    <span className="bullet">●</span>
+                                    <span>{item}</span>
+                                  </li>
+                                ),
+                              )}
+                            </ul>
+                          </div>
+                        )}
+
+                      {/* 3. 결론 */}
+                      {aiSummary.key_learnings &&
+                        aiSummary.key_learnings.length > 0 && (
+                          <div className="trouble-section">
+                            <h5>[KEY TAKEAWAYS & EARNED COMPETENCY]</h5>
+                            <ul>
+                              {aiSummary.key_learnings.map(
+                                (item: string, idx: number) => (
+                                  <li key={idx}>
+                                    <span className="bullet">●</span>
+                                    <span>{item}</span>
+                                  </li>
+                                ),
+                              )}
+                            </ul>
+                          </div>
+                        )}
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           )}
 
