@@ -189,8 +189,20 @@ export function DetailPage({ id }: DetailPageProps) {
           {activeTab === "trouble" && (
             <div className="tab-content trouble-panel">
               {(() => {
-                const aiSummary = project.ai_summary;
-                const hasData = aiSummary?.hasData ?? false;
+                let aiSummary = project.ai_summary;
+
+                if (typeof aiSummary === "string") {
+                  try {
+                    aiSummary = JSON.parse(aiSummary);
+                  } catch (e) {
+                    console.error("ai_summary parse error:", e);
+                  }
+                }
+
+                const hasData =
+                  aiSummary && typeof aiSummary === "object"
+                    ? (aiSummary.hasData ?? false)
+                    : false;
 
                 if (!aiSummary || !hasData) {
                   return (

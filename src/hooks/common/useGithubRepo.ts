@@ -211,10 +211,11 @@ export function useGithubRepo() {
       commits: GithubCommit[],
     ): Promise<AiTroubleshootingData | null> => {
       setIsTroubleshootingLoading(true);
+
       try {
         const filteredCommits = extractTroubleshootingCommits(commits);
 
-        // 팩트 근거가 될 커밋이 없으면 AI 호출 없이 바로 반환
+        // 근거가 될 커밋이 없으면 AI 호출 없이 바로 반환
         if (filteredCommits.length === 0) {
           return {
             hasData: false,

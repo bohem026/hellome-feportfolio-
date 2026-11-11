@@ -15,7 +15,7 @@ export interface Project {
   image_url: string; // 대표 썸네일 이미지 URL
   status: ProjectStatus; // 게시 상태 토글
   demo_url?: string | null; // 라이브 데모 URL
-  ai_summary?: any; // OpenAI 기반 요약/트러블슈팅 데이터 (jsonb)
+  ai_summary?: AiTroubleshootingData | null; // OpenAI 기반 요약/트러블슈팅 데이터 (jsonb)
   created_at?: string; // 포트폴리오 등록일
 }
 
