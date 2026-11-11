@@ -76,16 +76,6 @@ export const TROUBLESHOOTING_KEYWORDS = [
 ] as const;
 
 /**
- * 커밋 이력 타입
- */
-export interface CommitLog {
-  message: string;
-  date?: string;
-  author?: string;
-  url?: string;
-}
-
-/**
  * AI 트러블슈팅 데이터 타입 (JSON)
  */
 export interface AiTroubleshootingData {

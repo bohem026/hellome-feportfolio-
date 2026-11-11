@@ -2,11 +2,18 @@
 
 import { useState, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { GithubRepo, GithubCommit } from "@/types";
+import {
+  GithubRepo,
+  GithubCommit,
+  TROUBLESHOOTING_KEYWORDS,
+  AiTroubleshootingData,
+} from "@/types";
 
 export function useGithubRepo() {
   const supabase = createClient();
   const [isRepoLoading, setIsRepoLoading] = useState(false);
+  const [isTroubleshootingLoading, setIsTroubleshootingLoading] =
+    useState(false);
 
   /**
    * GitHub 레포지토리 목록 불러오기
@@ -118,7 +125,7 @@ export function useGithubRepo() {
     ): Promise<GithubCommit[]> => {
       try {
         const response = await fetch(
-          `https://api.github.com/repos/${owner}/${repoName}/commits?per_page=10`,
+          `https://api.github.com/repos/${owner}/${repoName}/commits?per_page=30`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -177,11 +184,74 @@ export function useGithubRepo() {
     }
   };
 
+  /**
+   * GithubCommit 기반 커밋 키워드 필터링
+   */
+  const extractTroubleshootingCommits = useCallback(
+    (commits: GithubCommit[]): GithubCommit[] => {
+      if (!Array.isArray(commits)) return [];
+
+      return commits.filter((commit) => {
+        const msg = commit.message.toLowerCase();
+        return TROUBLESHOOTING_KEYWORDS.some((keyword) =>
+          msg.includes(keyword),
+        );
+      });
+    },
+    [],
+  );
+
+  /**
+   * AI 트러블슈팅 데이터 생성
+   * Edge Function: generate-ai-troubleshooting
+   */
+  const generateAiTroubleshooting = useCallback(
+    async (
+      repoName: string,
+      commits: GithubCommit[],
+    ): Promise<AiTroubleshootingData | null> => {
+      setIsTroubleshootingLoading(true);
+      try {
+        const filteredCommits = extractTroubleshootingCommits(commits);
+
+        // 팩트 근거가 될 커밋이 없으면 AI 호출 없이 바로 반환
+        if (filteredCommits.length === 0) {
+          return {
+            hasData: false,
+            message: "분석할 이슈/해결 관련 커밋 이력이 존재하지 않습니다.",
+          };
+        }
+
+        const { data, error } = await supabase.functions.invoke(
+          "generate-ai-troubleshooting",
+          {
+            body: {
+              repoName,
+              filteredCommits,
+            },
+          },
+        );
+
+        if (error) throw error;
+        return data as AiTroubleshootingData;
+      } catch (err: any) {
+        console.error("Failed to generate AI troubleshooting:", err);
+        return null;
+      } finally {
+        setIsTroubleshootingLoading(false);
+      }
+    },
+    [extractTroubleshootingCommits, supabase],
+  );
+
   return {
     isRepoLoading,
+    isTroubleshootingLoading,
     fetchGithubRepositories,
     fetchGithubRepoDetails,
     fetchGithubRepoCommits,
     fetchGithubReadme,
+    extractTroubleshootingCommits,
+    generateAiTroubleshooting,
   };
 }
