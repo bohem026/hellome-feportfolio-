@@ -146,10 +146,42 @@ export function useGithubRepo() {
     [],
   );
 
+  /**
+   * 특정 레포지토리의 README 파일 불러오기
+   * @param owner
+   * @param repo
+   * @param token
+   * @returns
+   */
+  const fetchGithubReadme = async (
+    owner: string,
+    repo: string,
+    token: string,
+  ): Promise<string | null> => {
+    try {
+      const response = await fetch(
+        `https://api.github.com/repos/${owner}/${repo}/readme`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/vnd.github.raw+json",
+          },
+        },
+      );
+
+      if (!response.ok) return null;
+      return await response.text();
+    } catch (err) {
+      console.warn("Failed to fetch README:", err);
+      return null;
+    }
+  };
+
   return {
     isRepoLoading,
     fetchGithubRepositories,
     fetchGithubRepoDetails,
     fetchGithubRepoCommits,
+    fetchGithubReadme,
   };
 }
