@@ -1,3 +1,6 @@
+/* ==========================================================================
+   프로젝트 및 레포지토리 관련 타입 정의
+   ========================================================================== */
 export type ProjectStatus = "PUBLISHED" | "DRAFT" | "ARCHIVED";
 
 /**
@@ -46,4 +49,50 @@ export interface GithubCommit {
  */
 export interface ProjectWithRepo extends Project {
   repository?: GithubRepo;
+}
+
+/* ==========================================================================
+   트러블슈팅 관련 타입 정의
+   ========================================================================== */
+
+/**
+ * 커밋 키워드 목록
+ */
+export const TROUBLESHOOTING_KEYWORDS = [
+  "feat",
+  "fix",
+  "bug",
+  "refactor",
+  "solve",
+  "resolved",
+  "issue",
+  "error",
+  "conflict",
+  "grant",
+  "privilege",
+  "permission",
+  "handle",
+  "optimize",
+] as const;
+
+/**
+ * 커밋 이력 타입
+ */
+export interface CommitLog {
+  message: string;
+  date?: string;
+  author?: string;
+  url?: string;
+}
+
+/**
+ * AI 트러블슈팅 데이터 타입 (JSON)
+ */
+export interface AiTroubleshootingData {
+  hasData: boolean;
+  issue_title?: string;
+  challenges?: string[];
+  solutions?: string[];
+  key_learnings?: string[];
+  message?: string;
 }
