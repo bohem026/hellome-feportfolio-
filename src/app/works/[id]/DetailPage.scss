@@ -332,78 +332,67 @@ body {
         gap: 16px;
 
         .trouble-card {
-          background-color: $bg-card;
-          border: 1px solid $border-color;
-          padding: 20px;
+          border: 3px solid #000;
+          box-shadow: 6px 6px 0px #000;
+          background-color: #fff;
+          padding: 1.5rem;
 
           .trouble-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 14px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid $border-color;
+            border-bottom: 2px dashed #000;
+            padding-bottom: 1rem;
+            margin-bottom: 1.25rem;
 
             .trouble-id {
-              font-size: 9px;
+              font-size: 0.75rem;
               font-weight: 800;
-              background-color: #000000;
-              color: #ffffff;
-              padding: 3px 6px;
+              background-color: #000;
+              color: #fff;
+              padding: 0.2rem 0.5rem;
+              letter-spacing: 0.05em;
             }
 
             .trouble-title {
-              font-size: 13px;
+              font-size: 1.25rem;
               font-weight: 800;
-              color: $text-main;
+              margin-top: 0.75rem;
+              line-height: 1.4;
             }
           }
 
           .trouble-body {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
 
-            @media (max-width: 768px) {
-              grid-template-columns: 1fr;
-            }
-
-            strong {
-              display: block;
-              font-size: 9px; // label/box-tag 스케일 (9px)
-              font-weight: 800;
-              letter-spacing: 0.05em;
-              margin-bottom: 6px;
-            }
-
-            p {
-              font-size: 12px; // msg-text 스케일 (12px)
-              line-height: 1.5;
-            }
-
-            .issue-box {
-              background-color: $issue-bg;
-              border-left: 3px solid $issue-border;
-              padding: 12px;
-
-              strong {
-                color: $issue-border;
+            .trouble-section {
+              h5 {
+                font-size: 0.85rem;
+                font-weight: 800;
+                letter-spacing: 0.05em;
+                margin-bottom: 0.5rem;
+                color: #000;
               }
-              p {
-                color: $issue-text;
-              }
-            }
 
-            .solution-box {
-              background-color: $solution-bg;
-              border-left: 3px solid $solution-border;
-              padding: 12px;
+              ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 0.4rem;
 
-              strong {
-                color: $solution-border;
-              }
-              p {
-                color: $solution-text;
+                li {
+                  display: flex;
+                  align-items: flex-start;
+                  gap: 0.5rem;
+                  font-size: 0.95rem;
+                  line-height: 1.5;
+
+                  .bullet {
+                    font-size: 0.6rem;
+                    margin-top: 0.3rem;
+                  }
+                }
               }
             }
           }
