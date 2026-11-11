@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { Project, ProjectStatus } from "@/types";
+import { useGithubRepo } from "@/hooks";
+import { Project } from "@/types";
 import "./ProjectEditModal.scss";
 
 interface ProjectEditModalProps {
@@ -19,6 +20,7 @@ export function ProjectEditModal({
   onSave,
 }: ProjectEditModalProps) {
   const supabase = createClient();
+  const { fetchGithubReadme } = useGithubRepo();
   const [formData, setFormData] = useState<Project | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAiLoading, setIsAiLoading] = useState(false);
@@ -65,6 +67,26 @@ export function ProjectEditModal({
     setIsAiLoading(true);
 
     try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      let readmeContent: string | null = null;
+      if (session && session.provider_token) {
+        const username =
+          session.user.user_metadata?.preferred_username || session.user.email;
+
+        // GitHub Raw README 요청
+        // readmeContent: text
+        readmeContent = await fetchGithubReadme(
+          username,
+          formData.title,
+          session.provider_token,
+        );
+      }
+
+      // 엣지 함수 호출
+      // 추가: readmeContent 첨부
       const { data, error } = await supabase.functions.invoke(
         "generate-ai-description",
         {
@@ -74,7 +96,7 @@ export function ProjectEditModal({
               title: formData.title,
               categories: formData.categories,
               currentDescription: formData.description || "",
-              demoUrl: formData.demo_url || "",
+              readmeContent: readmeContent || "",
             },
           },
         },
