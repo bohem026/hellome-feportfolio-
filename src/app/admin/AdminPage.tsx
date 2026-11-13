@@ -28,6 +28,8 @@ export function AdminPage() {
     inquiries,
     activeTab,
     setActiveTab,
+    isArchiving,
+    archivingStep,
     handleCloseToast,
     handleConnectGithub,
     fetchGithubRepositories,
@@ -91,6 +93,8 @@ export function AdminPage() {
       <RepoImportModal
         isOpen={isRepoModalOpen}
         isLoading={isRepoLoading}
+        isArchiving={isArchiving}
+        archivingStep={archivingStep}
         repositories={repositories}
         onClose={() => setIsRepoModalOpen(false)}
         onArchive={handleArchiveRepo}

@@ -4,17 +4,29 @@ import React, { useState } from "react";
 import { GithubRepo } from "@/types";
 import "./RepoImportModal.scss";
 
+// 아카이빙 진행 상태 타입
+export type ArchivingStep =
+  | "IDLE"
+  | "SYNCING_REPO"
+  | "GENERATING_AI"
+  | "COMPLETE";
+
+// 추가: 아카이빙 상태 추가
 interface RepoImportModalProps {
   isOpen: boolean;
   isLoading: boolean;
+  isArchiving?: boolean;
+  archivingStep?: ArchivingStep;
   repositories: GithubRepo[];
   onClose: () => void;
-  onArchive: (repo: GithubRepo) => void;
+  onArchive: (repo: GithubRepo) => Promise<void> | void;
 }
 
 export function RepoImportModal({
   isOpen,
   isLoading,
+  isArchiving = false,
+  archivingStep = "IDLE",
   repositories,
   onClose,
   onArchive,
@@ -33,12 +45,81 @@ export function RepoImportModal({
           .includes(searchQuery.toLowerCase())),
   );
 
+  const handleStartArchiving = async () => {
+    if (!selectedRepo || isArchiving) return;
+    await onArchive(selectedRepo);
+  };
+
   return (
     <div className="repo-modal-overlay">
       <div className="repo-modal-container">
+        {/* 아카이빙 로딩 */}
+        {isArchiving && (
+          <div className="archiving-loading-overlay">
+            <div className="progress-box">
+              <span className="badge">PROCESSING ARCHIVE</span>
+              <h3>ARCHIVING SPECIMEN #{selectedRepo?.repo_name}</h3>
+
+              <div className="steps-list">
+                {/* STEP 1: 레포지토리 & 커밋 동기화 */}
+                <div
+                  className={`step-item ${
+                    archivingStep === "SYNCING_REPO"
+                      ? "active"
+                      : archivingStep === "GENERATING_AI" ||
+                          archivingStep === "COMPLETE"
+                        ? "done"
+                        : ""
+                  }`}
+                >
+                  <span className="step-icon">
+                    {archivingStep === "SYNCING_REPO"
+                      ? "●"
+                      : archivingStep === "GENERATING_AI" ||
+                          archivingStep === "COMPLETE"
+                        ? "✓"
+                        : "○"}
+                  </span>
+                  <span className="step-label">
+                    [STEP 1/2] Syncing Repository Metadata & Commit History...
+                  </span>
+                </div>
+
+                {/* STEP 2: AI 트러블슈팅 분석 생성 */}
+                <div
+                  className={`step-item ${
+                    archivingStep === "GENERATING_AI"
+                      ? "active"
+                      : archivingStep === "COMPLETE"
+                        ? "done"
+                        : ""
+                  }`}
+                >
+                  <span className="step-icon">
+                    {archivingStep === "GENERATING_AI"
+                      ? "●"
+                      : archivingStep === "COMPLETE"
+                        ? "✓"
+                        : "○"}
+                  </span>
+                  <span className="step-label">
+                    [STEP 2/2] Generating Fact-Based AI Troubleshooting
+                    Report...
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 추가: 활성화 조건에 아카이빙 상태 추가 */}
         <div className="modal-header">
           <h2>[IMPORT FROM GITHUB REPOSITORY]</h2>
-          <button className="close-btn" onClick={onClose}>
+          <button
+            className="close-btn"
+            onClick={onClose}
+            disabled={isArchiving}
+          >
             ×
           </button>
         </div>
@@ -69,8 +150,10 @@ export function RepoImportModal({
                 return (
                   <div
                     key={repo.id}
-                    className={`repo-card ${isSelected ? "selected" : ""}`}
-                    onClick={() => setSelectedRepo(repo)}
+                    className={`repo-card ${isSelected ? "selected" : ""} ${
+                      isArchiving ? "disabled" : ""
+                    }`}
+                    onClick={() => !isArchiving && setSelectedRepo(repo)}
                   >
                     <div className="repo-card-header">
                       <strong className="repo-title">{repo.repo_name}</strong>
@@ -78,8 +161,7 @@ export function RepoImportModal({
                     </div>
 
                     <p className="repo-desc">
-                      {(repo as any).description ||
-                        "설명이 제공되지 않은 레포지토리입니다."}
+                      {(repo as any).description || "NO DESCRIPTION PROVIDED."}
                     </p>
 
                     <div className="repo-meta">
@@ -102,15 +184,20 @@ export function RepoImportModal({
         </div>
 
         <div className="modal-footer">
-          <button className="btn-cancel" onClick={onClose}>
+          {/* 추가: 활성화 조건에 아카이빙 상태 추가 */}
+          <button
+            className="btn-cancel"
+            onClick={onClose}
+            disabled={isArchiving}
+          >
             CANCEL
           </button>
           <button
             className="btn-confirm"
-            disabled={!selectedRepo}
-            onClick={() => selectedRepo && onArchive(selectedRepo)}
+            disabled={!selectedRepo || isArchiving}
+            onClick={handleStartArchiving}
           >
-            START ARCHIVING
+            {isArchiving ? "PROCESSING..." : "START ARCHIVING"}
           </button>
         </div>
       </div>

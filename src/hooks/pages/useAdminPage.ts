@@ -13,6 +13,7 @@ import {
   AdminTab,
 } from "@/types";
 import { useProjects, useGithubRepo } from "@/hooks";
+import { ArchivingStep } from "@/components/RepoImportModal";
 import { ToastType } from "@/components/Toast";
 
 export function useAdminPage() {
@@ -27,11 +28,13 @@ export function useAdminPage() {
     isLoading: isProjectsLoading,
     refetchProjects,
   } = useProjects({ autoFetch: false });
+
   const {
     isRepoLoading,
     fetchGithubRepositories,
     fetchGithubRepoDetails,
     fetchGithubRepoCommits,
+    generateAiTroubleshooting,
   } = useGithubRepo();
 
   // 추가: 세션 로딩 상태(관리자 인증 모달 점멸 현상 방지)
@@ -75,6 +78,9 @@ export function useAdminPage() {
 
   const [inquiries, setInquiries] = useState<Inquiry[]>(INITIAL_INQUIRIES);
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
+
+  const [isArchiving, setIsArchiving] = useState(false);
+  const [archivingStep, setArchivingStep] = useState<ArchivingStep>("IDLE");
 
   const triggerToast = (message: string, type: ToastType = "success") => {
     setToastState({ isOpen: true, message, type });
@@ -153,131 +159,150 @@ export function useAdminPage() {
    * @param repo
    */
   const handleArchiveRepo = async (repo: GithubRepo) => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    // 추가: 세션 만료 시 재인증 유도
-    if (!session || !session.provider_token) {
-      setIsGithubSessionExpiredModalOpen(true);
-      return;
-    }
-
-    const currentGithubId =
-      session?.user?.user_metadata?.preferred_username ||
-      githubUser ||
-      "UNKNOWN";
-
-    // 1. 레포 상세 메타데이터 및 커밋 이력 패치
-    const targetRepoName = repo.repo_name || (repo as any).name;
-    if (!targetRepoName) {
-      triggerToast("레포지토리 이름을 찾을 수 없습니다.", "danger");
-      return;
-    }
-
-    // admin_users 테이블 외래키 사전 등록 (FK 23503 에러 방지)
-    const { error: userError } = await supabase.from("admin_users").upsert([
-      {
-        github_id: currentGithubId,
-        github_name: currentGithubId,
-        avatar_url: session?.user?.user_metadata?.avatar_url || "",
-      },
-    ]);
-
-    if (userError) {
-      console.error("admin_users upsert error:", userError);
-      triggerToast(`유저 등록 실패: ${userError.message}`, "danger");
-      return;
-    }
-
-    // 2. repositories 테이블 저장 (GithubRepo 매핑)
-    let repoDetails = null;
-    let commitHistory: GithubCommit[] = [];
+    setIsArchiving(true);
+    setArchivingStep("SYNCING_REPO");
 
     try {
-      const [detailsResult, commitsResult] = await Promise.all([
-        fetchGithubRepoDetails(
-          currentGithubId,
-          targetRepoName,
-          session.provider_token,
-        ),
-        fetchGithubRepoCommits(
-          currentGithubId,
-          targetRepoName,
-          session.provider_token,
-        ),
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      // 추가: 세션 만료 시 재인증 유도
+      if (!session || !session.provider_token) {
+        setIsGithubSessionExpiredModalOpen(true);
+        return;
+      }
+
+      const currentGithubId =
+        session?.user?.user_metadata?.preferred_username ||
+        githubUser ||
+        "UNKNOWN";
+
+      // 1. 레포 상세 메타데이터 및 커밋 이력 패치
+      const targetRepoName = repo.repo_name || (repo as any).name;
+      if (!targetRepoName) {
+        triggerToast("레포지토리 이름을 찾을 수 없습니다.", "danger");
+        return;
+      }
+
+      // admin_users 테이블 외래키 사전 등록 (FK 23503 에러 방지)
+      const { error: userError } = await supabase.from("admin_users").upsert([
+        {
+          github_id: currentGithubId,
+          github_name: currentGithubId,
+          avatar_url: session?.user?.user_metadata?.avatar_url || "",
+        },
       ]);
-      repoDetails = detailsResult;
-      commitHistory = commitsResult || [];
-    } catch (apiError) {
-      console.warn(
-        "GitHub API Fetch Warning (Proceeding with defaults):",
-        apiError,
+
+      if (userError) {
+        console.error("admin_users upsert error:", userError);
+        triggerToast(`유저 등록 실패: ${userError.message}`, "danger");
+        return;
+      }
+
+      // 2. repositories 테이블 저장 (GithubRepo 매핑)
+      let repoDetails = null;
+      let commitHistory: GithubCommit[] = [];
+
+      try {
+        const [detailsResult, commitsResult] = await Promise.all([
+          fetchGithubRepoDetails(
+            currentGithubId,
+            targetRepoName,
+            session.provider_token,
+          ),
+          fetchGithubRepoCommits(
+            currentGithubId,
+            targetRepoName,
+            session.provider_token,
+          ),
+        ]);
+        repoDetails = detailsResult;
+        commitHistory = commitsResult || [];
+      } catch (apiError) {
+        console.warn("GitHub API Fetch Warning:", apiError);
+      }
+
+      // 3. repositories 테이블 데이터 매핑
+      const repositoryPayload = {
+        id: repo.id,
+        github_id: currentGithubId,
+        repo_name: repoDetails?.repo_name || targetRepoName,
+        repo_url: repoDetails?.repo_url || repo.repo_url || "",
+        stars: repoDetails?.stars ?? repo.stars ?? 0,
+        languages: repoDetails?.languages || ["Web Application"],
+        pushed_at:
+          repoDetails?.pushed_at || repo.pushed_at || new Date().toISOString(),
+        commit_history: commitHistory,
+      };
+
+      const { error: repoError } = await supabase
+        .from("repositories")
+        .upsert([repositoryPayload], { onConflict: "id" });
+
+      if (repoError) {
+        console.error("repositories upsert error details:", repoError);
+        triggerToast(
+          `레포지토리 DB 저장 실패: ${repoError.message} ${repoError.details || ""})`,
+          "danger",
+        );
+        return;
+      }
+
+      // 4. 커밋 이력 기반 AI 트러블슈팅 분석 생성
+      setArchivingStep("GENERATING_AI");
+      const aiTroubleshootingResult = await generateAiTroubleshooting(
+        repoDetails?.repo_name || targetRepoName,
+        commitHistory,
       );
-    }
 
-    // 4. repositories 테이블 데이터 매핑
-    const repositoryPayload = {
-      id: repo.id,
-      github_id: currentGithubId,
-      repo_name: repoDetails?.repo_name || targetRepoName,
-      repo_url: repoDetails?.repo_url || repo.repo_url || "",
-      stars: repoDetails?.stars ?? repo.stars ?? 0,
-      languages: repoDetails?.languages || ["Web Application"],
-      pushed_at:
-        repoDetails?.pushed_at || repo.pushed_at || new Date().toISOString(),
-      commit_history: commitHistory,
-    };
+      // 5. projects 테이블 데이터 매핑
+      const categoryList: string[] = repoDetails?.languages?.slice(0, 3) || [
+        "Web Application",
+      ];
 
-    const { error: repoError } = await supabase
-      .from("repositories")
-      .upsert([repositoryPayload], { onConflict: "id" });
+      // 추가: AI 트러블슈팅 결과 포함
+      const projectPayload: Project = {
+        id: repo.id,
+        github_id: currentGithubId,
+        title: repoDetails?.repo_name || targetRepoName,
+        description: "GitHub 레포지토리로부터 임포트된 프로젝트입니다.",
+        categories: categoryList,
+        image_url:
+          "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
+        status: "PUBLISHED" as ProjectStatus,
+        ai_summary: aiTroubleshootingResult,
+      };
 
-    if (repoError) {
-      console.error("repositories upsert error details:", {
-        message: repoError.message,
-        details: repoError.details,
-        hint: repoError.hint,
-        code: repoError.code,
-      });
+      // Supabase DB에 Insert
+      // 수정: .insert() 대신 .upsert() 사용하여 중복 레코드 처리
+      const { error: projectError } = await supabase
+        .from("projects")
+        .upsert([projectPayload], { onConflict: "id" });
+
+      if (projectError) {
+        console.error("projects upsert error:", projectError);
+        triggerToast(
+          `프로젝트 DB 저장 실패: ${projectError.message}`,
+          "danger",
+        );
+        return;
+      }
+
+      setArchivingStep("COMPLETE");
+      await refetchProjects();
+      setIsRepoModalOpen(false);
+      triggerToast(`레포지토리가 성공적으로 아카이빙되었습니다!`, "success");
+    } catch (error: any) {
+      console.error("handleArchiveRepo unexpected error:", error);
       triggerToast(
-        `레포지토리 DB 저장 실패: ${repoError.message} ${repoError.details || ""})`,
+        `아카이빙 중 예상치 못한 오류가 발생했습니다: ${error.message || ""}`,
         "danger",
       );
-      return;
+    } finally {
+      setIsArchiving(false);
+      setArchivingStep("IDLE");
     }
-
-    // 3. projects 테이블 데이터 매핑
-    const categoryList: string[] = repoDetails?.languages?.slice(0, 3) || [
-      "Web Application",
-    ];
-
-    const projectPayload: Project = {
-      id: repo.id,
-      github_id: currentGithubId,
-      title: repoDetails?.repo_name || targetRepoName,
-      description: "GitHub 레포지토리로부터 임포트된 프로젝트입니다.",
-      categories: categoryList,
-      image_url:
-        "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
-      status: "PUBLISHED" as ProjectStatus,
-    };
-
-    // Supabase DB에 Insert
-    // 수정: .insert() 대신 .upsert() 사용하여 중복 레코드 처리
-    const { error: projectError } = await supabase
-      .from("projects")
-      .upsert([projectPayload], { onConflict: "id" });
-
-    if (projectError) {
-      console.error("projects upsert error:", projectError);
-      triggerToast(`프로젝트 DB 저장 실패: ${projectError.message}`, "danger");
-      return;
-    }
-
-    await refetchProjects();
-    setIsRepoModalOpen(false);
-    triggerToast(`레포지토리가 성공적으로 아카이빙되었습니다!`, "success");
   };
 
   /**
@@ -518,6 +543,8 @@ export function useAdminPage() {
     inquiries,
     activeTab,
     setActiveTab,
+    isArchiving,
+    archivingStep,
     triggerToast,
     handleCloseToast,
     handleConnectGithub,

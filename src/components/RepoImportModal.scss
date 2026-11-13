@@ -281,3 +281,88 @@
     }
   }
 }
+
+/* Archiving Loading Overlay */
+.repo-modal-container {
+  position: relative;
+
+  .archiving-loading-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.95);
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+
+    .progress-box {
+      border: 3px solid #000;
+      box-shadow: 6px 6px 0px #000;
+      background-color: #fff;
+      padding: 1.75rem;
+      width: 100%;
+      max-width: 480px;
+
+      .badge {
+        font-size: 0.7rem;
+        font-weight: 800;
+        background-color: #000;
+        color: #fff;
+        padding: 0.2rem 0.5rem;
+        letter-spacing: 0.05em;
+      }
+
+      h3 {
+        font-size: 1.1rem;
+        font-weight: 800;
+        margin-top: 0.75rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .steps-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+
+        .step-item {
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+          font-size: 0.85rem;
+          font-weight: 700;
+          color: #888;
+
+          .step-icon {
+            font-size: 0.9rem;
+          }
+
+          &.active {
+            color: #000;
+            .step-icon {
+              color: #000;
+              animation: blink 1s infinite;
+            }
+          }
+
+          &.done {
+            color: #000;
+            .step-icon {
+              color: #0055ff; /* 완료 시 포인트 컬러 */
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
