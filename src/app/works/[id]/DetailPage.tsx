@@ -159,7 +159,25 @@ export function DetailPage({ id }: DetailPageProps) {
 
                 {/* 추가: 마크다운 렌더링 적용 */}
                 <div className="summary-text markdown-body">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    // 추가: 가변 이미지 렌더링
+                    components={{
+                      img: ({ node, ...props }) => (
+                        <img
+                          {...props}
+                          loading="lazy"
+                          style={{
+                            maxWidth: "100%",
+                            height: "auto",
+                            display: "block",
+                            margin: "1rem 0",
+                          }}
+                          alt={props.alt || "Project Image"}
+                        />
+                      ),
+                    }}
+                  >
                     {project.description || "No description registered."}
                   </ReactMarkdown>
                 </div>

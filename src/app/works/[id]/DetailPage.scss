@@ -290,6 +290,16 @@ body {
               border: 1px solid #000;
               font-size: 0.85em;
             }
+
+            img {
+              display: block;
+              max-width: 100% !important;
+              width: auto;
+              height: auto !important;
+              margin: 1rem 0;
+              border: 2px solid #000;
+              object-fit: contain;
+            }
           }
         }
 
