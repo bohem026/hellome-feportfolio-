@@ -173,7 +173,10 @@ body {
     /* 4단 핵심 지표 그리드 (Contact 페이지 상단 01~04 메트릭 카드와 100% 동일 규격) */
     .metrics-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr); // Contact 페이지와 동일한 2x2 와이드 카드 구조
+      grid-template-columns: repeat(
+        2,
+        1fr
+      ); // Contact 페이지와 동일한 2x2 와이드 카드 구조
       gap: 1rem;
 
       @media (max-width: 640px) {
@@ -254,112 +257,174 @@ body {
     }
   }
 
-  /* 2. MILESTONE SECTION (스위스 그리드 테이블형 로우) */
+  /* 2. TIMELINE SECTION */
   .about-milestone-section {
     padding-bottom: 3rem;
     margin-bottom: 3.5rem;
     border-bottom: 1px solid #e0e0dc;
 
-    .milestone-list {
+    .inline-works-link {
+      color: #111111;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    .timeline-groups {
       display: flex;
       flex-direction: column;
-      background-color: #ffffff;
-      border: 1px solid #dfdeda;
+      gap: 1.25rem;
 
-      .milestone-row {
+      .timeline-group-card {
+        background-color: #ffffff;
+        border: 1px solid #dfdeda;
         display: grid;
-        grid-template-columns: 185px 230px 1fr;
-        gap: 1.5rem;
-        padding: 1.75rem;
-        border-bottom: 1px solid #eaeae6;
+        grid-template-columns: 280px 1fr;
 
-        &:last-child {
-          border-bottom: none;
-        }
-
-        @media (max-width: 960px) {
+        @media (max-width: 860px) {
           grid-template-columns: 1fr;
-          gap: 0.85rem;
-          padding: 1.35rem;
         }
 
-        .col-period {
+        /* 좌측 기관 요약 패널 */
+        .group-header-col {
+          background-color: #fafaf8;
+          border-right: 1px solid #eaeae6;
+          padding: 1.75rem;
           display: flex;
           flex-direction: column;
-          align-items: flex-start;
           gap: 0.5rem;
 
-          .period-text {
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.03em;
-            color: #444444;
+          @media (max-width: 860px) {
+            border-right: none;
+            border-bottom: 1px solid #eaeae6;
+            padding: 1.35rem;
           }
 
-          /* Contact 페이지 'VERIFIED ENTITY' 배지와 동일한 미니 블랙 배지 */
-          .category-badge {
-            font-size: 0.625rem;
-            font-weight: 700;
-            letter-spacing: 0.06em;
-            background-color: #111111;
-            color: #ffffff;
-            padding: 0.25rem 0.55rem;
-            text-transform: uppercase;
+          .group-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin-bottom: 0.35rem;
+
+            .group-period {
+              font-size: 0.72rem;
+              font-weight: 800;
+              letter-spacing: 0.04em;
+              color: #555555;
+            }
+
+            .group-badge {
+              font-size: 0.6rem;
+              font-weight: 700;
+              letter-spacing: 0.06em;
+              background-color: #111111;
+              color: #ffffff;
+              padding: 0.2rem 0.5rem;
+            }
+          }
+
+          .group-org {
+            font-size: 1.15rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            color: #111111;
+            word-break: keep-all;
+          }
+
+          .group-subtitle {
+            font-size: 0.82rem;
+            line-height: 1.5;
+            color: #666666;
+            word-break: keep-all;
           }
         }
 
-        .col-org {
+        /* 우측 프로젝트 타임라인 트랙 */
+        .group-track-col {
+          padding: 1.75rem 2rem;
           display: flex;
           flex-direction: column;
-          gap: 0.3rem;
 
-          .org-name {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: #111111;
-            word-break: keep-all;
+          @media (max-width: 860px) {
+            padding: 1.35rem;
           }
 
-          .role-name {
-            font-size: 0.72rem;
-            font-weight: 600;
-            letter-spacing: 0.04em;
-            color: #777777;
-            text-transform: uppercase;
-          }
-        }
+          .timeline-node {
+            position: relative;
+            padding-left: 1.5rem;
+            padding-bottom: 1.65rem;
+            border-left: 1px solid #d4d4d0;
 
-        .col-detail {
-          .project-title {
-            font-size: 1.05rem;
-            font-weight: 800;
-            letter-spacing: -0.015em;
-            color: #111111;
-            margin-bottom: 0.75rem;
-            word-break: keep-all;
-          }
+            &:last-child {
+              padding-bottom: 0;
+              border-left-color: transparent;
+            }
 
-          .highlight-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 0.45rem;
+            /* 수직선 위의 사각 타임라인 포인트 (Swiss Modern 디테일) */
+            .node-marker {
+              position: absolute;
+              left: -4.5px;
+              top: 0.28rem;
+              width: 8px;
+              height: 8px;
+              background-color: #111111;
+            }
 
-            li {
-              display: flex;
-              align-items: flex-start;
-              gap: 0.55rem;
-              font-size: 0.875rem;
-              line-height: 1.6;
-              color: #444444;
-              word-break: keep-all;
+            .node-content {
+              .node-top {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0.5rem;
+                margin-bottom: 0.45rem;
 
-              .bullet {
-                font-size: 0.65rem;
-                color: #888888;
-                margin-top: 0.25rem;
+                .node-period {
+                  font-size: 0.72rem;
+                  font-weight: 700;
+                  letter-spacing: 0.04em;
+                  color: #777777;
+                }
+
+                .node-tags {
+                  display: flex;
+                  flex-wrap: wrap;
+                  gap: 0.35rem;
+
+                  .type-chip {
+                    font-size: 0.625rem;
+                    font-weight: 700;
+                    letter-spacing: 0.05em;
+                    background-color: #efefec;
+                    color: #111111;
+                    padding: 0.18rem 0.5rem;
+                  }
+
+                  .role-chip {
+                    font-size: 0.625rem;
+                    font-weight: 700;
+                    letter-spacing: 0.05em;
+                    border: 1px solid #dfdeda;
+                    color: #555555;
+                    padding: 0.18rem 0.5rem;
+                  }
+                }
+              }
+
+              .node-title {
+                font-size: 1rem;
+                font-weight: 800;
+                letter-spacing: -0.015em;
+                color: #111111;
+                margin-bottom: 0.35rem;
+                word-break: keep-all;
+              }
+
+              .node-summary {
+                font-size: 0.85rem;
+                line-height: 1.55;
+                color: #555555;
+                word-break: keep-all;
               }
             }
           }
