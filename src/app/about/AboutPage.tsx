@@ -1,43 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import {
   ABOUT_PROFILE,
   EXPERIENCE_MILESTONES,
   TECHNICAL_CRAFTS,
 } from "@/constants";
-import { useProjects } from "@/hooks";
+import { useAboutPage } from "@/hooks";
 import { Toast } from "@/components/Toast";
 import "./AboutPage.scss";
 
 export function AboutPage() {
-  const { projects, isLoading: isProjectsLoading } = useProjects();
-  const [toastOpen, setToastOpen] = useState(false);
-  const [toastMsg, setToastMsg] = useState("");
-
-  const handleCopyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(ABOUT_PROFILE.contact.email);
-      setToastMsg(
-        `이메일 주소가 복사되었습니다: ${ABOUT_PROFILE.contact.email}`,
-      );
-      setToastOpen(true);
-    } catch {
-      setToastMsg("클립보드 복사에 실패했습니다.");
-      setToastOpen(true);
-    }
-  };
-
-  const handleComingSoon = (e: React.MouseEvent, label: string) => {
-    e.preventDefault();
-    setToastMsg(`${label} 기능은 현재 준비 중입니다.`);
-    setToastOpen(true);
-  };
-
-  const archivedCountDisplay = isProjectsLoading
-    ? "--"
-    : String(projects.length).padStart(2, "0");
+  const {
+    archivedCountDisplay,
+    toastState,
+    handleCloseToast,
+    handleCopyEmail,
+    handleComingSoon,
+  } = useAboutPage();
 
   return (
     <div className="about-container">
@@ -253,10 +234,10 @@ export function AboutPage() {
 
       {/* Toast */}
       <Toast
-        open={toastOpen}
-        message={toastMsg}
-        type="success"
-        onClose={() => setToastOpen(false)}
+        open={toastState.open}
+        message={toastState.message}
+        type={toastState.type}
+        onClose={handleCloseToast}
       />
     </div>
   );
