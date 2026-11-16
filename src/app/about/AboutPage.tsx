@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import {
   ABOUT_PROFILE,
-  EXPERIENCE_MILESTONES,
+  EXPERIENCE_TIMELINE,
   TECHNICAL_CRAFTS,
 } from "@/constants";
 import { useAboutPage } from "@/hooks";
@@ -100,43 +100,56 @@ export function AboutPage() {
       </section>
 
       {/* EXPERIENCE & MILESTONES */}
+      {/* 추가: 정보 간략화 */}
       <section className="about-milestone-section">
         <div className="section-header">
           <div>
-            <span className="section-index">02 // EXPERIENCE & MILESTONES</span>
-            <h2>PROJECT TRAJECTORY</h2>
+            <span className="section-index">02 // EXPERIENCE & TIMELINE</span>
+            <h2>EDUCATION & PROJECT TIMELINE</h2>
           </div>
           <p className="section-desc">
-            기획부터 아키텍처 설계, 팀 리딩 및 AI 데이터 자동화 파이프라인까지
-            직접 구축한 실전 개발 이력입니다.
+            소속 기관 및 활동 기간별 주요 프로젝트 진행 흐름입니다. 세부 구현
+            내역은{" "}
+            <Link href="/works" className="inline-works-link">
+              WORKS INDEX ↗
+            </Link>
+            에서 확인할 수 있습니다.
           </p>
         </div>
 
-        <div className="milestone-list">
-          {EXPERIENCE_MILESTONES.map((item) => (
-            <article key={item.id} className="milestone-row">
-              <div className="col-period">
-                <span className="period-text">{item.period}</span>
-                <span className="category-badge">{item.category}</span>
+        <div className="timeline-groups">
+          {EXPERIENCE_TIMELINE.map((group) => (
+            <div key={group.id} className="timeline-group-card">
+              {/* 좌측: 기관 및 전체 소속 기간 */}
+              <div className="group-header-col">
+                <div className="group-meta">
+                  <span className="group-period">{group.period}</span>
+                  <span className="group-badge">{group.badge}</span>
+                </div>
+                <h3 className="group-org">{group.organization}</h3>
+                <p className="group-subtitle">{group.subtitle}</p>
               </div>
 
-              <div className="col-org">
-                <strong className="org-name">{item.organization}</strong>
-                <span className="role-name">{item.role}</span>
+              {/* 우측: 수직 타임라인 트랙 & 하위 프로젝트 노드 */}
+              <div className="group-track-col">
+                {group.projects.map((proj) => (
+                  <div key={proj.id} className="timeline-node">
+                    <div className="node-marker" />
+                    <div className="node-content">
+                      <div className="node-top">
+                        <span className="node-period">{proj.period}</span>
+                        <div className="node-tags">
+                          <span className="type-chip">{proj.type}</span>
+                          <span className="role-chip">{proj.role}</span>
+                        </div>
+                      </div>
+                      <h4 className="node-title">{proj.title}</h4>
+                      <p className="node-summary">{proj.summary}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-
-              <div className="col-detail">
-                <h3 className="project-title">{item.title}</h3>
-                <ul className="highlight-list">
-                  {item.highlights.map((point, idx) => (
-                    <li key={idx}>
-                      <span className="bullet">▪</span>
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </article>
+            </div>
           ))}
         </div>
       </section>
