@@ -85,3 +85,57 @@ export const EXPERIENCE_MILESTONES: MilestoneItem[] = [
     ],
   },
 ];
+
+/**
+ * 기술 스택 및 개발 역량
+ */
+export const TECHNICAL_CRAFTS: TechCraftItem[] = [
+  {
+    id: "craft-01",
+    indexLabel: "01 // CORE FRAMEWORK",
+    title: "REACT & NEXT.JS",
+    description:
+      "App Router 기반 라우팅 설계와 커스텀 훅(useGithubRepo, useProjects 등)을 활용해 UI 렌더링과 비즈니스 로직을 명확히 분리합니다.",
+    tags: ["REACT", "NEXT.JS", "APP ROUTER", "CUSTOM HOOKS"],
+  },
+  {
+    id: "craft-02",
+    indexLabel: "02 // LANGUAGE & LOGIC",
+    title: "TYPESCRIPT & JAVASCRIPT",
+    description:
+      "엄격한 인터페이스 정의와 비동기 API 데이터 파싱을 통해 런타임 안정성과 예측 가능한 상태 흐름을 구축합니다.",
+    tags: ["TYPESCRIPT", "ES6+", "ASYNC PIPELINE", "REST API"],
+  },
+  {
+    id: "craft-03",
+    indexLabel: "03 // STYLING ARCHITECTURE",
+    title: "MODULAR SCSS & CSS ARCHITECTURE",
+    description:
+      "CSS Custom Properties 토큰 시스템과 모듈형 유틸리티 구조를 설계해 일관된 Brutalist 고대비 반응형 인터페이스를 구현합니다.",
+    tags: ["SCSS", "CSS VARIABLES", "RESPONSIVE", "DESIGN SYSTEM"],
+  },
+  {
+    id: "craft-04",
+    indexLabel: "04 // DATABASE & SECURITY",
+    title: "SUPABASE & POSTGRESQL",
+    description:
+      "OAuth 소셜 인증, 관계형 테이블 외래키(FK) 무결성 설계 및 RLS(Row Level Security) 보안 정책을 활용한 서버리스 백엔드를 구축합니다.",
+    tags: ["SUPABASE", "POSTGRESQL", "RLS", "OAUTH"],
+  },
+  {
+    id: "craft-05",
+    indexLabel: "05 // SERVERLESS & AI",
+    title: "EDGE FUNCTIONS & AI PIPELINE",
+    description:
+      "Deno 런타임 환경에서 비밀키를 보호하며 GitHub 메타데이터와 OpenAI API를 연동하는 정형화된 JSON 데이터 자동화 파이프라인을 개발합니다.",
+    tags: ["EDGE FUNCTIONS", "DENO", "OPENAI API", "PROMPT ENGINEERING"],
+  },
+  {
+    id: "craft-06",
+    indexLabel: "06 // WORKFLOW & GAME DEV",
+    title: "GIT COLLABORATION & MULTI-DOMAIN",
+    description:
+      "GitHub API 연동 및 Figma 시안 기반 팀 스프린트 리딩 경험과 더불어, Unity·UE5·C++/C# 학습을 통해 폭넓은 소프트웨어 구조를 이해합니다.",
+    tags: ["GIT / GITHUB", "FIGMA", "UNITY / UE5", "C++ / C#"],
+  },
+];
