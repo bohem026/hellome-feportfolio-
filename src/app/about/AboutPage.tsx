@@ -144,7 +144,7 @@ export function AboutPage() {
                         </div>
                       </div>
                       <h4 className="node-title">{proj.title}</h4>
-                      <p className="node-summary">{proj.summary}</p>
+                      {/* <p className="node-summary">{proj.summary}</p> */}
                     </div>
                   </div>
                 ))}
@@ -171,7 +171,7 @@ export function AboutPage() {
             <div key={craft.id} className="craft-card">
               <span className="craft-index">{craft.indexLabel}</span>
               <h3 className="craft-title">{craft.title}</h3>
-              {/* <p className="craft-desc">{craft.description}</p> */}
+              <p className="craft-desc">{craft.description}</p>
               <div className="craft-tags">
                 {craft.tags.map((tag) => (
                   <span key={tag} className="tag-chip">
