@@ -1,134 +1,188 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useAboutPage } from '@/hooks';
-import './AboutPage.scss';
+import React, { useState } from "react";
+import Link from "next/link";
+import {
+  ABOUT_PROFILE,
+  EXPERIENCE_MILESTONES,
+  TECHNICAL_CRAFTS,
+} from "@/constants";
+import { useProjects } from "@/hooks";
+import { Toast } from "@/components/Toast";
+import "./AboutPage.scss";
 
 export function AboutPage() {
-  const { careerHistory, techCrafts, handleCopyEmail } = useAboutPage();
+  const { projects, isLoading: isProjectsLoading } = useProjects();
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(ABOUT_PROFILE.contact.email);
+      setToastMsg(
+        `이메일 주소가 복사되었습니다: ${ABOUT_PROFILE.contact.email}`,
+      );
+      setToastOpen(true);
+    } catch {
+      setToastMsg("클립보드 복사에 실패했습니다.");
+      setToastOpen(true);
+    }
+  };
+
+  const handleComingSoon = (e: React.MouseEvent, label: string) => {
+    e.preventDefault();
+    setToastMsg(`${label} 기능은 현재 준비 중입니다.`);
+    setToastOpen(true);
+  };
+
+  const archivedCountDisplay = isProjectsLoading
+    ? "--"
+    : String(projects.length).padStart(2, "0");
 
   return (
     <div className="about-container">
-      {/* Hero / Bio Section */}
-      <section className="bio-section">
-        <div className="bio-left">
-          <div className="portrait-wrap">
-            <span className="tag-overlay">FIG.01 PORTRAIT</span>
-            <img
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80"
-              alt="Portrait"
-            />
+      {/* HERO & IDENTITY SECTION */}
+      <section className="about-hero-section">
+        <div className="hero-top-grid">
+          <div className="hero-title-area">
+            <div className="status-bar">
+              <span className="status-dot">●</span>
+              <span className="status-text">{ABOUT_PROFILE.statusBadge}</span>
+            </div>
+
+            <h1 className="hero-main-title">
+              {ABOUT_PROFILE.englishName} ({ABOUT_PROFILE.koreanName}) — <br />
+              {ABOUT_PROFILE.roleTitle}
+            </h1>
           </div>
-          <div className="status-box">
-            <span className="label">CURRENT STATUS // ● ACTIVE DISPATCH</span>
-            <h3>Open for select opportunities (Q3/Q4)</h3>
-            <p>PERMISSION GRANTED — FRONTEND / LEAD ARCHITECT</p>
+
+          {/* 로컬 프로필 이미지 카드 */}
+          <div className="hero-portrait-card">
+            <div className="portrait-badge">01 // PROFILE SPECIMEN</div>
+            <div className="portrait-frame">
+              <img
+                src={ABOUT_PROFILE.avatarUrl}
+                alt={`${ABOUT_PROFILE.koreanName} 프로필`}
+              />
+            </div>
           </div>
         </div>
 
-        <div className="bio-right">
-          <h1 className="name-title">
-            JU HU SAN —<br />
-            FRONTEND ENGINEER &<br />
-            CREATIVE ARCHITECT
-          </h1>
+        {/* PHILOSOPHY 영역 */}
+        <div className="philosophy-box">
+          <div className="philosophy-meta">
+            <span>PHILOSOPHY & ENGINEERING APPROACH</span>
+            <span>SPEC METHODOLOGY // STRUCTURAL CLARITY</span>
+          </div>
+          <p className="philosophy-lead">{ABOUT_PROFILE.philosophyHeadline}</p>
+          <p className="philosophy-sub">{ABOUT_PROFILE.philosophySub}</p>
+        </div>
 
-          <div className="philosophy-box">
-            <div className="philo-label">
-              <span>PHILOSOPHY</span>
-              <span>SWISS METHODOLOGY // BRUTALIST RIGOR</span>
-            </div>
-            <p className="philo-text">
-              Operating at the fault line where computational rigor coincides with relentless editorial design. Over the past years, I have engineered digital flagships, high-velocity design systems, and robust web applications for forward-looking web projects.
-            </p>
-            <p className="philo-subtext">
-              Every project is an opportunity to build from structural fundamentals: semantic clean architecture, precise typographic hierarchies, and performant render execution.
-            </p>
+        {/* 핵심 지표 그리드 */}
+        <div className="metrics-grid">
+          <div className="metric-card">
+            <span className="metric-label">DEV TRAINING</span>
+            <strong className="metric-value">
+              {ABOUT_PROFILE.metrics.trainingPeriod}
+            </strong>
+            <span className="metric-sub">
+              {ABOUT_PROFILE.metrics.trainingSub}
+            </span>
           </div>
 
-          <div className="metrics-bar">
-            <div className="metric-col">
-              <span className="label">EXPERIENCE</span>
-              <span className="value">03+</span>
-              <span className="sub">YEARS ACTIVE</span>
-            </div>
-            <div className="metric-col">
-              <span className="label">PROJECTS</span>
-              <span className="value">18</span>
-              <span className="sub">SHIPPED & DEPLOYED</span>
-            </div>
-            <div className="metric-col">
-              <span className="label">SHIPPED SITES</span>
-              <span className="value">24</span>
-              <span className="sub">ENTERPRISE REPOS</span>
-            </div>
-            <div className="metric-col">
-              <span className="label">TIMEZONE</span>
-              <span className="value">UTC+9</span>
-              <span className="sub">SEOUL, KOREA</span>
-            </div>
+          <div className="metric-card">
+            <span className="metric-label">ARCHIVED PROJECTS</span>
+            <strong className="metric-value">{archivedCountDisplay}</strong>
+            <span className="metric-sub">SYNCED VIA GITHUB API</span>
+          </div>
+
+          <div className="metric-card">
+            <span className="metric-label">CORE & SIDE STACK</span>
+            <strong className="metric-value stack-val">
+              {ABOUT_PROFILE.metrics.mainStack}
+            </strong>
+            <span className="metric-sub">
+              {ABOUT_PROFILE.metrics.sideStack}
+            </span>
+          </div>
+
+          <div className="metric-card">
+            <span className="metric-label">TIMEZONE</span>
+            <strong className="metric-value">
+              {ABOUT_PROFILE.metrics.timezone}
+            </strong>
+            <span className="metric-sub">
+              {ABOUT_PROFILE.metrics.timezoneSub}
+            </span>
           </div>
         </div>
       </section>
 
-      {/* Career Trajectory Section */}
-      <section className="career-section">
+      {/* EXPERIENCE & MILESTONES */}
+      <section className="about-milestone-section">
         <div className="section-header">
           <div>
-            <span className="sub-label">DOSSIER // 01 — TIMELINE</span>
-            <h2 className="section-title">CAREER TRAJECTORY</h2>
+            <span className="section-index">02 // EXPERIENCE & MILESTONES</span>
+            <h2>PROJECT TRAJECTORY</h2>
           </div>
-          <p className="header-desc">
-            A record of technical engineering, design execution, and enterprise application deployments.
+          <p className="section-desc">
+            기획부터 아키텍처 설계, 팀 리딩 및 AI 데이터 자동화 파이프라인까지
+            직접 구축한 실전 개발 이력입니다.
           </p>
         </div>
 
-        <div className="career-table">
-          <div className="table-header">
-            <span>TIMELINE</span>
-            <span>ORGANIZATION & LOCATION</span>
-            <span>ROLE & FOCUS</span>
-            <span>DISCIPLINE</span>
-          </div>
-          {careerHistory.map((item, index) => (
-            <div className="table-row" key={index}>
-              <div className="col-period">{item.period}</div>
+        <div className="milestone-list">
+          {EXPERIENCE_MILESTONES.map((item) => (
+            <article key={item.id} className="milestone-row">
+              <div className="col-period">
+                <span className="period-text">{item.period}</span>
+                <span className="category-badge">{item.category}</span>
+              </div>
+
               <div className="col-org">
-                <strong>{item.organization}</strong>
-                <span>{item.location}</span>
+                <strong className="org-name">{item.organization}</strong>
+                <span className="role-name">{item.role}</span>
               </div>
-              <div className="col-role">
-                <strong>{item.role}</strong>
-                <p>{item.description}</p>
+
+              <div className="col-detail">
+                <h3 className="project-title">{item.title}</h3>
+                <ul className="highlight-list">
+                  {item.highlights.map((point, idx) => (
+                    <li key={idx}>
+                      <span className="bullet">▪</span>
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className="col-discipline">{item.discipline}</div>
-            </div>
+            </article>
           ))}
         </div>
       </section>
 
-      {/* Technical Craft Section */}
-      <section className="craft-section">
+      {/* TECHNICAL CRAFT */}
+      <section className="about-craft-section">
         <div className="section-header">
           <div>
-            <span className="sub-label">MATERIAL // 02 — STACK & METHOD</span>
-            <h2 className="section-title">TECHNICAL CRAFT</h2>
+            <span className="section-index">03 // CORE COMPETENCIES</span>
+            <h2>TECHNICAL CRAFT</h2>
           </div>
-          <span className="right-label">DISCIPLINE STACK // CODE, ARCHITECTURE & UI</span>
+          <p className="section-desc">
+            SPECIALIZED STACKS & ARCHITECTURAL CAPABILITIES
+          </p>
         </div>
 
         <div className="craft-grid">
-          {techCrafts.map((craft, idx) => (
-            <div className="craft-card" key={idx}>
-              <div className="card-top">
-                <span className="id">{craft.id}</span>
-                <span className="icon">↗</span>
-              </div>
-              <h3>{craft.title}</h3>
-              <p>{craft.description}</p>
-              <div className="card-tags">
-                {craft.tags.map((tag, tIdx) => (
-                  <span key={tIdx} className="tag">{tag}</span>
+          {TECHNICAL_CRAFTS.map((craft) => (
+            <div key={craft.id} className="craft-card">
+              <span className="craft-index">{craft.indexLabel}</span>
+              <h3 className="craft-title">{craft.title}</h3>
+              <p className="craft-desc">{craft.description}</p>
+              <div className="craft-tags">
+                {craft.tags.map((tag) => (
+                  <span key={tag} className="tag-chip">
+                    {tag}
+                  </span>
                 ))}
               </div>
             </div>
@@ -136,39 +190,74 @@ export function AboutPage() {
         </div>
       </section>
 
-      {/* Contact Banner */}
-      <section className="contact-banner">
-        <div className="banner-left">
-          <span className="sub-tag">CONNECT DISPATCH // CHANNEL 01</span>
-          <h2>INITIATE A<br />COLLABORATION.</h2>
-          <p>
-            Currently taking select engineering roles, architectural advisory, and high-impact web development initiatives for 2026.
-          </p>
-          <div className="btn-group">
-            <button className="primary-btn">TRANSMIT INQUIRY ➔</button>
-            <button
-              className="secondary-btn"
-              onClick={() => handleCopyEmail('juhusan@example.com')}
-            >
-              COPY EMAIL
-            </button>
-            <a href="#cv" className="link-btn">DOWNLOAD FULL CV (PDF) ↗</a>
-          </div>
-        </div>
+      {/* CONTACT INFO */}
+      <section className="about-contact-section">
+        <div className="contact-box">
+          <div className="contact-main">
+            <span className="section-index">04 // CONNECT & COLLABORATE</span>
+            <h2>INITIATE A COLLABORATION.</h2>
+            <p>
+              프론트엔드 및 풀스택 웹 개발 포지션 제안, 혹은 기술적인 협업에
+              대해 언제든 열려 있습니다.
+            </p>
 
-        <div className="banner-right">
-          <div className="contact-card">
-            <span className="level">ENCRYPTED CREDENTIALS // SEC-LEVEL 0</span>
-            <div className="email-block">
-              <span className="label">PRIMARY EMAIL:</span>
-              <a href="mailto:juhusan@example.com" className="email">juhusan@example.com</a>
+            <div className="cta-buttons">
+              <Link href="/works" className="btn-primary">
+                EXPLORE ARCHIVED WORKS →
+              </Link>
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={handleCopyEmail}
+              >
+                COPY EMAIL
+              </button>
+              <a
+                href={ABOUT_PROFILE.contact.resumeUrl}
+                onClick={(e) => handleComingSoon(e, "이력서(PDF) 다운로드")}
+                className="btn-text-link"
+              >
+                DOWNLOAD FULL CV (PDF — COMING SOON) ↗
+              </a>
             </div>
-            <div className="social-links">
-              <span>GITHUB</span> // <span>LINKEDIN</span> // <span>NOTION</span>
+          </div>
+
+          <div className="contact-info-card">
+            <span className="card-label">DIRECT ELECTRONIC DISPATCH</span>
+            <div className="email-display">
+              <span className="sub">PRIMARY INBOX</span>
+              <strong className="email-address">
+                {ABOUT_PROFILE.contact.email}
+              </strong>
+            </div>
+
+            <div className="external-links">
+              <a
+                href={ABOUT_PROFILE.contact.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GITHUB (@bohem026) ↗
+              </a>
+              <span>/</span>
+              <a
+                href={ABOUT_PROFILE.contact.blogUrl}
+                onClick={(e) => handleComingSoon(e, "기술 블로그")}
+              >
+                TECH BLOG (COMING SOON) ↗
+              </a>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Toast */}
+      <Toast
+        open={toastOpen}
+        message={toastMsg}
+        type="success"
+        onClose={() => setToastOpen(false)}
+      />
     </div>
   );
 }
