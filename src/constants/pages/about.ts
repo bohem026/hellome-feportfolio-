@@ -1,5 +1,23 @@
 import { TechCraftItem, MilestoneItem } from "@/types";
 
+export interface TimelineProjectItem {
+  id: string;
+  period: string;       // 진행 기간
+  title: string;        // 프로젝트명
+  type: string;         // 프로젝트 특성 태그
+  role: string;         // 담당 역할
+  summary: string;      // 한 줄 요약
+}
+
+export interface TimelineGroupItem {
+  id: string;
+  period: string;       // 활동 기간
+  organization: string; // 기관명 또는 활동 구분
+  subtitle: string;     // 과정명 또는 활동 성격
+  badge: string;        // 상태/구분 배지
+  projects: TimelineProjectItem[];
+}
+
 export const ABOUT_PROFILE = {
   koreanName: "주후산",
   englishName: "JOO HU SAN",
@@ -82,6 +100,63 @@ export const EXPERIENCE_MILESTONES: MilestoneItem[] = [
       "CTA 버튼 확대 배치, 종스크롤 중심 레이아웃 및 고정 퀵메뉴를 통한 끊김 없는 지원 전환 동선 구축",
       "모듈형 카드 UI 확장, 충분한 여백 확보 및 단계별 난이도 시각화로 정보 탐색 편의성과 가독성 극대화",
       "단색 배경 기반 미니멀 디자인과 직관적 인포그래픽을 적용해 핵심 콘텐츠 집중도 향상",
+    ],
+  },
+];
+
+export const EXPERIENCE_TIMELINE: TimelineGroupItem[] = [
+  {
+    id: "group-personal",
+    period: "2026.09 — PRESENT",
+    organization: "PERSONAL LAB & ARCHIVE",
+    subtitle: "독립 개발 및 서버리스·AI 웹 아키텍처 연구",
+    badge: "INDEPENDENT",
+    projects: [
+      {
+        id: "proj-hellome",
+        period: "2026.09 — PRESENT",
+        title: "HelloMe — GitHub 레포지토리 AI 아카이빙 플랫폼",
+        type: "SERVERLESS & AI",
+        role: "SOLE DEVELOPER",
+        summary:
+          "Next.js·Supabase Edge Functions 기반 GitHub 커밋 데이터 자동 분석 및 포트폴리오 CMS",
+      },
+    ],
+  },
+  {
+    id: "group-estsoft",
+    period: "2026.04 — 2026.08",
+    organization: "이스트소프트 (ESTSOFT)",
+    subtitle: "오르미캠프 프론트엔드 13기 과정 수료 및 팀 프로젝트",
+    badge: "BOOTCAMP & TEAM",
+    projects: [
+      {
+        id: "proj-recipe",
+        period: "2026.07.15 — 2026.08.21",
+        title: "깃깔나는 레시피 — 생성형 AI 맞춤형 레시피 & 스마트 쿠킹 플랫폼",
+        type: "GENERATIVE AI APP",
+        role: "FRONTEND / BACKEND",
+        summary:
+          "동적 프롬프트 빌더, 5단계 위저드 폼, 임시 저장 및 장바구니 연계를 결합한 AI 쿠킹 서비스",
+      },
+      {
+        id: "proj-rounz",
+        period: "2026.05.29 — 2026.06.19",
+        title: "ROUNZ — 모바일 퍼스트 반응형 제품 상세 페이지 리뉴얼",
+        type: "COMMERCE UX RENEWAL",
+        role: "FRONTEND DEVELOPER",
+        summary:
+          "비동기 데이터 파싱, JSON 기반 연관 상품 비교·정렬 및 URL 쿼리 상태 동기화 구현",
+      },
+      {
+        id: "proj-estsoft-main",
+        period: "2026.05.06 — 2026.05.11",
+        title: "이스트소프트 교육 모집 웹페이지 메인 리뉴얼",
+        type: "LANDING & DESIGN SYSTEM",
+        role: "TEAM LEAD / FRONTEND",
+        summary:
+          "모듈형 카드 UI, 단계별 난이도 시각화 및 고정 퀵메뉴 기반의 지원 전환 UX 개선",
+      },
     ],
   },
 ];
