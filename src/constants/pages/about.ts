@@ -1,4 +1,5 @@
 import { TechCraftItem, MilestoneItem } from "@/types";
+import { TechStackIconKey } from "@/components/TechStackIcon";
 
 export interface TimelineProjectItem {
   id: string;
@@ -212,5 +213,73 @@ export const TECHNICAL_CRAFTS: TechCraftItem[] = [
     description:
       "GitHub API 연동 및 Figma 시안 기반 팀 스프린트 리딩 경험과 더불어, Unity·UE5·C++/C# 학습을 통해 폭넓은 소프트웨어 구조를 이해합니다.",
     tags: ["GIT / GITHUB", "FIGMA", "UNITY / UE5", "C++ / C#"],
+  },
+];
+
+/**
+ * 기술 스택 네임태그
+ * 기술 스택 네임과 아이콘 매핑
+ */
+export interface SkillBadge {
+  label: string;
+  icon: TechStackIconKey;
+  level?: "MAIN" | "SIDE";
+}
+
+/**
+ * 기술 스택 카테고리
+ * 각 카테고리별 기술 스택 그룹화
+ */
+export interface TechStackCategory {
+  id: string;
+  indexLabel: string;
+  categoryName: string;
+  skills: SkillBadge[];
+}
+
+export const TECHNICAL_STACK_GROUPS: TechStackCategory[] = [
+  {
+    id: "stack-frontend",
+    indexLabel: "01 // FRONTEND & UI ARCHITECTURE",
+    categoryName: "FRONTEND CORE",
+    skills: [
+      { label: "React", icon: "react", level: "MAIN" },
+      { label: "Next.js (App Router)", icon: "nextjs", level: "MAIN" },
+      { label: "TypeScript", icon: "typescript", level: "MAIN" },
+      { label: "JavaScript (ES6+)", icon: "javascript", level: "MAIN" },
+      { label: "SCSS / CSS Modules", icon: "scss", level: "MAIN" },
+      { label: "HTML5 / CSS3", icon: "html5", level: "MAIN" },
+    ],
+  },
+  {
+    id: "stack-backend-ai",
+    indexLabel: "02 // SERVERLESS & AI PIPELINE",
+    categoryName: "BACKEND & AI",
+    skills: [
+      { label: "Supabase", icon: "supabase", level: "MAIN" },
+      { label: "PostgreSQL (RLS)", icon: "postgresql", level: "MAIN" },
+      { label: "Edge Functions (Deno)", icon: "deno", level: "MAIN" },
+      { label: "OpenAI API", icon: "openai", level: "MAIN" },
+    ],
+  },
+  {
+    id: "stack-workflow",
+    indexLabel: "03 // COLLABORATION & DESIGN",
+    categoryName: "TOOLS & WORKFLOW",
+    skills: [
+      { label: "Git / GitHub", icon: "github", level: "MAIN" },
+      { label: "Figma", icon: "figma", level: "MAIN" },
+    ],
+  },
+  {
+    id: "stack-gamedev",
+    indexLabel: "04 // MULTI-DOMAIN & GAME DEV",
+    categoryName: "SIDE STACK",
+    skills: [
+      { label: "Unity 3D", icon: "unity", level: "SIDE" },
+      { label: "Unreal Engine 5", icon: "unreal", level: "SIDE" },
+      { label: "C++", icon: "cpp", level: "SIDE" },
+      { label: "C#", icon: "csharp", level: "SIDE" },
+    ],
   },
 ];

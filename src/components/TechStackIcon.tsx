@@ -1,4 +1,4 @@
-export type TechIconKey =
+export type TechStackIconKey =
   | "react"
   | "nextjs"
   | "typescript"
@@ -16,8 +16,8 @@ export type TechIconKey =
   | "cpp"
   | "csharp";
 
-interface TechIconProps {
-  name: TechIconKey;
+interface TechStackIconProps {
+  name: TechStackIconKey;
   size?: number;
 }
 
@@ -26,7 +26,7 @@ interface TechIconProps {
  * @param param0 
  * @returns 
  */
-export function TechIcon({ name, size = 15 }: TechIconProps) {
+export function TechStackIcon({ name, size = 15 }: TechStackIconProps) {
   const commonProps = {
     width: size,
     height: size,
