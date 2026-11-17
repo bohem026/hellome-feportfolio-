@@ -117,7 +117,7 @@ export const EXPERIENCE_TIMELINE: TimelineGroupItem[] = [
         id: "proj-hellome",
         period: "2026.09 — PRESENT",
         title: "HelloMe",
-        type: "APP DEV",
+        type: "APPLICATION",
         role: "FULLSTACK",
         summary:
           "GitHub 레포지토리 아카이빙 플랫폼",
@@ -135,7 +135,7 @@ export const EXPERIENCE_TIMELINE: TimelineGroupItem[] = [
         id: "proj-recipe",
         period: "2026.07.15 — 2026.08.21",
         title: "깃깔나는 레시피",
-        type: "APP DEV",
+        type: "APPLICATION",
         role: "FULLSTACK",
         summary:
           "생성형 AI 맞춤형 레시피 & 스마트 쿠킹 플랫폼",
