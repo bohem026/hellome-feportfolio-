@@ -116,11 +116,11 @@ export const EXPERIENCE_TIMELINE: TimelineGroupItem[] = [
       {
         id: "proj-hellome",
         period: "2026.09 — PRESENT",
-        title: "HelloMe — GitHub 레포지토리 AI 아카이빙 플랫폼",
+        title: "HelloMe",
         type: "SERVERLESS & AI",
         role: "SOLE DEVELOPER",
         summary:
-          "Next.js·Supabase Edge Functions 기반 GitHub 커밋 데이터 자동 분석 및 포트폴리오 CMS",
+          "GitHub 레포지토리 아카이빙 플랫폼",
       },
     ],
   },
@@ -134,29 +134,29 @@ export const EXPERIENCE_TIMELINE: TimelineGroupItem[] = [
       {
         id: "proj-recipe",
         period: "2026.07.15 — 2026.08.21",
-        title: "깃깔나는 레시피 — 생성형 AI 맞춤형 레시피 & 스마트 쿠킹 플랫폼",
+        title: "깃깔나는 레시피",
         type: "GENERATIVE AI APP",
         role: "FRONTEND / BACKEND",
         summary:
-          "동적 프롬프트 빌더, 5단계 위저드 폼, 임시 저장 및 장바구니 연계를 결합한 AI 쿠킹 서비스",
+          "생성형 AI 맞춤형 레시피 & 스마트 쿠킹 플랫폼",
       },
       {
         id: "proj-rounz",
         period: "2026.05.29 — 2026.06.19",
-        title: "ROUNZ — 모바일 퍼스트 반응형 제품 상세 페이지 리뉴얼",
+        title: "웹 페이지 리뉴얼 프로젝트(2)",
         type: "COMMERCE UX RENEWAL",
         role: "FRONTEND DEVELOPER",
         summary:
-          "비동기 데이터 파싱, JSON 기반 연관 상품 비교·정렬 및 URL 쿼리 상태 동기화 구현",
+          "이스트소프트 아이웨어 플랫폼 ROUNZ 리뉴얼",
       },
       {
         id: "proj-estsoft-main",
         period: "2026.05.06 — 2026.05.11",
-        title: "이스트소프트 교육 모집 웹페이지 메인 리뉴얼",
+        title: "웹 페이지 리뉴얼 프로젝트(1)",
         type: "LANDING & DESIGN SYSTEM",
         role: "TEAM LEAD / FRONTEND",
         summary:
-          "모듈형 카드 UI, 단계별 난이도 시각화 및 고정 퀵메뉴 기반의 지원 전환 UX 개선",
+          "이스트소프트 교육 모집 메인 페이지 리뉴얼",
       },
     ],
   },

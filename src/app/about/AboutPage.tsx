@@ -145,7 +145,7 @@ export function AboutPage() {
                         </div>
                       </div>
                       <h4 className="node-title">{proj.title}</h4>
-                      {/* <p className="node-summary">{proj.summary}</p> */}
+                      <p className="node-summary">{proj.summary}</p>
                     </div>
                   </div>
                 ))}
