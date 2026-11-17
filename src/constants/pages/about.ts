@@ -244,10 +244,10 @@ export const TECH_STACK_GROUPS: TechStackCategory[] = [
     categoryName: "FRONTEND CORE",
     skills: [
       { label: "React", icon: "react", level: "MAIN" },
-      { label: "Next.js (App Router)", icon: "nextjs", level: "MAIN" },
+      { label: "Next.js", icon: "nextjs", level: "MAIN" },
       { label: "TypeScript", icon: "typescript", level: "MAIN" },
-      { label: "JavaScript (ES6+)", icon: "javascript", level: "MAIN" },
-      { label: "SCSS / CSS Modules", icon: "scss", level: "MAIN" },
+      { label: "JavaScript", icon: "javascript", level: "MAIN" },
+      { label: "SCSS / CSS", icon: "scss", level: "MAIN" },
       { label: "HTML5 / CSS3", icon: "html5", level: "MAIN" },
     ],
   },
@@ -257,7 +257,7 @@ export const TECH_STACK_GROUPS: TechStackCategory[] = [
     categoryName: "BACKEND & AI",
     skills: [
       { label: "Supabase", icon: "supabase", level: "MAIN" },
-      { label: "PostgreSQL (RLS)", icon: "postgresql", level: "MAIN" },
+      { label: "PostgreSQL", icon: "postgresql", level: "MAIN" },
       { label: "Edge Functions (Deno)", icon: "deno", level: "MAIN" },
       { label: "OpenAI API", icon: "openai", level: "MAIN" },
     ],
