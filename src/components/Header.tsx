@@ -22,8 +22,8 @@ export function Header() {
 
   const navLinks = [
     { name: "INDEX", href: "/" },
-    { name: "WORKS", href: "/works" },
     { name: "ABOUT", href: "/about" },
+    { name: "WORKS", href: "/works" },
     { name: "CONTACT ASSISTANT", href: "/contact" },
     { name: "CMS CONSOLE", href: "/admin" },
   ];
