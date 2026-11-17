@@ -25,7 +25,7 @@ export const ABOUT_PROFILE = {
   roleTitle: "JUNIOR FRONTEND ENGINEER & CREATIVE ARCHITECT",
   statusBadge: "OPEN TO WORK // FRONTEND & FULLSTACK ROLES",
   locationBadge: "SEOUL, KR — AVAILABLE FOR COLLABORATION",
-  avatarUrl: "/images/profile.jpg", // public/images/profile.jpg 경로에 로컬 이미지 배치
+  avatarUrl: "/images/profile-image.jpg",
   philosophyHeadline:
     "모듈형 CSS 아키텍처와 Next.js·Supabase 서버리스 파이프라인을 결합해 기획부터 데이터 자동화까지 설계하는 프론트엔드 개발자입니다.",
   philosophySub:
