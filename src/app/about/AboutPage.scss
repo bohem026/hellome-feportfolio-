@@ -433,13 +433,14 @@ body {
     }
   }
 
-  /* 3. TECHNICAL CRAFT SECTION (Contact FAQ 카드와 동일한 화이트 + 1px 보더) */
+  /* 3. TECHNICAL CRAFT SECTION */
+  // 추가: 네임태그 스타일 추가
   .about-craft-section {
     padding-bottom: 3rem;
     margin-bottom: 3.5rem;
     border-bottom: 1px solid #e0e0dc;
 
-    .craft-grid {
+    .stack-category-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
@@ -448,48 +449,86 @@ body {
         grid-template-columns: 1fr;
       }
 
-      .craft-card {
+      .stack-group-card {
         background-color: #ffffff;
         border: 1px solid #dfdeda;
-        padding: 1.65rem 1.75rem;
+        padding: 1.5rem 1.75rem;
         display: flex;
         flex-direction: column;
+        gap: 1.15rem;
         transition: border-color 0.15s ease;
 
         &:hover {
           border-color: #111111;
         }
 
-        .craft-title {
-          font-size: 1.15rem;
-          font-weight: 800;
-          letter-spacing: -0.015em;
-          color: #111111;
-          margin-bottom: 0.65rem;
+        .group-card-head {
+          .craft-index {
+            margin-bottom: 0.35rem;
+          }
+
+          .group-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: -0.015em;
+            color: #111111;
+          }
         }
 
-        .craft-desc {
-          font-size: 0.875rem;
-          line-height: 1.65;
-          color: #555555;
-          margin-bottom: 1.25rem;
-          flex-grow: 1;
-          word-break: keep-all;
-        }
-
-        .craft-tags {
+        /* 아이콘 + 이름 컴팩트 네임태그 리스트 */
+        .skill-badge-list {
           display: flex;
           flex-wrap: wrap;
-          gap: 0.4rem;
+          gap: 0.5rem;
 
-          .tag-chip {
-            border: 1px solid #dfdeda;
+          .skill-nametag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
             background-color: #f7f7f5;
-            color: #444444;
-            font-size: 0.65rem;
+            border: 1px solid #d8d8d4;
+            color: #111111;
+            padding: 0.42rem 0.75rem;
+            font-size: 0.78rem;
             font-weight: 700;
-            letter-spacing: 0.05em;
-            padding: 0.25rem 0.55rem;
+            letter-spacing: -0.01em;
+            transition: all 0.15s ease;
+
+            svg {
+              flex-shrink: 0;
+              color: #111111;
+            }
+
+            &:hover {
+              background-color: #111111;
+              border-color: #111111;
+              color: #ffffff;
+
+              svg {
+                color: #ffffff;
+              }
+            }
+
+            /* 사이드 스택 구분 (미세한 점선 보더 & 톤 다운) */
+            &.is-side {
+              background-color: #ffffff;
+              border-style: dashed;
+              color: #444444;
+
+              svg {
+                color: #555555;
+              }
+
+              &:hover {
+                background-color: #111111;
+                border-style: solid;
+                color: #ffffff;
+
+                svg {
+                  color: #ffffff;
+                }
+              }
+            }
           }
         }
       }
