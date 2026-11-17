@@ -5,10 +5,11 @@ import Link from "next/link";
 import {
   ABOUT_PROFILE,
   EXPERIENCE_TIMELINE,
-  TECHNICAL_CRAFTS,
+  TECH_STACK_GROUPS,
 } from "@/constants";
 import { useAboutPage } from "@/hooks";
 import { Toast } from "@/components/Toast";
+import { TechStackIcon } from "@/components/TechStackIcon";
 import "./AboutPage.scss";
 
 export function AboutPage() {
@@ -158,24 +159,32 @@ export function AboutPage() {
       <section className="about-craft-section">
         <div className="section-header">
           <div>
-            <span className="section-index">03 // CORE COMPETENCIES</span>
-            <h2>TECHNICAL CRAFT</h2>
+            <span className="section-index">03 // TECHNICAL STACK</span>
+            <h2>CAPABLE TECHNOLOGIES</h2>
           </div>
           <p className="section-desc">
-            SPECIALIZED STACKS & ARCHITECTURAL CAPABILITIES
+            프론트엔드·서버리스 메인 스택과 그 외 사이드 스택입니다.
           </p>
         </div>
 
-        <div className="craft-grid">
-          {TECHNICAL_CRAFTS.map((craft) => (
-            <div key={craft.id} className="craft-card">
-              <span className="craft-index">{craft.indexLabel}</span>
-              <h3 className="craft-title">{craft.title}</h3>
-              <p className="craft-desc">{craft.description}</p>
-              <div className="craft-tags">
-                {craft.tags.map((tag) => (
-                  <span key={tag} className="tag-chip">
-                    {tag}
+        <div className="stack-category-grid">
+          {TECH_STACK_GROUPS.map((group) => (
+            <div key={group.id} className="stack-group-card">
+              <div className="group-card-head">
+                <span className="craft-index">{group.indexLabel}</span>
+                <h3 className="group-title">{group.categoryName}</h3>
+              </div>
+
+              <div className="skill-badge-list">
+                {group.skills.map((skill) => (
+                  <span
+                    key={skill.label}
+                    className={`skill-nametag ${
+                      skill.level === "SIDE" ? "is-side" : ""
+                    }`}
+                  >
+                    <TechStackIcon name={skill.icon} size={15} />
+                    <span className="skill-name">{skill.label}</span>
                   </span>
                 ))}
               </div>

@@ -165,7 +165,7 @@ export const EXPERIENCE_TIMELINE: TimelineGroupItem[] = [
 /**
  * 기술 스택 및 개발 역량
  */
-export const TECHNICAL_CRAFTS: TechCraftItem[] = [
+export const TECH_CRAFTS: TechCraftItem[] = [
   {
     id: "craft-01",
     indexLabel: "01 // CORE FRAMEWORK",
@@ -237,7 +237,7 @@ export interface TechStackCategory {
   skills: SkillBadge[];
 }
 
-export const TECHNICAL_STACK_GROUPS: TechStackCategory[] = [
+export const TECH_STACK_GROUPS: TechStackCategory[] = [
   {
     id: "stack-frontend",
     indexLabel: "01 // FRONTEND & UI ARCHITECTURE",
