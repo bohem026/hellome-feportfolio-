@@ -117,8 +117,8 @@ export const EXPERIENCE_TIMELINE: TimelineGroupItem[] = [
         id: "proj-hellome",
         period: "2026.09 — PRESENT",
         title: "HelloMe",
-        type: "SERVERLESS & AI",
-        role: "SOLE DEVELOPER",
+        type: "APP DEV",
+        role: "FULLSTACK",
         summary:
           "GitHub 레포지토리 아카이빙 플랫폼",
       },
@@ -135,8 +135,8 @@ export const EXPERIENCE_TIMELINE: TimelineGroupItem[] = [
         id: "proj-recipe",
         period: "2026.07.15 — 2026.08.21",
         title: "깃깔나는 레시피",
-        type: "GENERATIVE AI APP",
-        role: "FRONTEND / BACKEND",
+        type: "APP DEV",
+        role: "FULLSTACK",
         summary:
           "생성형 AI 맞춤형 레시피 & 스마트 쿠킹 플랫폼",
       },
@@ -144,8 +144,8 @@ export const EXPERIENCE_TIMELINE: TimelineGroupItem[] = [
         id: "proj-rounz",
         period: "2026.05.29 — 2026.06.19",
         title: "웹 페이지 리뉴얼 프로젝트(2)",
-        type: "COMMERCE UX RENEWAL",
-        role: "FRONTEND DEVELOPER",
+        type: "RENEWAL",
+        role: "FRONTEND",
         summary:
           "이스트소프트 아이웨어 플랫폼 ROUNZ 리뉴얼",
       },
@@ -153,7 +153,7 @@ export const EXPERIENCE_TIMELINE: TimelineGroupItem[] = [
         id: "proj-estsoft-main",
         period: "2026.05.06 — 2026.05.11",
         title: "웹 페이지 리뉴얼 프로젝트(1)",
-        type: "LANDING & DESIGN SYSTEM",
+        type: "RENEWAL",
         role: "TEAM LEAD / FRONTEND",
         summary:
           "이스트소프트 교육 모집 메인 페이지 리뉴얼",
