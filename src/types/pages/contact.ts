@@ -13,5 +13,5 @@ export interface QuickAction {
 export interface ProposalFormState {
   name: string;
   email: string;
-  details: string;
+  message: string;
 }
