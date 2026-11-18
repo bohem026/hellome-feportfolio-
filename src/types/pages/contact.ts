@@ -10,7 +10,7 @@ export interface QuickAction {
   keyword: string;
 }
 
-export interface ProposalFormState {
+export interface ContactFormState {
   name: string;
   email: string;
   message: string;
