@@ -63,7 +63,7 @@ export function useContactPage() {
     alert(
       `[제안 전송 완료] ${formData.name}님의 입사/프로젝트 제안이 성공적으로 전달되었습니다.`,
     );
-    setFormData({ name: "", email: "", details: "" });
+    setFormData({ name: "", email: "", message: "" });
   };
 
   return {
