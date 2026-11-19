@@ -7,7 +7,7 @@ export interface Message {
 
 export interface QuickAction {
   label: string;
-  keyword: string;
+  template: string;
 }
 
 export interface ContactFormState {

@@ -4,22 +4,24 @@ export const INITIAL_BOT_MESSAGES: Message[] = [
   {
     id: "msg-1",
     sender: "bot",
-    text: "안녕하세요! 프론트엔드 엔지니어 주후산의 채용 어시스턴트 봇입니다. 채용 조건, 이력서 다운로드, 또는 입사/프로젝트 제안을 원하시면 아래 키워드를 클릭하시거나 메시지를 남겨주세요.",
+    text: "안녕하세요! 프론트엔드 엔지니어 주후산의 채용 어시스턴트 봇입니다. 채용 및 이력서 관련 문의를 원하시면 아래 키워드를 클릭하시거나 메시지를 남겨주세요.",
     time: "JUST NOW",
   },
 ];
 
 export const QUICK_ACTIONS: QuickAction[] = [
   {
-    label: "• Discuss full-time staff role",
-    keyword: "Discuss full-time staff role (채용 관련 질문)",
+    label: "채용 제안",
+    template:
+      "프론트엔드 개발자 포지션 채용 제안을 드리고자 연락드립니다.\n- 회사/팀 소개:\n- 주요 업무 및 기술 스택:\n- 채용 절차:",
   },
   {
-    label: "• Request resume & portfolio",
-    keyword: "Request resume & portfolio (이력서 / 포트폴리오 다운로드)",
+    label: "프로젝트 협업 문의",
+    template:
+      "신규 웹 서비스 개발 협업 문의를 드립니다.\n- 프로젝트 개요:\n- 예상 일정:",
   },
   {
-    label: "• Schedule 15-min intro sync",
-    keyword: "Schedule 15-min introductory sync (1:1 커피챗 / 면접 요청)",
+    label: "이력서 다운로드",
+    template: "이력서 다운로드 링크를 요청드립니다.",
   },
 ];
