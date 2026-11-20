@@ -3,7 +3,7 @@ export type ChatSender = "bot" | "user";
 export interface ChatMessage {
   id: string;
   sender: ChatSender;
-  time: string;
+  timestamp: string;
   text: string;
   actionType?: "resume_download" | "works_link";
 }
@@ -31,6 +31,6 @@ export const INITIAL_FORM_STATE: ContactFormState = {
 /**
  * 무분별 메시지 전송 방지 관련 상수
  */
-const COOLDOWN_STORAGE_KEY = "hellome_dispatch_cooldown_until";
+export const COOLDOWN_STORAGE_KEY = "hellome_dispatch_cooldown_until";
 // 3분 재전송 제한
-const COOLDOWN_DURATION_MS = 3 * 60 * 1000;
+export const COOLDOWN_DURATION_MS = 3 * 60 * 1000;

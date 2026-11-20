@@ -5,7 +5,7 @@ export const INITIAL_BOT_MESSAGES: ChatMessage[] = [
     id: "msg-1",
     sender: "bot",
     text: "안녕하세요! 프론트엔드 엔지니어 주후산의 채용 어시스턴트 봇입니다. 채용 및 이력서 관련 문의를 원하시면 아래 키워드를 클릭하시거나 메시지를 남겨주세요.",
-    time: "JUST NOW",
+    timestamp: "JUST NOW",
   },
 ];
 
