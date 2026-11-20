@@ -25,3 +25,10 @@ export const QUICK_ACTIONS: QuickAction[] = [
     template: "이력서 다운로드 링크를 요청드립니다.",
   },
 ];
+
+/**
+ * 무분별 메시지 전송 방지 관련 상수
+ */
+export const COOLDOWN_STORAGE_KEY = "hellome_dispatch_cooldown_until";
+// 3분 재전송 제한
+export const COOLDOWN_DURATION_MS = 3 * 60 * 1000;

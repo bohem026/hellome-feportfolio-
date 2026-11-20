@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { ContactFormState, INITIAL_FORM_STATE, ChatMessage } from "@/types";
+import { COOLDOWN_STORAGE_KEY } from "@/constants";
 import { ToastType } from "@/components/Toast";
 
 export function useContactPage() {
@@ -196,15 +197,45 @@ export function useContactPage() {
   );
 
   /**
+   * test
+   * 이력서 다운로드 실행 핸들러
+   */
+  const handleDownloadResume = useCallback(() => {
+    // 실제 PDF 파일 경로가 public/files/RESUME.pdf 에 준비되면 링크 다운로드 실행
+    triggerToast("이력서 PDF 파일은 준비 중입니다.", "warning");
+  }, [triggerToast]);
+
+  /**
    * 컨택트 메시지 유효성 검증
    */
   const validateForm = useCallback((): boolean => {
+    // 1. Honeypot 체크
+    // 봇이 해당 필드를 채운 경우 차단
+    if (formData.website.trim().length > 0) {
+      return false;
+    }
+
+    // 2. 메시지 전송 쿨타임
+    const cooldownUntil = Number(
+      localStorage.getItem(COOLDOWN_STORAGE_KEY) || "0",
+    );
+    if (Date.now() < cooldownUntil) {
+      const remainSec = Math.ceil((cooldownUntil - Date.now()) / 1000);
+      triggerToast(
+        `연속 전송 방지를 위해 ${remainSec}초 후에 다시 전송할 수 있습니다.`,
+        "warning",
+      );
+      return false;
+    }
+
     const trimmedName = formData.name.trim();
     const trimmedEmail = formData.email.trim();
     const trimmedMessage = formData.message.trim();
 
+    // Refs: 자동 포커스
     if (!trimmedName) {
       triggerToast("성함 및 직책을 입력해 주세요.", "warning");
+      nameInputRef.current?.focus();
       return false;
     }
 
