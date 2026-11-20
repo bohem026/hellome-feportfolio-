@@ -1,15 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { INITIAL_BOT_MESSAGES, QUICK_ACTIONS } from "@/constants";
-import { Message, ContactFormState } from "@/types";
+import { useState, useCallback, useRef, useEffect } from "react";
+import { ContactFormState, INITIAL_FORM_STATE } from "@/types";
 import { ToastType } from "@/components/Toast";
-
-const INITIAL_FORM_STATE: ContactFormState = {
-  name: "",
-  email: "",
-  message: "",
-};
 
 export function useContactPage() {
   const [formData, setFormData] =
