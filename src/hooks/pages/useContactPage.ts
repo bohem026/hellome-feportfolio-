@@ -25,6 +25,42 @@ export function useContactPage() {
     },
   ]);
 
+  const [showScrollToBottom, setShowScrollToBottom] = useState(false);
+
+  /**
+   * 최하단 스크롤 이동 네비게이션 함수
+   */
+  const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
+    const viewport = chatViewportRef.current;
+    if (!viewport) return;
+
+    viewport.scrollTo({
+      top: viewport.scrollHeight,
+      behavior,
+    });
+  }, []);
+
+  /**
+   * 채팅 뷰포트 스크롤 위치 감지 핸들러
+   * 최하단에서 60px 이상 위로 올라가면 네비게이션 버튼 노출
+   */
+  const handleChatScroll = useCallback(() => {
+    const viewport = chatViewportRef.current;
+    if (!viewport) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = viewport;
+    const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
+
+    setShowScrollToBottom(distanceFromBottom > 60);
+  }, []);
+
+  /**
+   * 메시지가 추가되거나 봇 타이핑 상태가 바뀔 때마다 채팅창 최하단 자동 스크롤
+   */
+  useEffect(() => {
+    scrollToBottom("smooth");
+  }, [chatMessages, isBotTyping, scrollToBottom]);
+
   // Toast
   const [toastState, setToastState] = useState<{
     open: boolean;
@@ -46,19 +82,6 @@ export function useContactPage() {
   const handleCloseToast = useCallback(() => {
     setToastState((prev) => ({ ...prev, open: false }));
   }, []);
-
-  /**
-   * 메시지가 추가되거나 봇 타이핑 상태가 바뀔 때마다 채팅창 최하단 자동 스크롤
-   */
-  useEffect(() => {
-    const viewport = chatViewportRef.current;
-    if (!viewport) return;
-
-    viewport.scrollTo({
-      top: viewport.scrollHeight,
-      behavior: "smooth",
-    });
-  }, [chatMessages, isBotTyping]);
 
   /**
    * 현재 시간으로 채팅 타임스탬프 업데이트
@@ -346,6 +369,9 @@ export function useContactPage() {
     chatViewportRef,
     nameInputRef,
     toastState,
+    showScrollToBottom,
+    scrollToBottom,
+    handleChatScroll,
     handleCloseToast,
     handleInputChange,
     handleQuickAction,
