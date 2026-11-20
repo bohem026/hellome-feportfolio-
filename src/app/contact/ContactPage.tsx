@@ -15,6 +15,9 @@ export function ContactPage() {
     chatViewportRef,
     nameInputRef,
     toastState,
+    showScrollToBottom,
+    scrollToBottom,
+    handleChatScroll,
     handleCloseToast,
     handleInputChange,
     handleQuickAction,
@@ -90,85 +93,106 @@ export function ContactPage() {
             <span className="online-status">● ONLINE / AGENT READY</span>
           </div>
 
-          {/* CHAT-BOT */}
-          <div className="chat-viewport" ref={chatViewportRef}>
-            {chatMessages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`chat-bubble-row ${
-                  msg.sender === "user" ? "is-user" : "is-bot"
-                }`}
-              >
-                <div className="chat-bubble">
-                  <span className="msg-sender">
-                    {msg.sender === "bot" ? "ASSISTANT BOT" : "VISITOR"} —{" "}
-                    {msg.timestamp}
-                  </span>
-                  <p>{msg.text}</p>
+          {/* CHAT-BOT WRAPPER*/}
+          <div className="chat-viewport-wrapper">
+            {/* CHAT-BOT*/}
+            <div
+              className="chat-viewport"
+              ref={chatViewportRef}
+              onScroll={handleChatScroll}
+            >
+              {chatMessages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`chat-bubble-row ${
+                    msg.sender === "user" ? "is-user" : "is-bot"
+                  }`}
+                >
+                  <div className="chat-bubble">
+                    <span className="msg-sender">
+                      {msg.sender === "bot" ? "ASSISTANT BOT" : "VISITOR"} —{" "}
+                      {msg.timestamp}
+                    </span>
+                    <p>{msg.text}</p>
 
-                  {/* 이력서 즉시 다운로드 액션 카드 */}
-                  {msg.actionType === "resume_download" && (
-                    <div className="bubble-inline-actions">
-                      <button
-                        type="button"
-                        className="btn-resume-download"
-                        onClick={handleDownloadResume}
-                      >
-                        RESUME_2026.PDF ↓
-                      </button>
-                      <Link href="/works" className="btn-works-jump">
-                        VIEW WORKS ARCHIVE ↗
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-
-            {/* 봇 입력 진행 애니메이션 스켈레톤 UI */}
-            {isBotTyping && (
-              <div className="chat-bubble-row is-bot">
-                <div className="chat-bubble is-typing">
-                  <span className="msg-sender">ASSISTANT BOT — TYPING...</span>
-                  <div className="typing-skeleton">
-                    <span className="dot" />
-                    <span className="dot" />
-                    <span className="dot" />
+                    {/* 이력서 즉시 다운로드 액션 카드 */}
+                    {msg.actionType === "resume_download" && (
+                      <div className="bubble-inline-actions">
+                        <button
+                          type="button"
+                          className="btn-resume-download"
+                          onClick={handleDownloadResume}
+                        >
+                          RESUME_2026.PDF ↓
+                        </button>
+                        <Link href="/works" className="btn-works-jump">
+                          VIEW WORKS ARCHIVE ↗
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 </div>
-              </div>
-            )}
+              ))}
 
-            {/* 챗봇 뷰포트 내부 인라인 퀵 액션 말풍선 */}
-            <div className="inline-quick-prompts">
-              <span className="prompt-guide">SELECT QUICK INTENT:</span>
-              <div className="prompt-chips">
-                <button
-                  type="button"
-                  className="prompt-chip-btn"
-                  disabled={isBotTyping || isSubmitting}
-                  onClick={() => handleQuickAction("hiring")}
-                >
-                  + 채용 제안 양식 불러오기
-                </button>
-                <button
-                  type="button"
-                  className="prompt-chip-btn"
-                  disabled={isBotTyping || isSubmitting}
-                  onClick={() => handleQuickAction("project")}
-                >
-                  + 프로젝트 협업 문의
-                </button>
-                <button
-                  type="button"
-                  className="prompt-chip-btn"
-                  disabled={isBotTyping || isSubmitting}
-                  onClick={() => handleQuickAction("resume")}
-                >
-                  + 이력서 다운로드
-                </button>
+              {/* 봇 입력 진행 애니메이션 스켈레톤 UI */}
+              {isBotTyping && (
+                <div className="chat-bubble-row is-bot">
+                  <div className="chat-bubble is-typing">
+                    <span className="msg-sender">
+                      ASSISTANT BOT — TYPING...
+                    </span>
+                    <div className="typing-skeleton">
+                      <span className="dot" />
+                      <span className="dot" />
+                      <span className="dot" />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 챗봇 뷰포트 내부 인라인 퀵 액션 말풍선 */}
+              <div className="inline-quick-prompts">
+                <span className="prompt-guide">SELECT QUICK INTENT:</span>
+                <div className="prompt-chips">
+                  <button
+                    type="button"
+                    className="prompt-chip-btn"
+                    disabled={isBotTyping || isSubmitting}
+                    onClick={() => handleQuickAction("hiring")}
+                  >
+                    + 채용 제안 양식 불러오기
+                  </button>
+                  <button
+                    type="button"
+                    className="prompt-chip-btn"
+                    disabled={isBotTyping || isSubmitting}
+                    onClick={() => handleQuickAction("project")}
+                  >
+                    + 프로젝트 협업 문의
+                  </button>
+                  <button
+                    type="button"
+                    className="prompt-chip-btn"
+                    disabled={isBotTyping || isSubmitting}
+                    onClick={() => handleQuickAction("resume")}
+                  >
+                    + 이력서 다운로드
+                  </button>
+                </div>
               </div>
             </div>
+
+            {/* SCROLL-DOWN NAV BUTTON */}
+            {showScrollToBottom && (
+              <button
+                type="button"
+                className="btn-scroll-bottom"
+                onClick={() => scrollToBottom("smooth")}
+                aria-label="최신 대화 및 퀵 버튼으로 이동"
+              >
+                ↓ SCROLL TO LATEST
+              </button>
+            )}
           </div>
 
           {/* 1. 구직 제안 입력 폼 */}
