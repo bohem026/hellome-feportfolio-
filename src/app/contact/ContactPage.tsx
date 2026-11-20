@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { useContactPage } from "@/hooks";
-import { INITIAL_BOT_MESSAGES, QUICK_ACTIONS } from "@/constants";
 import { Toast } from "@/components/Toast";
 import "./ContactPage.scss";
 
@@ -10,10 +10,15 @@ export function ContactPage() {
   const {
     formData,
     isSubmitting,
+    isBotTyping,
+    chatMessages,
+    chatViewportRef,
+    nameInputRef,
     toastState,
     handleCloseToast,
     handleInputChange,
     handleQuickAction,
+    handleDownloadResume,
     handleSubmitInquiry,
   } = useContactPage();
 
@@ -52,7 +57,7 @@ export function ContactPage() {
 
           <div className="meta-card">
             <span className="meta-label">03 // RESPONSE TIME</span>
-            <strong className="meta-value">&lt; 24 HOURS</strong>
+            <strong className="meta-value">24 HOURS</strong>
             <span className="meta-sub">DAILY MONITORED</span>
           </div>
 
@@ -86,32 +91,83 @@ export function ContactPage() {
           </div>
 
           {/* CHAT-BOT */}
-          <div className="chat-viewport">
-            <div className="bot-message-card">
-              <span className="msg-sender">ASSISTANT BOT — JUST NOW</span>
-              <p>
-                안녕하세요! 프론트엔드 엔지니어 주후산의 채용 어시스턴트
-                봇입니다. 입사/프로젝트 제안 또는 이력서 다운로드를 원하시면
-                아래 키워드를 클릭하시거나 메시지를 남겨주세요.
-              </p>
-            </div>
-          </div>
+          <div className="chat-viewport" ref={chatViewportRef}>
+            {chatMessages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`chat-bubble-row ${
+                  msg.sender === "user" ? "is-user" : "is-bot"
+                }`}
+              >
+                <div className="chat-bubble">
+                  <span className="msg-sender">
+                    {msg.sender === "bot" ? "ASSISTANT BOT" : "VISITOR"} —{" "}
+                    {msg.timestamp}
+                  </span>
+                  <p>{msg.text}</p>
 
-          {/* QUICK DISPATCH ACTIONS */}
-          <div className="quick-actions-area">
-            <span className="field-label">QUICK DISPATCH ACTIONS:</span>
-            <div className="quick-btn-grid">
-              {QUICK_ACTIONS.map((action) => (
+                  {/* 이력서 즉시 다운로드 액션 카드 */}
+                  {msg.actionType === "resume_download" && (
+                    <div className="bubble-inline-actions">
+                      <button
+                        type="button"
+                        className="btn-resume-download"
+                        onClick={handleDownloadResume}
+                      >
+                        RESUME_2026.PDF ↓
+                      </button>
+                      <Link href="/works" className="btn-works-jump">
+                        VIEW WORKS ARCHIVE ↗
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+
+            {/* 봇 입력 진행 애니메이션 스켈레톤 UI */}
+            {isBotTyping && (
+              <div className="chat-bubble-row is-bot">
+                <div className="chat-bubble is-typing">
+                  <span className="msg-sender">ASSISTANT BOT — TYPING...</span>
+                  <div className="typing-skeleton">
+                    <span className="dot" />
+                    <span className="dot" />
+                    <span className="dot" />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 챗봇 뷰포트 내부 인라인 퀵 액션 말풍선 */}
+            <div className="inline-quick-prompts">
+              <span className="prompt-guide">SELECT QUICK INTENT:</span>
+              <div className="prompt-chips">
                 <button
-                  key={action.label}
                   type="button"
-                  className="quick-action-btn"
-                  disabled={isSubmitting}
+                  className="prompt-chip-btn"
+                  disabled={isBotTyping || isSubmitting}
                   onClick={() => handleQuickAction("hiring")}
                 >
-                  + {action.label}
+                  + 채용 제안 양식 불러오기
                 </button>
-              ))}
+                <button
+                  type="button"
+                  className="prompt-chip-btn"
+                  disabled={isBotTyping || isSubmitting}
+                  onClick={() => handleQuickAction("project")}
+                >
+                  + 프로젝트 협업 문의
+                </button>
+                <button
+                  type="button"
+                  className="prompt-chip-btn"
+                  disabled={isBotTyping || isSubmitting}
+                  onClick={() => handleQuickAction("resume")}
+                >
+                  + 이력서 다운로드
+                </button>
+              </div>
             </div>
           </div>
 
@@ -121,12 +177,25 @@ export function ContactPage() {
             onSubmit={handleSubmitInquiry}
             noValidate
           >
+            {/* 스팸 봇 차단용 Honeypot 숨김 필드 */}
+            <input
+              type="text"
+              name="website"
+              value={formData.website}
+              onChange={handleInputChange}
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              style={{ display: "none" }}
+            />
+
             <div className="form-row-two">
               <div className="form-group">
                 <label htmlFor="senderName" className="field-label">
                   YOUR NAME &amp; TITLE *
                 </label>
                 <input
+                  ref={nameInputRef}
                   id="senderName"
                   name="senderName"
                   type="text"
