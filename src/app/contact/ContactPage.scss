@@ -215,186 +215,220 @@ body {
         }
       }
 
-      .chat-viewport {
-        background-color: #eaeae7;
-        border: 1px solid #e0e0dc;
-        padding: 1.35rem;
-        height: 310px;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 0.9rem;
+      .chat-viewport-wrapper {
+        position: relative;
         margin-bottom: 1.5rem;
-        scroll-behavior: smooth;
 
-        /* 봇/사용자 말풍선 정렬 */
-        .chat-bubble-row {
+        .chat-viewport {
+          background-color: #eaeae7;
+          border: 1px solid #e0e0dc;
+          padding: 1.35rem;
+          height: 310px;
+          overflow-y: auto;
           display: flex;
-          width: 100%;
+          flex-direction: column;
+          gap: 0.9rem;
+          margin-bottom: 1.5rem;
+          scroll-behavior: smooth;
 
-          &.is-bot {
-            justify-content: flex-start;
+          /* 봇/사용자 말풍선 정렬 */
+          .chat-bubble-row {
+            display: flex;
+            width: 100%;
 
-            .chat-bubble {
-              background-color: #ffffff;
-              border: 1px solid #dfdeda;
-              color: #222222;
+            &.is-bot {
+              justify-content: flex-start;
+
+              .chat-bubble {
+                background-color: #ffffff;
+                border: 1px solid #dfdeda;
+                color: #222222;
+              }
             }
-          }
 
-          &.is-user {
-            justify-content: flex-end;
+            &.is-user {
+              justify-content: flex-end;
+
+              .chat-bubble {
+                background-color: #111111;
+                border: 1px solid #111111;
+                color: #ffffff;
+
+                .msg-sender {
+                  color: #aaaaaa;
+                }
+
+                p {
+                  color: #ffffff;
+                }
+              }
+            }
 
             .chat-bubble {
-              background-color: #111111;
-              border: 1px solid #111111;
-              color: #ffffff;
+              padding: 1rem 1.15rem;
+              max-width: 78%;
+              animation: bubbleFadeIn 0.2s ease-out;
+
+              @media (max-width: 768px) {
+                max-width: 92%;
+              }
 
               .msg-sender {
-                color: #aaaaaa;
+                display: block;
+                font-size: 0.6rem;
+                font-weight: 700;
+                letter-spacing: 0.06em;
+                color: #777777;
+                margin-bottom: 0.4rem;
               }
 
               p {
-                color: #ffffff;
+                font-size: 0.85rem;
+                line-height: 1.6;
+                word-break: keep-all;
+              }
+
+              /* 이력서 다운로드 말풍선 내부 버튼 */
+              .bubble-inline-actions {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                margin-top: 0.85rem;
+                padding-top: 0.75rem;
+                border-top: 1px dashed #dcdcd8;
+
+                .btn-resume-download {
+                  background-color: #111111;
+                  color: #ffffff;
+                  border: 1px solid #111111;
+                  padding: 0.5rem 0.85rem;
+                  font-size: 0.72rem;
+                  font-weight: 700;
+                  letter-spacing: 0.04em;
+                  cursor: pointer;
+
+                  &:hover {
+                    background-color: #333333;
+                  }
+                }
+
+                .btn-works-jump {
+                  background-color: #f7f7f5;
+                  color: #111111;
+                  border: 1px solid #d4d4d0;
+                  padding: 0.5rem 0.85rem;
+                  font-size: 0.72rem;
+                  font-weight: 700;
+                  letter-spacing: 0.04em;
+                  text-decoration: none;
+
+                  &:hover {
+                    border-color: #111111;
+                  }
+                }
+              }
+
+              /* 봇 타이핑 진행 애니메이션 스켈레톤 */
+              &.is-typing {
+                min-width: 160px;
+
+                .typing-skeleton {
+                  display: flex;
+                  align-items: center;
+                  gap: 0.35rem;
+                  padding: 0.25rem 0;
+
+                  .dot {
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background-color: #111111;
+                    animation: typingBounce 1.1s infinite ease-in-out;
+
+                    &:nth-child(2) {
+                      animation-delay: 0.18s;
+                    }
+                    &:nth-child(3) {
+                      animation-delay: 0.36s;
+                    }
+                  }
+                }
               }
             }
           }
 
-          .chat-bubble {
-            padding: 1rem 1.15rem;
-            max-width: 78%;
-            animation: bubbleFadeIn 0.2s ease-out;
+          /* 인라인 퀵 액션 프롬프트 말풍선 영역 */
+          .inline-quick-prompts {
+            margin-top: auto;
+            padding-top: 0.65rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.45rem;
 
-            @media (max-width: 768px) {
-              max-width: 92%;
-            }
-
-            .msg-sender {
-              display: block;
+            .prompt-guide {
               font-size: 0.6rem;
               font-weight: 700;
-              letter-spacing: 0.06em;
+              letter-spacing: 0.07em;
               color: #777777;
-              margin-bottom: 0.4rem;
             }
 
-            p {
-              font-size: 0.85rem;
-              line-height: 1.6;
-              word-break: keep-all;
-            }
-
-            /* 이력서 다운로드 말풍선 내부 버튼 */
-            .bubble-inline-actions {
+            .prompt-chips {
               display: flex;
               flex-wrap: wrap;
-              gap: 0.5rem;
-              margin-top: 0.85rem;
-              padding-top: 0.75rem;
-              border-top: 1px dashed #dcdcd8;
+              justify-content: flex-end;
+              gap: 0.45rem;
 
-              .btn-resume-download {
-                background-color: #111111;
-                color: #ffffff;
+              .prompt-chip-btn {
+                background-color: #ffffff;
                 border: 1px solid #111111;
-                padding: 0.5rem 0.85rem;
-                font-size: 0.72rem;
-                font-weight: 700;
-                letter-spacing: 0.04em;
-                cursor: pointer;
-
-                &:hover {
-                  background-color: #333333;
-                }
-              }
-
-              .btn-works-jump {
-                background-color: #f7f7f5;
                 color: #111111;
-                border: 1px solid #d4d4d0;
-                padding: 0.5rem 0.85rem;
-                font-size: 0.72rem;
+                padding: 0.45rem 0.8rem;
+                font-size: 0.74rem;
                 font-weight: 700;
-                letter-spacing: 0.04em;
-                text-decoration: none;
+                cursor: pointer;
+                transition: all 0.15s ease;
 
-                &:hover {
-                  border-color: #111111;
-                }
-              }
-            }
-
-            /* 봇 타이핑 진행 애니메이션 스켈레톤 */
-            &.is-typing {
-              min-width: 160px;
-
-              .typing-skeleton {
-                display: flex;
-                align-items: center;
-                gap: 0.35rem;
-                padding: 0.25rem 0;
-
-                .dot {
-                  width: 6px;
-                  height: 6px;
-                  border-radius: 50%;
+                &:hover:not(:disabled) {
                   background-color: #111111;
-                  animation: typingBounce 1.1s infinite ease-in-out;
+                  color: #ffffff;
+                }
 
-                  &:nth-child(2) {
-                    animation-delay: 0.18s;
-                  }
-                  &:nth-child(3) {
-                    animation-delay: 0.36s;
-                  }
+                &:disabled {
+                  opacity: 0.45;
+                  cursor: not-allowed;
                 }
               }
             }
           }
         }
 
-        /* 인라인 퀵 액션 프롬프트 말풍선 영역 */
-        .inline-quick-prompts {
-          margin-top: auto;
-          padding-top: 0.65rem;
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-          gap: 0.45rem;
+        .btn-scroll-bottom {
+          position: absolute;
+          right: 1.15rem;
+          bottom: 1rem;
+          z-index: 10;
+          background-color: #111111;
+          color: #ffffff;
+          border: 1px solid #111111;
+          padding: 0.45rem 0.85rem;
+          font-size: 0.65rem;
+          font-weight: 800;
+          letter-spacing: 0.07em;
+          cursor: pointer;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+          animation: fadeSlideUp 0.18s ease-out;
+          transition:
+            background-color 0.15s ease,
+            transform 0.15s ease;
 
-          .prompt-guide {
-            font-size: 0.6rem;
-            font-weight: 700;
-            letter-spacing: 0.07em;
-            color: #777777;
+          &:hover {
+            background-color: #2b2b2b;
+            transform: translateY(-1px);
           }
 
-          .prompt-chips {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-            gap: 0.45rem;
-
-            .prompt-chip-btn {
-              background-color: #ffffff;
-              border: 1px solid #111111;
-              color: #111111;
-              padding: 0.45rem 0.8rem;
-              font-size: 0.74rem;
-              font-weight: 700;
-              cursor: pointer;
-              transition: all 0.15s ease;
-
-              &:hover:not(:disabled) {
-                background-color: #111111;
-                color: #ffffff;
-              }
-
-              &:disabled {
-                opacity: 0.45;
-                cursor: not-allowed;
-              }
-            }
+          &:active {
+            transform: translateY(0);
           }
         }
       }
