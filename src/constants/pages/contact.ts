@@ -1,6 +1,6 @@
-import { Message, QuickAction } from "@/types";
+import { ChatMessage, QuickAction } from "@/types";
 
-export const INITIAL_BOT_MESSAGES: Message[] = [
+export const INITIAL_BOT_MESSAGES: ChatMessage[] = [
   {
     id: "msg-1",
     sender: "bot",
