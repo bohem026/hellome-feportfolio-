@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { ContactFormState, INITIAL_FORM_STATE, ChatMessage } from "@/types";
-import { COOLDOWN_STORAGE_KEY } from "@/constants";
+import { COOLDOWN_STORAGE_KEY, COOLDOWN_DURATION_MS } from "@/constants";
 import { ToastType } from "@/components/Toast";
 
 export function useContactPage() {
@@ -270,33 +270,55 @@ export function useContactPage() {
   }, [formData, triggerToast]);
 
   /**
-   * 폼 제출 핸들러
+   * 구직 제안 폼 제출 핸들러
    */
   const handleSubmitInquiry = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-
       // 이미 전송 중이면 중복 클릭 차단
       if (isSubmitting) return;
-
       // 유효성 검증 통과 실패 시 중단
       if (!validateForm()) return;
 
+      const submittedName = formData.name.trim();
+      const submittedEmail = formData.email.trim();
+
       setIsSubmitting(true);
+
+      // 시스템 채팅 메시지 보완
+      // - 메시지 db 저장용 아이디 추가
+      // - 현재 시간 표기
+      setChatMessages((prev) => [
+        ...prev,
+        {
+          id: `user-dispatch-${Date.now()}`,
+          sender: "user",
+          timestamp: getCurrentTimestamp(),
+          text: `[DISPATCH REQUEST] ${submittedName} (${submittedEmail}) 님의 제안 메시지를 전송 요청했습니다.`,
+        },
+      ]);
 
       try {
         // test
         // 임시 네트워크 지연 시뮬레이션 (1.5초)
         // 추후 Supabase DB INSERT 및 Edge Function 호출로 교체 예정
+        // 추가할 예정 기능: supabase db insert + 메일 발송 (edge function)
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
-        triggerToast(
-          "구직 및 협업 제안 메시지가 성공적으로 전송되었습니다. 확인 후 24시간 이내에 회신드리겠습니다!",
-          "success",
+        // 3분 재전송 쿨타임 기록
+        localStorage.setItem(
+          COOLDOWN_STORAGE_KEY,
+          String(Date.now() + COOLDOWN_DURATION_MS),
         );
 
+        triggerToast("메시지가 성공적으로 전송되었습니다!", "success");
         // 전송 완료 후 입력 폼 초기화
         setFormData(INITIAL_FORM_STATE);
+
+        // 시스템 채팅 출력: 전송 완료
+        appendBotReplyWithDelay(
+          `전송이 완료되었습니다!\n${submittedName} 님의 제안이 정상 접수되었으며, 입력하신 이메일(${submittedEmail})로 접수 확인 안내가 발송됩니다.\n검토 후 24시간 이내에 회신드리겠습니다.`,
+        );
       } catch (error) {
         console.error("Dispatch error:", error);
         triggerToast(
@@ -307,16 +329,27 @@ export function useContactPage() {
         setIsSubmitting(false);
       }
     },
-    [isSubmitting, validateForm, triggerToast],
+    [
+      formData,
+      isSubmitting,
+      validateForm,
+      appendBotReplyWithDelay,
+      triggerToast,
+    ],
   );
 
   return {
     formData,
     isSubmitting,
+    isBotTyping,
+    chatMessages,
+    chatViewportRef,
+    nameInputRef,
     toastState,
     handleCloseToast,
     handleInputChange,
     handleQuickAction,
+    handleDownloadResume,
     handleSubmitInquiry,
   };
 }
