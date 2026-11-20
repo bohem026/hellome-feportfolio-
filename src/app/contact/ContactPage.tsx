@@ -191,13 +191,13 @@ export function ContactPage() {
 
             <div className="form-row-two">
               <div className="form-group">
-                <label htmlFor="senderName" className="field-label">
+                <label htmlFor="name" className="field-label">
                   YOUR NAME &amp; TITLE *
                 </label>
                 <input
                   ref={nameInputRef}
-                  id="senderName"
-                  name="senderName"
+                  id="name"
+                  name="name"
                   type="text"
                   placeholder="e.g. Hong Gil Dong, Tech Lead"
                   value={formData.name}
@@ -207,12 +207,12 @@ export function ContactPage() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="senderEmail" className="field-label">
+                <label htmlFor="email" className="field-label">
                   WORK EMAIL *
                 </label>
                 <input
-                  id="senderEmail"
-                  name="senderEmail"
+                  id="email"
+                  name="email"
                   type="email"
                   placeholder="name@company.com"
                   value={formData.email}
