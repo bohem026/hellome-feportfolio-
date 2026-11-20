@@ -141,7 +141,7 @@ export function useContactPage() {
         setFormData((prev) => ({
           ...prev,
           message:
-            "안녕하세요, 프론트엔드 개발자 포지션 채용 제안을 드리고자 연락드립니다.\n- 회사 및 팀 소개: \n- 담당 업무 및 주요 기술 스택: \n- 채용 절차 및 희망 일정: ",
+            "프론트엔드 개발자 포지션 채용 제안을 드리고자 연락드립니다.\n- 회사/팀 소개: \n- 주요 업무 및 기술 스택: \n- 채용 절차: ",
         }));
 
         appendBotReplyWithDelay(
@@ -165,7 +165,7 @@ export function useContactPage() {
         setFormData((prev) => ({
           ...prev,
           message:
-            "안녕하세요, 웹 서비스 개발 및 아키텍처 협업 문의를 드립니다.\n- 프로젝트 개요 및 목표: \n- 예상 개발 일정 및 범위: \n- 기타 요청 사항: ",
+            "신규 웹 서비스 개발 협업 문의를 드립니다.\n- 프로젝트 개요: \n- 예상 일정: ",
         }));
 
         appendBotReplyWithDelay(
@@ -187,7 +187,7 @@ export function useContactPage() {
         ]);
 
         appendBotReplyWithDelay(
-          "아래 버튼을 통해 최신 이력서 PDF를 바로 내려받으실 수 있습니다. 주요 프로젝트의 상세 내용은 Works 페이지에서도 확인 가능합니다.",
+          "아래 버튼을 통해 최신 이력서 PDF를 바로 내려받으실 수 있습니다. 주요 프로젝트의 상세 내용은 프로젝트 목록 페이지에서도 확인 가능합니다.",
           "resume_download",
         );
       }

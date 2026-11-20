@@ -13,7 +13,7 @@ export function ContactPage() {
     toastState,
     handleCloseToast,
     handleInputChange,
-    handleSelectQuickAction,
+    handleQuickAction,
     handleSubmitInquiry,
   } = useContactPage();
 
@@ -107,7 +107,7 @@ export function ContactPage() {
                   type="button"
                   className="quick-action-btn"
                   disabled={isSubmitting}
-                  onClick={() => handleSelectQuickAction(action.template)}
+                  onClick={() => handleQuickAction("hiring")}
                 >
                   + {action.label}
                 </button>
