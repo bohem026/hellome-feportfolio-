@@ -417,7 +417,10 @@ export function AdminPage() {
                             </strong>
                           </div>
 
-                          <span className="col-email">
+                          <span
+                            className="col-email"
+                            title={inquiry.sender_email}
+                          >
                             {inquiry.sender_email}
                           </span>
 
