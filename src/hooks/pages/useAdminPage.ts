@@ -76,7 +76,9 @@ export function useAdminPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
 
-  const [inquiries, setInquiries] = useState<Inquiry[]>(INITIAL_INQUIRIES);
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+  const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
+
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
 
   const [isArchiving, setIsArchiving] = useState(false);
@@ -124,8 +126,10 @@ export function useAdminPage() {
           ]);
 
           // 추가: 세션 확인 직후 DB 목록 조회 실행
-          // 수정: 공통 훅의 refetchProjects()로 대체
-          await refetchProjects();
+          // 수정:
+          // - 공통 훅의 refetchProjects()로 대체
+          // - inquiries db 패칭 추가
+          await Promise.all([refetchProjects(), fetchInquiries()]);
 
           // OAuth 인증 직후 콜백(?connected=true)으로 들어온 경우 성공 처리
           const isJustConnected = searchParams.get("connected") === "true";
@@ -512,11 +516,63 @@ export function useAdminPage() {
   };
 
   /**
-   * 문의 / 취업 제안 삭제 핸들러
+   * DB에서 제안 목록 최신순 조회
+   */
+  const fetchInquiries = async () => {
+    const { data, error } = await supabase
+      .from("inquiries")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (!error && data) {
+      setInquiries(data as Inquiry[]);
+    }
+  };
+
+  /**
+   * 제안 목록 선택 핸들러
+   * - is_read 컬럼 패칭
+   * - 선택한 경우 is_read 업데이트
+   * @param inquiry
+   * @returns
+   */
+  const handleSelectAndReadInquiry = async (inquiry: Inquiry) => {
+    setSelectedInquiry(inquiry);
+
+    // 이미 읽음 상태라면 DB 요청 생략
+    if (inquiry.is_read) return;
+
+    setInquiries((prev) =>
+      prev.map((item) =>
+        item.id === inquiry.id ? { ...item, is_read: true } : item,
+      ),
+    );
+
+    const { error } = await supabase
+      .from("inquiries")
+      .update({ is_read: true })
+      .eq("id", inquiry.id);
+
+    if (error) {
+      console.error("Failed to mark inquiry as read:", error);
+    }
+  };
+
+  /**
+   * 문의/취업 제안 삭제 핸들러
    * @param id
    */
-  const handleRemoveInquiry = (id: string) => {
+  const handleRemoveInquiry = async (id: string) => {
+    const { error } = await supabase.from("inquiries").delete().eq("id", id);
+    if (error) {
+      triggerToast(`삭제 실패: ${error.message}`, "danger");
+      return;
+    }
+
     setInquiries((prev) => prev.filter((i) => i.id !== id));
+    if (selectedInquiry?.id === id) {
+      setSelectedInquiry(null);
+    }
     triggerToast("취업 제안이 삭제되었습니다.", "success");
   };
 
