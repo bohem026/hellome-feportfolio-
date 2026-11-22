@@ -350,8 +350,8 @@ export function AdminPage() {
                 )}
               </div>
 
-              {/* 스켈레톤 UI 적용 */}
-              {!isDataVisible ? (
+              {/* 1. 관리자 모달 인증 전: 스켈레톤 UI */}
+              {!isAuthenticated ? (
                 <div className="inquiry-skeleton-list">
                   {[1, 2, 3].map((n) => (
                     <div key={n} className="inquiry-skeleton-row">
@@ -361,11 +361,31 @@ export function AdminPage() {
                     </div>
                   ))}
                 </div>
+              ) : !isGithubConnected ? (
+                /* 2. 관리자 인증 완료 */
+                /* GitHub 미연동 상태인 경우-> 보안 안내 및 GitHub 연동 CTA  */
+                <div className="inquiry-auth-gate-box">
+                  <span className="gate-badge">SECURITY &amp; RLS GATE</span>
+                  <h3>GITHUB OAUTH AUTHENTICATION REQUIRED</h3>
+                  {/* <p>
+                    GitHub 계정을 연동하여 전체 문의 내역을 열람하고 관리할 수
+                    있습니다.
+                  </p> */}
+                  <button
+                    type="button"
+                    className="btn-connect-github-cta"
+                    onClick={handleConnectGithub}
+                  >
+                    CONNECT GITHUB ACCOUNT →
+                  </button>
+                </div>
               ) : inquiries.length === 0 ? (
+                /* 3. 연동 완료 후 데이터 없음 */
                 <div className="inquiry-empty-box">
                   <span>NO INBOUND INQUIRIES RECORDED YET.</span>
                 </div>
               ) : (
+                /* 4. 연동 완료 후 아코디언 목록 출력 */
                 <div className="inquiry-accordion-list">
                   {inquiries.map((inquiry) => {
                     const isExpanded = expandedInquiryId === inquiry.id;
