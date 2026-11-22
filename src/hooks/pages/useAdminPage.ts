@@ -544,8 +544,8 @@ export function useAdminPage() {
    * - is_read 컬럼 패칭
    * - 선택한 경우 is_read 업데이트
    * - 아코디언 토글
-   * @param inquiry 
-   * @returns 
+   * @param inquiry
+   * @returns
    */
   const handleToggleInquiryAccordion = async (inquiry: Inquiry) => {
     const isClosing = expandedInquiryId === inquiry.id;
@@ -583,8 +583,8 @@ export function useAdminPage() {
     }
 
     setInquiries((prev) => prev.filter((i) => i.id !== id));
-    if (selectedInquiry?.id === id) {
-      setSelectedInquiry(null);
+    if (expandedInquiryId === id) {
+      setExpandedInquiryId(null);
     }
     triggerToast("취업 제안이 삭제되었습니다.", "success");
   };
@@ -611,6 +611,7 @@ export function useAdminPage() {
     isProjectsLoading,
     inquiries,
     selectedInquiry,
+    expandedInquiryId,
     activeTab,
     setActiveTab,
     isArchiving,

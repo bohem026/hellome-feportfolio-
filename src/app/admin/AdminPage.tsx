@@ -27,6 +27,7 @@ export function AdminPage() {
     projects,
     inquiries,
     selectedInquiry,
+    expandedInquiryId,
     activeTab,
     setActiveTab,
     isArchiving,
@@ -333,50 +334,123 @@ export function AdminPage() {
             </div>
 
             {/* Inquiries Queue Section */}
-            <div className="inquiries-queue-section">
-              <div className="section-title-bar">
-                <span>[INQUIRIES QUEUE]</span>
-                <span className="live-dot">● LIVE STREAM</span>
+            <section className="admin-inquiries-section">
+              <div className="inquiries-header">
+                <div>
+                  <span className="section-index">
+                    // INBOUND TRANSMISSIONS
+                  </span>
+                  <h2>RECRUITMENT &amp; PROJECT INQUIRIES</h2>
+                </div>
+                {isDataVisible && (
+                  <span className="unread-counter">
+                    UNREAD: {inquiries.filter((i) => !i.is_read).length} /
+                    TOTAL: {inquiries.length}
+                  </span>
+                )}
               </div>
 
-              <div className="queue-list">
-                {inquiries.map((inquiry) => (
-                  <div
-                    key={inquiry.id}
-                    className={`inquiry-row ${inquiry.is_read ? "is-read" : "is-unread"} ${
-                      selectedInquiry?.id === inquiry.id ? "is-selected" : ""
-                    }`}
-                    onClick={() => handleToggleInquiryAccordion(inquiry)}
-                  >
-                    <div className="inquiry-meta">
-                      {!inquiry.is_read && (
-                        <span className="unread-dot">NEW</span>
-                      )}
-                      <strong className="sender-name">
-                        {inquiry.sender_name}
-                      </strong>
-                      <span className="sender-email">
-                        {inquiry.sender_email}
-                      </span>
-                      <span className="sent-date">
-                        {new Date(inquiry.created_at).toLocaleDateString()}
-                      </span>
+              {/* 스켈레톤 UI 적용 */}
+              {!isDataVisible ? (
+                <div className="inquiry-skeleton-list">
+                  {[1, 2, 3].map((n) => (
+                    <div key={n} className="inquiry-skeleton-row">
+                      <div className="skeleton-bar w-30" />
+                      <div className="skeleton-bar w-40" />
+                      <div className="skeleton-bar w-15" />
                     </div>
-                    <p className="inquiry-preview">{inquiry.message}</p>
-                    <button
-                      type="button"
-                      className="btn-delete-inquiry"
-                      onClick={(e) => {
-                        e.stopPropagation(); // 클릭 이벤트 버블링(읽음 처리) 방지
-                        handleRemoveInquiry(inquiry.id);
-                      }}
-                    >
-                      DELETE
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
+                  ))}
+                </div>
+              ) : inquiries.length === 0 ? (
+                <div className="inquiry-empty-box">
+                  <span>NO INBOUND INQUIRIES RECORDED YET.</span>
+                </div>
+              ) : (
+                <div className="inquiry-accordion-list">
+                  {inquiries.map((inquiry) => {
+                    const isExpanded = expandedInquiryId === inquiry.id;
+
+                    return (
+                      <div
+                        key={inquiry.id}
+                        className={`inquiry-accordion-item ${
+                          inquiry.is_read ? "is-read" : "is-unread"
+                        } ${isExpanded ? "is-expanded" : ""}`}
+                      >
+                        {/* 아코디언 헤더 */}
+                        <button
+                          type="button"
+                          className="accordion-trigger"
+                          onClick={() => handleToggleInquiryAccordion(inquiry)}
+                          aria-expanded={isExpanded}
+                        >
+                          <div className="col-sender">
+                            {!inquiry.is_read ? (
+                              <span className="status-pill is-new">NEW</span>
+                            ) : (
+                              <span className="status-pill is-checked">
+                                READ
+                              </span>
+                            )}
+                            <strong className="sender-name">
+                              {inquiry.sender_name}
+                            </strong>
+                          </div>
+
+                          <span className="col-email">
+                            {inquiry.sender_email}
+                          </span>
+
+                          <div className="col-date-arrow">
+                            <span className="sent-date">
+                              {new Date(inquiry.created_at).toLocaleDateString(
+                                "ko-KR",
+                                {
+                                  year: "numeric",
+                                  month: "2-digit",
+                                  day: "2-digit",
+                                },
+                              )}
+                            </span>
+                            <span className="accordion-arrow">
+                              {isExpanded ? "▲" : "▼"}
+                            </span>
+                          </div>
+                        </button>
+
+                        {/* 아코디언 바디 */}
+                        {isExpanded && (
+                          <div className="accordion-panel">
+                            <div className="panel-meta-label">
+                              // MESSAGE PAYLOAD &amp; DISPATCH DETAILS
+                            </div>
+                            <pre className="message-body">
+                              {inquiry.message}
+                            </pre>
+
+                            <div className="panel-actions">
+                              <a
+                                href={`mailto:${inquiry.sender_email}?subject=[Re] 프론트엔드 엔지니어 주후산입니다.`}
+                                className="btn-reply-mail"
+                              >
+                                REPLY VIA EMAIL ↗
+                              </a>
+                              <button
+                                type="button"
+                                className="btn-delete-inquiry"
+                                onClick={() => handleRemoveInquiry(inquiry.id)}
+                              >
+                                DELETE RECORD
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </section>
           </div>
         </main>
       </div>
