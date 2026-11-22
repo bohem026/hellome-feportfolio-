@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
-import { INITIAL_INQUIRIES } from "@/constants";
+// import { INITIAL_INQUIRIES } from "@/constants";
 import {
   Project,
   ProjectStatus,
