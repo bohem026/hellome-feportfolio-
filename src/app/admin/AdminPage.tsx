@@ -342,7 +342,7 @@ export function AdminPage() {
                   </span>
                   <h2>RECRUITMENT &amp; PROJECT INQUIRIES</h2>
                 </div>
-                {isDataVisible && (
+                {isAuthenticated && isGithubConnected && (
                   <span className="unread-counter">
                     UNREAD: {inquiries.filter((i) => !i.is_read).length} /
                     TOTAL: {inquiries.length}
