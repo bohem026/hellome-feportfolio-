@@ -404,72 +404,53 @@ body {
             flex-direction: column;
             gap: 16px;
 
-            .queue-card {
-              background: $bg-secondary;
-              padding: 16px;
-              position: relative;
+            .inquiry-row {
+              cursor: pointer;
+              border-bottom: 1px solid #e0e0dc;
+              padding: 1.15rem 1.25rem;
+              transition: background-color 0.15s ease;
 
-              .queue-top {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 8px;
+              /* 미확인 요청 */
+              &.is-unread {
+                background-color: #ffffff;
+                color: #111111;
 
-                .tag {
-                  font-size: 9px;
+                .sender-name {
+                  font-weight: 900;
+                  color: #111111;
+                }
+
+                .inquiry-preview {
+                  font-weight: 600;
+                  color: #222222;
+                }
+
+                .unread-dot {
+                  background-color: #008a2e;
+                  color: #ffffff;
+                  font-size: 0.6rem;
                   font-weight: 800;
-                  color: $text-muted;
-                }
-
-                .close-btn {
-                  background: none;
-                  border: none;
-                  font-size: 14px;
-                  cursor: pointer;
+                  padding: 0.15rem 0.4rem;
+                  margin-right: 0.5rem;
                 }
               }
 
-              h3 {
-                font-size: 14px;
-                font-weight: 900;
+              /* 확인한 요청 */
+              &.is-read {
+                background-color: #fafaf8;
+                color: #888888;
+
+                .sender-name,
+                .sender-email,
+                .sent-date,
+                .inquiry-preview {
+                  font-weight: 400;
+                  color: #999999;
+                }
               }
 
-              .role {
-                font-size: 10px;
-                color: $text-muted;
-                display: block;
-                margin-bottom: 8px;
-              }
-
-              .msg {
-                font-size: 11px;
-                line-height: 1.4;
-                margin-bottom: 12px;
-                color: $text-main;
-              }
-
-              .queue-actions {
-                display: flex;
-                gap: 8px;
-
-                button {
-                  flex: 1;
-                  padding: 6px;
-                  font-size: 9px;
-                  font-weight: 800;
-                  cursor: pointer;
-                  border: none;
-                }
-
-                .resp-btn {
-                  background: #000;
-                  color: #fff;
-                }
-
-                .arch-btn {
-                  background: $border-color;
-                  color: $text-main;
-                }
+              &.is-selected {
+                border-left: 3px solid #111111;
               }
             }
           }
