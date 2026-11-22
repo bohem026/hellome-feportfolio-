@@ -96,7 +96,9 @@ export function useAdminPage() {
     setToastState((prev) => ({ ...prev, isOpen: false }));
   };
 
-  // 실제 데이터 노출 조건: 관리자 인증 완료 & GitHub 연동 완료
+  // 실제 데이터 노출 조건
+  // - projects 목록: 관리자 인증(isAuthenticated)만 통과하면 조회 가능
+  // - inquiries 목록: 관리자 인증 + GitHub OAuth 세션 모두 필요
   const isDataVisible = isAuthenticated && isGithubConnected;
 
   /**
@@ -108,7 +110,16 @@ export function useAdminPage() {
       .select("*")
       .order("created_at", { ascending: false });
 
-    if (!error && data) {
+    if (error) {
+      console.error(
+        "fetchInquiries RLS/DB error:",
+        error.message,
+        error.details,
+      );
+      return;
+    }
+
+    if (data) {
       setInquiries(data as Inquiry[]);
     }
   }, [supabase]);
@@ -119,59 +130,80 @@ export function useAdminPage() {
    * 추가: Supabase Auth 세션 검수 및 OAuth 복귀 시 인증 기능 핸들링
    */
   useEffect(() => {
-    const checkGithubSession = async () => {
-      try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
+    let isMounted = true;
 
-        if (session && session.user) {
-          const username =
-            session.user.user_metadata?.preferred_username ||
-            session.user.email ||
-            "CONNECTED";
+    const syncSessionState = async (session: any) => {
+      if (!isMounted) return;
 
-          setIsGithubConnected(true);
-          setGithubUser(username);
+      if (session && session.user) {
+        const username =
+          session.user.user_metadata?.preferred_username ||
+          session.user.email ||
+          "CONNECTED";
 
-          // 깃허브 세션 확인 시 admin_users 테이블 동기화 (PK 에러 방지)
-          await supabase.from("admin_users").upsert([
-            {
-              github_id: username,
-              github_name: username,
-              avatar_url: session.user.user_metadata?.avatar_url || "",
-            },
-          ]);
+        setIsGithubConnected(true);
+        setGithubUser(username);
 
-          // OAuth 인증 직후 콜백(?connected=true)으로 들어온 경우 성공 처리
-          const isJustConnected = searchParams.get("connected") === "true";
-          // 추가: 깃허브 연동 승인과 함께 관리자 인증 세션도 함께 부여
-          if (isJustConnected) {
-            sessionStorage.setItem("admin_authenticated", "true");
-            setIsAuthenticated(true);
-            setIsAuthModalOpen(false);
+        await supabase.from("admin_users").upsert([
+          {
+            github_id: username,
+            github_name: username,
+            avatar_url: session.user.user_metadata?.avatar_url || "",
+          },
+        ]);
 
-            triggerToast(`GitHub 계정이 성공적으로 연동되었습니다!`, "success");
-            // URL 쿼리 파라미터 클린업(?connected=true 제거)
-            router.replace("/admin", { scroll: false });
-          }
-        } else {
-          setIsGithubConnected(false);
-          setGithubUser(null);
+        // OAuth 콜백(?connected=true) 복귀 시 관리자 인증 함께 활성화
+        if (searchParams.get("connected") === "true") {
+          setIsAuthenticated(true);
+          setIsAuthModalOpen(false);
+          triggerToast("GitHub 계정이 성공적으로 연동되었습니다!", "success");
+          router.replace("/admin", { scroll: false });
         }
-      } catch (error) {
-        console.error("Session check error:", error);
-      } finally {
-        // 추가: 세션 점검 완료 후 로딩 해제(인증 모달 점멸 방지)
-        setIsAuthLoading(false);
+      } else {
+        setIsGithubConnected(false);
+        setGithubUser(null);
       }
+      setIsAuthLoading(false);
     };
 
-    checkGithubSession();
-  }, [searchParams, router]);
+    // 초기 세션 확인
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      syncSessionState(session);
+    });
+
+    // OAuth 리다이렉트 직후 쿠키 -> 클라이언트 세션 동기화 감지
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      syncSessionState(session);
+    });
+
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
+  }, [searchParams, router, supabase]);
 
   /**
-   * 레포지토리 선택 후 아카이빙(프로젝트 등록) 실행
+   * 추가: 관리자 인증만 되어도 게시 중인 프로젝트 목록 로드
+   */
+  useEffect(() => {
+    if (isAuthenticated) {
+      refetchProjects();
+    }
+  }, [isAuthenticated, refetchProjects]);
+
+  /**
+   * GitHub OAuth 세션까지 확보되면 문의 목록 로드
+   */
+  useEffect(() => {
+    if (isAuthenticated && isGithubConnected) {
+      fetchInquiries();
+    }
+  }, [isAuthenticated, isGithubConnected, fetchInquiries]);
+
+  /**
+   * 레포지토리 선택 후 아카이빙 실행
    * @param repo
    */
   const handleArchiveRepo = async (repo: GithubRepo) => {
@@ -376,7 +408,7 @@ export function useAdminPage() {
   const handleConfirmDisconnectGithub = async () => {
     setIsGithubDisconnectModalOpen(false);
 
-    await supabase.from("projects").delete().neq("id", "");
+    // await supabase.from("projects").delete().neq("id", "");
     await supabase.auth.signOut({ scope: "global" });
 
     setIsGithubConnected(false);
