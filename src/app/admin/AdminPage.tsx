@@ -26,6 +26,7 @@ export function AdminPage() {
     toastState,
     projects,
     inquiries,
+    selectedInquiry,
     activeTab,
     setActiveTab,
     isArchiving,
@@ -43,6 +44,7 @@ export function AdminPage() {
     handleAuthFailure,
     handleDeleteProject,
     handleToggleStatus,
+    handleSelectAndReadInquiry,
     handleRemoveInquiry,
     // 추가: 프로젝트 수정 모달 관련 핸들러
     isEditModalOpen,
@@ -173,12 +175,6 @@ export function AdminPage() {
                 </button>
               ) : (
                 <div className="connect-btn-wrapper">
-                  {/* {!isGithubConnected && isAuthenticated && (
-                    <div className="speech-bubble top">
-                      깃허브 계정을 연동하여 아카이빙을 시작
-                      <span className="bubble-arrow" />
-                    </div>
-                  )} */}
                   <button
                     className="btn-outline connect"
                     onClick={handleConnectGithub}
@@ -344,30 +340,41 @@ export function AdminPage() {
               </div>
 
               <div className="queue-list">
-                {isDataVisible
-                  ? inquiries.map((inq) => (
-                      <div className="queue-card" key={inq.id}>
-                        <div className="queue-top">
-                          <span className="tag">{inq.timeAgo}</span>
-                          <button
-                            className="close-btn"
-                            onClick={() => handleRemoveInquiry(inq.id)}
-                          >
-                            ×
-                          </button>
-                        </div>
-                        <h3>{inq.sender}</h3>
-                        <span className="role">{inq.role}</span>
-                        <p className="msg">"{inq.message}"</p>
-                      </div>
-                    ))
-                  : [1, 2].map((idx) => (
-                      <div className="queue-card skeleton-card" key={idx}>
-                        <div className="skeleton-box text-box-short" />
-                        <div className="skeleton-box text-box-long" />
-                        <div className="skeleton-box text-box-long" />
-                      </div>
-                    ))}
+                {inquiries.map((inquiry) => (
+                  <div
+                    key={inquiry.id}
+                    className={`inquiry-row ${inquiry.is_read ? "is-read" : "is-unread"} ${
+                      selectedInquiry?.id === inquiry.id ? "is-selected" : ""
+                    }`}
+                    onClick={() => handleSelectAndReadInquiry(inquiry)}
+                  >
+                    <div className="inquiry-meta">
+                      {!inquiry.is_read && (
+                        <span className="unread-dot">NEW</span>
+                      )}
+                      <strong className="sender-name">
+                        {inquiry.sender_name}
+                      </strong>
+                      <span className="sender-email">
+                        {inquiry.sender_email}
+                      </span>
+                      <span className="sent-date">
+                        {new Date(inquiry.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p className="inquiry-preview">{inquiry.message}</p>
+                    <button
+                      type="button"
+                      className="btn-delete-inquiry"
+                      onClick={(e) => {
+                        e.stopPropagation(); // 클릭 이벤트 버블링(읽음 처리) 방지
+                        handleRemoveInquiry(inquiry.id);
+                      }}
+                    >
+                      DELETE
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

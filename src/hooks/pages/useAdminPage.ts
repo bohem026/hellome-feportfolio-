@@ -597,6 +597,7 @@ export function useAdminPage() {
     projects,
     isProjectsLoading,
     inquiries,
+    selectedInquiry,
     activeTab,
     setActiveTab,
     isArchiving,
@@ -618,6 +619,7 @@ export function useAdminPage() {
     handleUpdateProject,
     handleDeleteProject,
     handleToggleStatus,
+    handleSelectAndReadInquiry,
     handleRemoveInquiry,
     refetchProjects,
   };
