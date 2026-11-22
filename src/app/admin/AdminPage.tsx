@@ -44,7 +44,7 @@ export function AdminPage() {
     handleAuthFailure,
     handleDeleteProject,
     handleToggleStatus,
-    handleSelectAndReadInquiry,
+    handleToggleInquiryAccordion,
     handleRemoveInquiry,
     // 추가: 프로젝트 수정 모달 관련 핸들러
     isEditModalOpen,
@@ -346,7 +346,7 @@ export function AdminPage() {
                     className={`inquiry-row ${inquiry.is_read ? "is-read" : "is-unread"} ${
                       selectedInquiry?.id === inquiry.id ? "is-selected" : ""
                     }`}
-                    onClick={() => handleSelectAndReadInquiry(inquiry)}
+                    onClick={() => handleToggleInquiryAccordion(inquiry)}
                   >
                     <div className="inquiry-meta">
                       {!inquiry.is_read && (

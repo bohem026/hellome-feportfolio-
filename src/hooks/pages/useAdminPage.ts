@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 // import { INITIAL_INQUIRIES } from "@/constants";
@@ -76,8 +76,12 @@ export function useAdminPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
 
+  // 추가: 아코디언 상태
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
+  const [expandedInquiryId, setExpandedInquiryId] = useState<string | null>(
+    null,
+  );
 
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
 
@@ -129,7 +133,13 @@ export function useAdminPage() {
           // 수정:
           // - 공통 훅의 refetchProjects()로 대체
           // - inquiries db 패칭 추가
-          await Promise.all([refetchProjects(), fetchInquiries()]);
+          // - 가드 추가_ isDataVisible
+          useEffect(() => {
+            if (isDataVisible) {
+              refetchProjects();
+              fetchInquiries();
+            }
+          }, [isDataVisible, refetchProjects, fetchInquiries]);
 
           // OAuth 인증 직후 콜백(?connected=true)으로 들어온 경우 성공 처리
           const isJustConnected = searchParams.get("connected") === "true";
@@ -518,7 +528,7 @@ export function useAdminPage() {
   /**
    * DB에서 제안 목록 최신순 조회
    */
-  const fetchInquiries = async () => {
+  const fetchInquiries = useCallback(async () => {
     const { data, error } = await supabase
       .from("inquiries")
       .select("*")
@@ -527,21 +537,24 @@ export function useAdminPage() {
     if (!error && data) {
       setInquiries(data as Inquiry[]);
     }
-  };
+  }, [supabase]);
 
   /**
    * 제안 목록 선택 핸들러
    * - is_read 컬럼 패칭
    * - 선택한 경우 is_read 업데이트
-   * @param inquiry
-   * @returns
+   * - 아코디언 토글
+   * @param inquiry 
+   * @returns 
    */
-  const handleSelectAndReadInquiry = async (inquiry: Inquiry) => {
-    setSelectedInquiry(inquiry);
+  const handleToggleInquiryAccordion = async (inquiry: Inquiry) => {
+    const isClosing = expandedInquiryId === inquiry.id;
+    setExpandedInquiryId(isClosing ? null : inquiry.id);
 
-    // 이미 읽음 상태라면 DB 요청 생략
-    if (inquiry.is_read) return;
+    // 닫는 동작이거나 이미 읽음 상태면 DB 업데이트 생략
+    if (isClosing || inquiry.is_read) return;
 
+    // 낙관적 UI 업데이트 (즉시 폰트 색상 연하게 전환)
     setInquiries((prev) =>
       prev.map((item) =>
         item.id === inquiry.id ? { ...item, is_read: true } : item,
@@ -619,7 +632,7 @@ export function useAdminPage() {
     handleUpdateProject,
     handleDeleteProject,
     handleToggleStatus,
-    handleSelectAndReadInquiry,
+    handleToggleInquiryAccordion,
     handleRemoveInquiry,
     refetchProjects,
   };
