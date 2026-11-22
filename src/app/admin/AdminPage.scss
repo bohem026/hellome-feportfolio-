@@ -465,6 +465,61 @@ body {
             }
           }
 
+          /* 깃허브 인증 유도 섹션 */
+          .inquiry-auth-gate-box {
+            background-color: #ffffff;
+            border: 1px solid #dfdeda;
+            padding: 2.75rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.75rem;
+
+            .gate-badge {
+              font-size: 0.625rem;
+              font-weight: 800;
+              letter-spacing: 0.08em;
+              background-color: #efefec;
+              color: #555555;
+              border: 1px solid #e0e0dc;
+              padding: 0.25rem 0.6rem;
+            }
+
+            h3 {
+              font-size: 1.15rem;
+              font-weight: 900;
+              letter-spacing: -0.015em;
+              color: #111111;
+              margin-top: 0.25rem;
+            }
+
+            p {
+              font-size: 0.85rem;
+              line-height: 1.65;
+              color: #666666;
+              max-width: 480px;
+              word-break: keep-all;
+              margin-bottom: 0.75rem;
+            }
+
+            .btn-connect-github-cta {
+              background-color: #111111;
+              color: #ffffff;
+              border: 1px solid #111111;
+              padding: 0.75rem 1.35rem;
+              font-size: 0.75rem;
+              font-weight: 800;
+              letter-spacing: 0.06em;
+              cursor: pointer;
+              transition: background-color 0.15s ease;
+
+              &:hover {
+                background-color: #2b2b2b;
+              }
+            }
+          }
+
           .inquiry-empty-box {
             background-color: #ffffff;
             border: 1px solid #dfdeda;
