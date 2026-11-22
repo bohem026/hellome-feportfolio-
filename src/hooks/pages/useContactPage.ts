@@ -1,11 +1,14 @@
 "use client";
 
+import { createClient } from "@/utils/supabase/client";
 import { useState, useCallback, useRef, useEffect } from "react";
 import { ContactFormState, INITIAL_FORM_STATE, ChatMessage } from "@/types";
 import { COOLDOWN_STORAGE_KEY, COOLDOWN_DURATION_MS } from "@/constants";
 import { ToastType } from "@/components/Toast";
 
 export function useContactPage() {
+  const supabase = createClient();
+
   const [formData, setFormData] =
     useState<ContactFormState>(INITIAL_FORM_STATE);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -322,30 +325,58 @@ export function useContactPage() {
       ]);
 
       try {
-        // test
-        // 임시 네트워크 지연 시뮬레이션 (1.5초)
-        // 추후 Supabase DB INSERT 및 Edge Function 호출로 교체 예정
-        // 추가할 예정 기능: supabase db insert + 메일 발송 (edge function)
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        // 1. Supabase DB에 구직/협업 제안 저장
+        const { error: dbError } = await supabase.from("inquiries").insert([
+          {
+            sender_name: submittedName,
+            sender_email: submittedEmail,
+            message: formData.message.trim(),
+            is_read: false,
+          },
+        ]);
 
-        // 3분 재전송 쿨타임 기록
+        if (dbError) {
+          throw new Error(`DB 저장 실패: ${dbError.message}`);
+        }
+
+        // 2. 발송자 접수 확인 이메일 & 관리자 알림 발송
+        // Edge Function 연동
+        const { error: fnError } = await supabase.functions.invoke(
+          "send-inquiry-email",
+          {
+            body: {
+              senderName: submittedName,
+              senderEmail: submittedEmail,
+              message: formData.message.trim(),
+            },
+          },
+        );
+
+        if (fnError) {
+          console.warn(
+            "확인 이메일 발송 지연/실패 (DB 저장은 완료됨):",
+            fnError,
+          );
+        }
+
+        // 3. 3분 재전송 쿨타임 기록
         localStorage.setItem(
           COOLDOWN_STORAGE_KEY,
           String(Date.now() + COOLDOWN_DURATION_MS),
         );
 
         triggerToast("메시지가 성공적으로 전송되었습니다!", "success");
-        // 전송 완료 후 입력 폼 초기화
         setFormData(INITIAL_FORM_STATE);
 
-        // 시스템 채팅 출력: 전송 완료
+        // 4. 시스템 채팅 출력: 전송 및 확인 메일 발송 완료 보고
         appendBotReplyWithDelay(
-          `전송이 완료되었습니다!\n${submittedName} 님의 제안이 정상 접수되었으며, 입력하신 이메일(${submittedEmail})로 접수 확인 안내가 발송됩니다.\n검토 후 24시간 이내에 회신드리겠습니다.`,
+          `전송이 완료되었습니다!\n${submittedName} 님의 제안이 정상 접수되었으며, 입력하신 이메일(${submittedEmail})로 접수 확인 메일이 발송되었습니다.\n검토 후 24시간 이내에 회신드리겠습니다.`,
         );
-      } catch (error) {
+      } catch (error: any) {
         console.error("Dispatch error:", error);
         triggerToast(
-          "메시지 전송 중 오류가 발생했습니다. 다시 시도해 주세요.",
+          error.message ||
+            "메시지 전송 중 오류가 발생했습니다. 다시 시도해 주세요.",
           "danger",
         );
       } finally {
