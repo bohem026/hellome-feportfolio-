@@ -143,18 +143,6 @@ export function useAdminPage() {
             },
           ]);
 
-          // 추가: 세션 확인 직후 DB 목록 조회 실행
-          // 수정:
-          // - 공통 훅의 refetchProjects()로 대체
-          // - inquiries db 패칭 추가
-          // - 가드 추가_ isDataVisible
-          useEffect(() => {
-            if (isDataVisible) {
-              refetchProjects();
-              fetchInquiries();
-            }
-          }, [isDataVisible, refetchProjects, fetchInquiries]);
-
           // OAuth 인증 직후 콜백(?connected=true)으로 들어온 경우 성공 처리
           const isJustConnected = searchParams.get("connected") === "true";
           // 추가: 깃허브 연동 승인과 함께 관리자 인증 세션도 함께 부여
