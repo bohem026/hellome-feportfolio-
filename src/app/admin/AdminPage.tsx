@@ -207,7 +207,7 @@ export function AdminPage() {
             <div className="metric-box">
               <span className="label">ACTIVE CASE STUDIES</span>
               <div className="value">
-                {isDataVisible ? projects.length : "••"}
+                {isAuthenticated ? projects.length : "••"}
               </div>
               <span className="sub">INDEXED & PUBLISHED</span>
             </div>
@@ -231,7 +231,7 @@ export function AdminPage() {
               <div className="section-title-bar">
                 <span>[LIBRARY DISPATCH]</span>
                 <span>
-                  {isDataVisible
+                  {isAuthenticated
                     ? `${projects.length} ITEMS RECORDED`
                     : "RESTRICTED"}
                 </span>
@@ -249,7 +249,7 @@ export function AdminPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {isDataVisible
+                    {isAuthenticated
                       ? projects.map((proj) => {
                           // 카테고리 쉼표 + 공백으로 구분
                           const formattedCategories = Array.isArray(
