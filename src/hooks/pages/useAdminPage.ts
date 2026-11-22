@@ -100,6 +100,20 @@ export function useAdminPage() {
   const isDataVisible = isAuthenticated && isGithubConnected;
 
   /**
+   * DB에서 제안 목록 최신순 조회
+   */
+  const fetchInquiries = useCallback(async () => {
+    const { data, error } = await supabase
+      .from("inquiries")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (!error && data) {
+      setInquiries(data as Inquiry[]);
+    }
+  }, [supabase]);
+
+  /**
    * Supabase Auth 세션 체크
    * Github OAuth 연동 유무 확인
    * 추가: Supabase Auth 세션 검수 및 OAuth 복귀 시 인증 기능 핸들링
@@ -166,7 +180,7 @@ export function useAdminPage() {
     };
 
     checkGithubSession();
-  }, [searchParams, router, refetchProjects]);
+  }, [searchParams, router]);
 
   /**
    * 레포지토리 선택 후 아카이빙(프로젝트 등록) 실행
@@ -524,20 +538,6 @@ export function useAdminPage() {
       triggerToast("게시 상태 변경 실패", "danger");
     }
   };
-
-  /**
-   * DB에서 제안 목록 최신순 조회
-   */
-  const fetchInquiries = useCallback(async () => {
-    const { data, error } = await supabase
-      .from("inquiries")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (!error && data) {
-      setInquiries(data as Inquiry[]);
-    }
-  }, [supabase]);
 
   /**
    * 제안 목록 선택 핸들러
