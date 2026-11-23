@@ -84,7 +84,7 @@ export function useAdminPage() {
   );
 
   // 추가: 전체 게시된 레포지토리 최신화 상태
-  const [isSyncingAll, setIsSyncingAll] = useState(false);
+  const [isSyncAll, setIsSyncAll] = useState(false);
 
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
 
@@ -568,8 +568,8 @@ export function useAdminPage() {
    * - 새 커밋이 푸시된 레포지토리만 최신화
    */
   const handleSyncAllRepos = async () => {
-    if (isSyncingAll) return;
-    setIsSyncingAll(true);
+    if (isSyncAll) return;
+    setIsSyncAll(true);
 
     try {
       const {
@@ -704,7 +704,7 @@ export function useAdminPage() {
         "danger",
       );
     } finally {
-      setIsSyncingAll(false);
+      setIsSyncAll(false);
     }
   };
 
@@ -781,6 +781,7 @@ export function useAdminPage() {
     inquiries,
     selectedInquiry,
     expandedInquiryId,
+    isSyncAll,
     activeTab,
     setActiveTab,
     isArchiving,
@@ -803,6 +804,7 @@ export function useAdminPage() {
     handleDeleteProject,
     handleToggleStatus,
     handleToggleInquiryAccordion,
+    handleSyncAllRepos,
     handleRemoveInquiry,
     refetchProjects,
   };

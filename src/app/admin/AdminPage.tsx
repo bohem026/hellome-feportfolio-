@@ -28,6 +28,7 @@ export function AdminPage() {
     inquiries,
     selectedInquiry,
     expandedInquiryId,
+    isSyncAll,
     activeTab,
     setActiveTab,
     isArchiving,
@@ -46,6 +47,7 @@ export function AdminPage() {
     handleDeleteProject,
     handleToggleStatus,
     handleToggleInquiryAccordion,
+    handleSyncAllRepos,
     handleRemoveInquiry,
     // 추가: 프로젝트 수정 모달 관련 핸들러
     isEditModalOpen,
@@ -168,15 +170,28 @@ export function AdminPage() {
             <div className="console-actions">
               {/* GitHub Connect/Disconnect Button */}
               {isGithubConnected ? (
-                <button
-                  className="btn-outline disconnect"
-                  onClick={handleOpenDisconnectModal}
-                >
-                  DISCONNECT GITHUB
-                </button>
+                <>
+                  <button
+                    type="button"
+                    className="btn-outline sync-all"
+                    disabled={isSyncAll || isRepoLoading}
+                    onClick={handleSyncAllRepos}
+                  >
+                    {isSyncAll ? "SYNCING..." : "↻ SYNC ALL"}
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn-outline disconnect"
+                    onClick={handleOpenDisconnectModal}
+                  >
+                    DISCONNECT GITHUB
+                  </button>
+                </>
               ) : (
                 <div className="connect-btn-wrapper">
                   <button
+                    type="button"
                     className="btn-outline connect"
                     onClick={handleConnectGithub}
                   >
@@ -186,8 +201,9 @@ export function AdminPage() {
               )}
 
               <button
+                type="button"
                 className="btn-solid"
-                disabled={!isGithubConnected || isRepoLoading}
+                disabled={!isGithubConnected || isRepoLoading || isSyncAll}
                 onClick={fetchGithubRepositories}
               >
                 {isRepoLoading ? "LOADING..." : "+ IMPORT FROM REPO"}
