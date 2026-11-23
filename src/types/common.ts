@@ -28,7 +28,7 @@ export interface GithubRepo {
   repo_url: string; // 저장소 Web URL
   stars: number; // Stargazers Count
   languages: string[]; // 주 사용 언어 스택 목록 (text[])
-  commit_history?: GithubCommit[]; // 최근 10개 커밋 목록 (jsonb[])
+  commit_history?: (ClassifiedCommit | GithubCommit)[]; // 최근 10개 커밋 목록 (jsonb[])
   pushed_at: string; // 최근 커밋/Push 시각 (timestamptz)
   created_at?: string; // 레포 아카이빙 일시
 }

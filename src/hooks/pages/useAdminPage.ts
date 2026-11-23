@@ -8,7 +8,7 @@ import {
   Project,
   ProjectStatus,
   GithubRepo,
-  GithubCommit,
+  ClassifiedCommit,
   Inquiry,
   AdminTab,
 } from "@/types";
@@ -250,7 +250,7 @@ export function useAdminPage() {
 
       // 2. repositories 테이블 저장 (GithubRepo 매핑)
       let repoDetails = null;
-      let commitHistory: GithubCommit[] = [];
+      let commitHistory: ClassifiedCommit[] = [];
 
       try {
         const [detailsResult, commitsResult] = await Promise.all([
