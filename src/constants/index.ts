@@ -5,3 +5,4 @@ export * from './pages/admin';
 export * from './pages/contact';
 export * from './pages/main';
 export * from './pages/works';
+export * from './common';
