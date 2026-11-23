@@ -1,7 +1,9 @@
+import { CommitCategory } from "@/types";
+
 /**
  * 커밋 키워드 목록
  */
-export const TROUBLESHOOTING_KEYWORDS = [
+const TROUBLESHOOTING_KEYWORDS = [
   "feat",
   "fix",
   "bug",
@@ -17,3 +19,23 @@ export const TROUBLESHOOTING_KEYWORDS = [
   "handle",
   "optimize",
 ] as const;
+
+export const KEYWORD_GROUP_MAP: Record<
+  (typeof TROUBLESHOOTING_KEYWORDS)[number],
+  Exclude<CommitCategory, "ALL" | "OTHER" | "MERGE">
+> = {
+  feat: "FEAT",
+  fix: "FIX",
+  bug: "FIX",
+  solve: "FIX",
+  resolved: "FIX",
+  issue: "FIX",
+  error: "FIX",
+  conflict: "FIX",
+  handle: "FIX",
+  refactor: "REFACTOR",
+  optimize: "REFACTOR",
+  grant: "SECURITY",
+  privilege: "SECURITY",
+  permission: "SECURITY",
+};

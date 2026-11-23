@@ -56,6 +56,25 @@ export interface ProjectWithRepo extends Project {
    ========================================================================== */
 
 /**
+ * 카테고리용 커밋 타입 상수 묶음
+ */
+export type CommitCategory =
+  | "ALL"
+  | "FEAT"
+  | "FIX"
+  | "REFACTOR"
+  | "SECURITY"
+  | "OTHER"
+  | "MERGE";
+
+export interface ClassifiedCommit {
+  commit: GithubCommit;
+  category: Exclude<CommitCategory, "ALL">;
+  // 매칭된 TROUBLESHOOTING_KEYWORDS 원문
+  matchedKeyword?: string;
+}
+
+/**
  * AI 트러블슈팅 데이터 타입 (JSON)
  */
 export interface AiTroubleshootingData {
