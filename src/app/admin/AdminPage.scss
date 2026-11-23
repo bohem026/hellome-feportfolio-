@@ -225,10 +225,30 @@ body {
                 color: #ffffff;
               }
 
-              &.disconnect:hover {
-                background: #dc2626;
+              &.disconnect {
+                background-color: #c62828;
+                border: 1px solid #c62828;
                 color: #ffffff;
-                border-color: #dc2626;
+                font-weight: 800;
+                transition:
+                  background-color 0.15s ease,
+                  border-color 0.15s ease;
+
+                &:hover:not(:disabled) {
+                  background-color: #9e1c1c;
+                  border-color: #9e1c1c;
+                  color: #ffffff;
+                }
+
+                &:active:not(:disabled) {
+                  background-color: #7f1515;
+                  border-color: #7f1515;
+                }
+
+                &:disabled {
+                  opacity: 0.5;
+                  cursor: not-allowed;
+                }
               }
             }
 
