@@ -374,19 +374,42 @@ body {
 
               .action-btns {
                 display: flex;
-                gap: 6px;
+                align-items: center;
+                gap: 0.45rem;
 
-                button {
-                  background: transparent;
-                  border: 1px solid $border-color;
-                  padding: 4px 8px;
-                  font-size: 9px;
+                .edit-btn {
+                  background-color: #ffffff;
+                  color: #111111;
+                  border: 1px solid #d4d4d0;
+                  padding: 0.35rem 0.65rem;
+                  font-size: 0.72rem;
                   font-weight: 700;
                   cursor: pointer;
+                  white-space: nowrap;
+                  transition: all 0.15s ease;
 
-                  &.delete {
-                    color: #d32f2f;
-                    border-color: #f5c2c2;
+                  &:hover {
+                    background-color: #111111;
+                    border-color: #111111;
+                    color: #ffffff;
+                  }
+                }
+
+                .delete {
+                  background-color: #ffffff;
+                  color: #c62828;
+                  border: 1px solid #e0c8c8;
+                  padding: 0.35rem 0.65rem;
+                  font-size: 0.72rem;
+                  font-weight: 700;
+                  cursor: pointer;
+                  white-space: nowrap;
+                  transition: all 0.15s ease;
+
+                  &:hover {
+                    background-color: #c62828;
+                    border-color: #c62828;
+                    color: #ffffff;
                   }
                 }
               }
