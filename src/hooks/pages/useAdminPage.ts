@@ -83,6 +83,9 @@ export function useAdminPage() {
     null,
   );
 
+  // 추가: 전체 게시된 레포지토리 최신화 상태
+  const [isSyncingAll, setIsSyncingAll] = useState(false);
+
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
 
   const [isArchiving, setIsArchiving] = useState(false);
@@ -556,6 +559,152 @@ export function useAdminPage() {
     } catch (error: any) {
       console.error("Failed to toggle status:", error);
       triggerToast("게시 상태 변경 실패", "danger");
+    }
+  };
+
+  /**
+   * 게시된 레포지토리 최신화 핸들러
+   * - 게시된 모든 레포지토리의 pushed_at 비교
+   * - 새 커밋이 푸시된 레포지토리만 최신화
+   */
+  const handleSyncAllRepos = async () => {
+    if (isSyncingAll) return;
+    setIsSyncingAll(true);
+
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session || !session.provider_token) {
+        setIsGithubSessionExpiredModalOpen(true);
+        return;
+      }
+
+      const currentGithubId =
+        session.user.user_metadata?.preferred_username ||
+        githubUser ||
+        "UNKNOWN";
+
+      // 현재 DB의 repositories 테이블에 저장된 레포지토리 속성값 조회
+      const { data: dbRepos, error: dbFetchError } = await supabase
+        .from("repositories")
+        .select("id, repo_name, pushed_at, stars, repo_url, languages");
+
+      if (dbFetchError) {
+        throw new Error(`DB 레포지토리 조회 실패: ${dbFetchError.message}`);
+      }
+
+      if (!dbRepos || dbRepos.length === 0) {
+        triggerToast("동기화할 아카이빙 레포지토리가 없습니다.", "warning");
+        return;
+      }
+
+      const latestGithubRepos = await fetchGithubRepositories();
+      if (!latestGithubRepos) {
+        setIsGithubSessionExpiredModalOpen(true);
+        return;
+      }
+
+      // 빠른 조회를 위해 Map으로 변환
+      // key: repo.id
+      const latestRepoMap = new Map(
+        latestGithubRepos.map((repo) => [repo.id, repo]),
+      );
+
+      let updatedCommitsCount = 0;
+      let updatedStarsOnlyCount = 0;
+
+      // DB 레포지토리 순회하며 pushed_at 비교
+      for (const dbRepo of dbRepos) {
+        const latestRepo = latestRepoMap.get(dbRepo.id);
+        if (!latestRepo) continue;
+
+        const dbPushedTime = dbRepo.pushed_at
+          ? new Date(dbRepo.pushed_at).getTime()
+          : 0;
+        const latestPushedTime = latestRepo.pushed_at
+          ? new Date(latestRepo.pushed_at).getTime()
+          : 0;
+
+        const hasNewCommits = latestPushedTime > dbPushedTime;
+        const hasStarsChanged = (latestRepo.stars ?? 0) !== (dbRepo.stars ?? 0);
+
+        // Case A: 새 커밋이 푸시된 경우
+        // -> 커밋 목록 + 상세 언어 + 메타데이터 갱신
+        if (hasNewCommits) {
+          const targetRepoName = latestRepo.repo_name || dbRepo.repo_name;
+
+          const [detailsResult, latestCommits] = await Promise.all([
+            fetchGithubRepoDetails(
+              currentGithubId,
+              targetRepoName,
+              session.provider_token,
+            ),
+            fetchGithubRepoCommits(
+              currentGithubId,
+              targetRepoName,
+              session.provider_token,
+            ),
+          ]);
+
+          const { error: updateError } = await supabase
+            .from("repositories")
+            .update({
+              repo_name: detailsResult?.repo_name || targetRepoName,
+              repo_url: detailsResult?.repo_url || latestRepo.repo_url,
+              stars: detailsResult?.stars ?? latestRepo.stars ?? 0,
+              languages: detailsResult?.languages || dbRepo.languages,
+              pushed_at: latestRepo.pushed_at,
+              commit_history: latestCommits,
+            })
+            .eq("id", dbRepo.id);
+
+          if (!updateError) {
+            updatedCommitsCount++;
+          }
+        }
+        // Case B: 새 커밋은 없지만 Star 수만 바뀐 경우
+        // -> stars만 갱신
+        else if (hasStarsChanged) {
+          const { error: starError } = await supabase
+            .from("repositories")
+            .update({
+              stars: latestRepo.stars ?? 0,
+            })
+            .eq("id", dbRepo.id);
+
+          if (!starError) {
+            updatedStarsOnlyCount++;
+          }
+        }
+      }
+
+      // 결과 화면 & 리프레시
+      if (updatedCommitsCount > 0 || updatedStarsOnlyCount > 0) {
+        await refetchProjects();
+        const summaryParts: string[] = [];
+        if (updatedCommitsCount > 0) {
+          summaryParts.push(`커밋 이력 ${updatedCommitsCount}건`);
+        }
+        if (updatedStarsOnlyCount > 0) {
+          summaryParts.push(`메타데이터 ${updatedStarsOnlyCount}건`);
+        }
+        triggerToast(
+          `동기화 완료: ${summaryParts.join(", ")}이 최신화되었습니다.`,
+          "success",
+        );
+      } else {
+        triggerToast("모든 레포지토리가 이미 최신 상태입니다.", "success");
+      }
+    } catch (err: any) {
+      console.error("handleSyncAllRepos error:", err);
+      triggerToast(
+        `일괄 동기화 중 오류가 발생했습니다: ${err.message || ""}`,
+        "danger",
+      );
+    } finally {
+      setIsSyncingAll(false);
     }
   };
 
