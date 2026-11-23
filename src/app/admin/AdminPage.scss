@@ -253,7 +253,7 @@ body {
 
               &.sync-all {
                 background-color: #e6e6e2;
-                border: 1px solid #c8c8c3;
+                border: 1px solid #111111;
                 color: #111111;
                 font-weight: 800;
                 transition:
@@ -263,13 +263,11 @@ body {
 
                 &:hover:not(:disabled) {
                   background-color: #d4d4ce;
-                  border-color: #111111;
                   color: #111111;
                 }
 
                 &:active:not(:disabled) {
                   background-color: #c4c4bd;
-                  border-color: #111111;
                 }
 
                 &:disabled {
