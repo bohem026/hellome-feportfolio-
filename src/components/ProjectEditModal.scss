@@ -99,6 +99,48 @@
         align-items: center;
         justify-content: space-between;
 
+        /* 썸네일 이미지 업로드 영역 */
+        .thumbnail-action-group {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+
+          .thumb-action-btn {
+            padding: 0.35rem 0.65rem;
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            transition: all 0.15s ease;
+
+            &.upload {
+              background-color: #111111;
+              border: 1px solid #111111;
+              color: #ffffff;
+
+              &:hover:not(:disabled) {
+                background-color: #333333;
+              }
+            }
+
+            &.paste {
+              background-color: #f4f4f1;
+              border: 1px solid #111111;
+              color: #111111;
+
+              &:hover:not(:disabled) {
+                background-color: #111111;
+                color: #ffffff;
+              }
+            }
+
+            &:disabled {
+              opacity: 0.5;
+              cursor: not-allowed;
+            }
+          }
+        }
+
         label {
           font-size: 0.8rem;
           font-weight: 800;
@@ -129,6 +171,21 @@
             opacity: 0.5;
             cursor: not-allowed;
           }
+        }
+      }
+
+      .thumbnail-preview-box {
+        margin-top: 0.55rem;
+        border: 1px solid #111111;
+        background-color: #f7f7f5;
+        height: 120px;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
         }
       }
 
