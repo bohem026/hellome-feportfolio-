@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useGithubRepo } from "@/hooks";
 import { Project } from "@/types";
@@ -24,6 +24,10 @@ export function ProjectEditModal({
   const [formData, setFormData] = useState<Project | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAiLoading, setIsAiLoading] = useState(false);
+
+  // 추가: 이미지 파일 업로드 상태
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [isUploadingThumbnail, setIsUploadingThumbnail] = useState(false);
 
   useEffect(() => {
     if (project) {
@@ -56,6 +60,81 @@ export function ProjectEditModal({
     setFormData((prev) =>
       prev ? { ...prev, categories: categoryArray } : null,
     );
+  };
+
+  /**
+   * 클립보드 텍스트 붙여넣기
+   * @returns
+   */
+  const handlePasteThumbnailUrl = async () => {
+    try {
+      const clipboardText = await navigator.clipboard.readText();
+      const trimmed = clipboardText.trim();
+
+      if (!trimmed) {
+        alert("클립보드에 복사된 URL 텍스트가 없습니다.");
+        return;
+      }
+
+      setFormData((prev) => (prev ? { ...prev, image_url: trimmed } : null));
+    } catch (err) {
+      console.warn("Clipboard read permission denied:", err);
+      alert("클립보드 접근 권한이 없습니다.");
+    }
+  };
+
+  /**
+   * 로컬 이미지 파일 업로드-> supabase storage
+   * @param e
+   * @returns
+   */
+  const handleLocalImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file || !formData) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("이미지 파일만 업로드할 수 있습니다.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("이미지 용량은 5MB 이하만 업로드할 수 있습니다.");
+      return;
+    }
+
+    setIsUploadingThumbnail(true);
+
+    try {
+      const fileExt = file.name.split(".").pop();
+      const filePath = `thumbnails/thumb_${formData.id}_${Date.now()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("project-assets")
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: true,
+        });
+
+      if (uploadError) throw uploadError;
+
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("project-assets").getPublicUrl(filePath);
+
+      setFormData((prev) => (prev ? { ...prev, image_url: publicUrl } : null));
+    } catch (err: any) {
+      console.error("Thumbnail upload error:", err);
+      alert(
+        `이미지 업로드 실패: ${err.message || "Storage 설정을 확인해주세요."}`,
+      );
+    } finally {
+      setIsUploadingThumbnail(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
   };
 
   /**
@@ -166,14 +245,50 @@ export function ProjectEditModal({
             />
           </div>
 
+          {/* THUMBNAIL URL */}
           <div className="form-group">
-            <label>THUMBNAIL URL</label>
-            <input
-              type="text"
+            <div className="label-with-action">
+              <label>THUMBNAIL URL</label>
+              <div className="thumbnail-action-group">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleLocalImageUpload}
+                  style={{ display: "none" }}
+                />
+                <button
+                  type="button"
+                  className="thumb-action-btn upload"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploadingThumbnail}
+                >
+                  {isUploadingThumbnail ? "UPLOADING..." : "↑ UPLOAD IMAGE"}
+                </button>
+                <button
+                  type="button"
+                  className="thumb-action-btn paste"
+                  onClick={handlePasteThumbnailUrl}
+                  disabled={isUploadingThumbnail}
+                >
+                  PASTE URL
+                </button>
+              </div>
+            </div>
+
+            <textarea
               name="image_url"
+              rows={2}
               value={formData.image_url || ""}
               onChange={handleChange}
+              placeholder="https://images.com/..."
             />
+
+            {formData.image_url && (
+              <div className="thumbnail-preview-box">
+                <img src={formData.image_url} alt="Thumbnail Preview" />
+              </div>
+            )}
           </div>
 
           <div className="form-group">
