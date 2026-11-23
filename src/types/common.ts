@@ -56,7 +56,7 @@ export interface ProjectWithRepo extends Project {
    ========================================================================== */
 
 /**
- * 카테고리용 커밋 타입 상수 묶음
+ * 카테고리용 커밋 타입 묶음
  */
 export type CommitCategory =
   | "ALL"

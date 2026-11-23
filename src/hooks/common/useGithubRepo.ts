@@ -5,9 +5,11 @@ import { createClient } from "@/utils/supabase/client";
 import {
   GithubRepo,
   GithubCommit,
-  TROUBLESHOOTING_KEYWORDS,
+  CommitCategory,
+  ClassifiedCommit,
   AiTroubleshootingData,
 } from "@/types";
+import { TROUBLESHOOTING_KEYWORDS, KEYWORD_GROUP_MAP } from "@/constants";
 
 export function useGithubRepo() {
   const supabase = createClient();
@@ -60,7 +62,7 @@ export function useGithubRepo() {
     } finally {
       setIsRepoLoading(false);
     }
-  }, []);
+  }, [supabase]);
 
   /**
    * 특정 레포지토리의 상세 정보 불러오기
@@ -115,17 +117,73 @@ export function useGithubRepo() {
   );
 
   /**
+   * TROUBLESHOOTING_KEYWORDS를 재활용하여 커밋 메시지의 카테고리와 매칭 키워드를 추출
+   */
+  const classifyCommitWithKeywords = useCallback(
+    (commit: GithubCommit): ClassifiedCommit => {
+      const lower = commit.message.trim().toLowerCase();
+
+      // 1. Merge 우선 판별
+      if (
+        lower.startsWith("merge pull request") ||
+        lower.startsWith("merge branch") ||
+        lower.startsWith("merge remote")
+      ) {
+        return {
+          commit,
+          category: "MERGE",
+        };
+      }
+
+      // 2. 접두사 우선 매칭
+      // 예: "feat:", "fix:", ...
+      for (const kw of TROUBLESHOOTING_KEYWORDS) {
+        const prefixRegex = new RegExp(`^${kw}(\\([^)]+\\))?:`, "i");
+        if (prefixRegex.test(lower)) {
+          return {
+            commit,
+            category: KEYWORD_GROUP_MAP[kw],
+            matchedKeyword: kw.toUpperCase(),
+          };
+        }
+      }
+
+      // 3. 본문에 키워드가 포함된 경우 매칭
+      for (const kw of TROUBLESHOOTING_KEYWORDS) {
+        const wordRegex = new RegExp(`\\b${kw}\\b`, "i");
+        if (wordRegex.test(lower)) {
+          return {
+            commit,
+            category: KEYWORD_GROUP_MAP[kw],
+            matchedKeyword: kw.toUpperCase(),
+          };
+        }
+      }
+
+      // 3. 그 외 일반 커밋 (README, style 등)
+      return {
+        commit,
+        category: "OTHER",
+      };
+    },
+    [],
+  );
+
+  /**
    * 특정 레포지토리의 최근 커밋 불러오기
+   * 수정:
+   * - 최대 100건 패칭
+   * - 그룹화된 카테고리로 매핑
    */
   const fetchGithubRepoCommits = useCallback(
     async (
       owner: string,
       repoName: string,
       token: string,
-    ): Promise<GithubCommit[]> => {
+    ): Promise<ClassifiedCommit[]> => {
       try {
         const response = await fetch(
-          `https://api.github.com/repos/${owner}/${repoName}/commits?per_page=30`,
+          `https://api.github.com/repos/${owner}/${repoName}/commits?per_page=100`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -138,13 +196,17 @@ export function useGithubRepo() {
 
         const data = await response.json();
 
-        return data.map((item: any) => ({
-          sha: item.sha.substring(0, 7),
-          message: item.commit.message,
-          date: item.commit.committer?.date || item.commit.author?.date,
-          author: item.commit.author?.name || item.author?.login || "Unknown",
-          url: item.html_url,
-        }));
+        return data.map((item: any) => {
+          const baseCommit: GithubCommit = {
+            sha: item.sha.substring(0, 7),
+            message: item.commit.message,
+            date: item.commit.committer?.date || item.commit.author?.date,
+            author: item.commit.author?.name || item.author?.login || "Unknown",
+            url: item.html_url,
+          };
+
+          return classifyCommitWithKeywords(baseCommit);
+        });
       } catch (error) {
         console.error("fetchGithubRepoCommits error:", error);
         return [];
@@ -160,43 +222,49 @@ export function useGithubRepo() {
    * @param token
    * @returns
    */
-  const fetchGithubReadme = async (
-    owner: string,
-    repo: string,
-    token: string,
-  ): Promise<string | null> => {
-    try {
-      const response = await fetch(
-        `https://api.github.com/repos/${owner}/${repo}/readme`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/vnd.github.raw+json",
+  const fetchGithubReadme = useCallback(
+    async (
+      owner: string,
+      repo: string,
+      token: string,
+    ): Promise<string | null> => {
+      try {
+        const response = await fetch(
+          `https://api.github.com/repos/${owner}/${repo}/readme`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/vnd.github.raw+json",
+            },
           },
-        },
-      );
+        );
 
-      if (!response.ok) return null;
-      return await response.text();
-    } catch (err) {
-      console.warn("Failed to fetch README:", err);
-      return null;
-    }
-  };
+        if (!response.ok) return null;
+        return await response.text();
+      } catch (err) {
+        console.warn("Failed to fetch README:", err);
+        return null;
+      }
+    },
+    [],
+  );
 
   /**
    * GithubCommit 기반 커밋 키워드 필터링
+   * 수정: 신규 ClassifiedCommit[] 구조와 기존 GithubCommit[] 구조 호환
    */
   const extractTroubleshootingCommits = useCallback(
-    (commits: GithubCommit[]): GithubCommit[] => {
+    (commits: (ClassifiedCommit | GithubCommit)[]): GithubCommit[] => {
       if (!Array.isArray(commits)) return [];
 
-      return commits.filter((commit) => {
-        const msg = commit.message.toLowerCase();
-        return TROUBLESHOOTING_KEYWORDS.some((keyword) =>
-          msg.includes(keyword),
-        );
-      });
+      return commits
+        .map((item) => ("commit" in item ? item.commit : item))
+        .filter((commit) => {
+          const msg = commit.message.toLowerCase();
+          return TROUBLESHOOTING_KEYWORDS.some((keyword) =>
+            msg.includes(keyword),
+          );
+        });
     },
     [],
   );
@@ -208,7 +276,7 @@ export function useGithubRepo() {
   const generateAiTroubleshooting = useCallback(
     async (
       repoName: string,
-      commits: GithubCommit[],
+      commits: (ClassifiedCommit | GithubCommit)[],
     ): Promise<AiTroubleshootingData | null> => {
       setIsTroubleshootingLoading(true);
 
@@ -252,6 +320,7 @@ export function useGithubRepo() {
     fetchGithubRepoDetails,
     fetchGithubRepoCommits,
     fetchGithubReadme,
+    classifyCommitWithKeywords,
     extractTroubleshootingCommits,
     generateAiTroubleshooting,
   };

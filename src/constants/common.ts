@@ -3,7 +3,7 @@ import { CommitCategory } from "@/types";
 /**
  * 커밋 키워드 목록
  */
-const TROUBLESHOOTING_KEYWORDS = [
+export const TROUBLESHOOTING_KEYWORDS = [
   "feat",
   "fix",
   "bug",
