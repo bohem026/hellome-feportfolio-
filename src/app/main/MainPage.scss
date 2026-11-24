@@ -123,82 +123,406 @@ body {
   }
 
   /* Hero Section */
-  .hero {
-    padding: 40px 0 60px;
-    border-bottom: 1px solid $border-color;
+  .hero.hero--interactive {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid #dfdeda;
+    padding-bottom: 0;
+    --mouse-x: 50%;
+    --mouse-y: 35%;
 
-    &__top-meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      font-weight: 600;
-      color: $text-muted;
-      margin-bottom: 20px;
+    /* 마우스 반응형 건축 그리드 배경 */
+    .hero__grid-backdrop {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(to right, rgba(17, 17, 17, 0.045) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(17, 17, 17, 0.045) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(
+        420px circle at var(--mouse-x) var(--mouse-y),
+        rgba(0, 0, 0, 0.95) 0%,
+        rgba(0, 0, 0, 0.25) 60%,
+        transparent 100%
+      );
+      -webkit-mask-image: radial-gradient(
+        420px circle at var(--mouse-x) var(--mouse-y),
+        rgba(0, 0, 0, 0.95) 0%,
+        rgba(0, 0, 0, 0.25) 60%,
+        transparent 100%
+      );
     }
 
-    &__title {
-      font-size: clamp(48px, 8vw, 100px);
-      font-weight: 900;
-      line-height: 0.95;
-      letter-spacing: -0.03em;
-      text-transform: uppercase;
-      margin-bottom: 30px;
-    }
-
-    &__badge-bar {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 40px;
-
-      .sys-badge {
-        font-size: 10px;
-        font-weight: 700;
-        background: $border-color;
-        padding: 4px 8px;
-      }
-    }
-
-    &__brand-ticker {
+    .hero__top-meta {
+      position: relative;
+      z-index: 1;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 0;
-      border-top: 1px solid $border-color;
-      border-bottom: 1px solid $border-color;
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: 0.05em;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid #dfdeda;
+      margin-bottom: 2.5rem;
 
-      .bold-serif {
-        font-family: "Times New Roman", serif;
-        font-style: italic;
-        font-weight: bold;
+      .meta-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .sys-badge {
+          font-size: 0.68rem;
+          font-weight: 800;
+          letter-spacing: 0.06em;
+          background-color: #111111;
+          color: #ffffff;
+          padding: 0.25rem 0.6rem;
+        }
       }
     }
 
-    &__intro {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-top: 40px;
-      gap: 40px;
+    /* 7:5 비대칭 스플릿 그리드 */
+    .hero__split-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: 3rem;
+      align-items: end;
+      margin-bottom: 3rem;
 
-      .intro-text {
-        max-width: 600px;
-        font-size: 14px;
-        line-height: 1.6;
-        color: $text-main;
+      @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+        gap: 2.25rem;
+      }
+    }
+
+    .hero__left-col {
+      .hero__title {
+        margin: 0 0 1.5rem 0;
+        display: flex;
+        flex-direction: column;
+        line-height: 0.98;
+
+        .kinetic-slot {
+          display: inline-block;
+          overflow: hidden;
+          padding: 0.1rem 0;
+
+          .kinetic-word {
+            display: inline-block;
+            background-color: #111111;
+            color: #ffffff;
+            padding: 0.08em 0.22em;
+            animation: kineticSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+          }
+        }
       }
 
-      .link-arrow {
-        font-size: 11px;
-        font-weight: 700;
-        color: $text-main;
+      .hero__lead {
+        max-width: 540px;
+        font-size: 0.95rem;
+        line-height: 1.65;
+        color: #444444;
+        margin-bottom: 2rem;
+        word-break: keep-all;
+      }
+
+      .hero__cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+
+        .btn-hero-solid {
+          display: inline-flex;
+          align-items: center;
+          background-color: #111111;
+          color: #ffffff;
+          border: 1px solid #111111;
+          padding: 0.85rem 1.4rem;
+          font-size: 0.75rem;
+          font-weight: 800;
+          letter-spacing: 0.06em;
+          text-decoration: none;
+          transition:
+            background-color 0.15s ease,
+            transform 0.15s ease;
+
+          &:hover {
+            background-color: #333333;
+          }
+        }
+
+        .btn-hero-outline {
+          display: inline-flex;
+          align-items: center;
+          background-color: #ffffff;
+          color: #111111;
+          border: 1px solid #111111;
+          padding: 0.85rem 1.4rem;
+          font-size: 0.75rem;
+          font-weight: 800;
+          letter-spacing: 0.06em;
+          text-decoration: none;
+          transition:
+            background-color 0.15s ease,
+            color 0.15s ease;
+
+          &:hover {
+            background-color: #111111;
+            color: #ffffff;
+          }
+        }
+      }
+    }
+
+    /* 우측 Live Specimen 카드 */
+    .hero__right-col {
+      .specimen-card {
+        border: 1px solid #111111;
+        background-color: #ffffff;
+        box-shadow: 6px 6px 0px #111111;
+
+        .specimen-card__header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.65rem 1rem;
+          background-color: #f7f7f5;
+          border-bottom: 1px solid #111111;
+          font-size: 0.68rem;
+          font-weight: 800;
+          letter-spacing: 0.05em;
+
+          .specimen-status {
+            color: #111111;
+          }
+
+          .specimen-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            button {
+              background: #ffffff;
+              border: 1px solid #111111;
+              color: #111111;
+              width: 24px;
+              height: 22px;
+              font-size: 0.75rem;
+              font-weight: 800;
+              cursor: pointer;
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              transition:
+                background-color 0.12s ease,
+                color 0.12s ease;
+
+              &:hover {
+                background-color: #111111;
+                color: #ffffff;
+              }
+            }
+
+            .specimen-counter {
+              font-family: monospace;
+              font-size: 0.72rem;
+            }
+          }
+        }
+
+        .specimen-card__thumb {
+          position: relative;
+          display: block;
+          height: 210px;
+          overflow: hidden;
+          border-bottom: 1px solid #111111;
+          background-color: #ecece9;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition:
+              filter 0.35s ease,
+              transform 0.45s ease;
+          }
+
+          .thumb-overlay-badge {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 0.75rem;
+            background-color: #111111;
+            color: #ffffff;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            padding: 0.35rem 0.65rem;
+            opacity: 0;
+            transform: translateY(4px);
+            transition:
+              opacity 0.2s ease,
+              transform 0.2s ease;
+          }
+
+          &:hover {
+            img {
+              filter: grayscale(0%);
+              transform: scale(1.03);
+            }
+
+            .thumb-overlay-badge {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+        }
+
+        .specimen-card__body {
+          padding: 1rem 1.15rem;
+
+          .specimen-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 0.75rem;
+            margin-bottom: 0.55rem;
+
+            h3 {
+              font-size: 1.05rem;
+              font-weight: 900;
+              letter-spacing: -0.02em;
+              margin: 0;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+
+            .specimen-id {
+              font-family: monospace;
+              font-size: 0.7rem;
+              color: #777777;
+              flex-shrink: 0;
+            }
+          }
+
+          .specimen-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            margin-bottom: 0.85rem;
+
+            .tag {
+              font-size: 0.65rem;
+              font-weight: 700;
+              padding: 0.18rem 0.5rem;
+              border: 1px solid #d4d4d0;
+              background-color: #fafaf8;
+              color: #333333;
+            }
+          }
+
+          .specimen-commit-bar {
+            padding-top: 0.75rem;
+            border-top: 1px dashed #d4d4d0;
+
+            .commit-label {
+              display: block;
+              font-size: 0.6rem;
+              font-weight: 800;
+              letter-spacing: 0.06em;
+              color: #888888;
+              margin-bottom: 0.2rem;
+            }
+
+            .commit-text {
+              margin: 0;
+              font-family: monospace;
+              font-size: 0.75rem;
+              color: #111111;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+          }
+        }
+      }
+    }
+
+    /* 하단 5열 핵심 기술 스펙트럼 바 */
+    .hero__spectrum-bar {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      border-top: 1px solid #111111;
+      margin-top: 0;
+
+      @media (max-width: 900px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .spectrum-cell {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        padding: 1rem 1.15rem;
+        border-right: 1px solid #dfdeda;
         text-decoration: none;
-        border-bottom: 1px solid $text-main;
-        padding-bottom: 2px;
-        white-space: nowrap;
+        color: #111111;
+        background-color: rgba(255, 255, 255, 0.7);
+        transition:
+          background-color 0.15s ease,
+          color 0.15s ease;
+
+        &:last-child {
+          border-right: none;
+        }
+
+        &:hover {
+          background-color: #111111;
+          color: #ffffff;
+
+          .spectrum-idx,
+          .spectrum-sub {
+            color: #cccccc;
+          }
+        }
+
+        .spectrum-idx {
+          font-family: monospace;
+          font-size: 0.65rem;
+          color: #888888;
+        }
+
+        .spectrum-name {
+          font-size: 0.8rem;
+          font-weight: 900;
+          letter-spacing: -0.01em;
+        }
+
+        .spectrum-sub {
+          font-size: 0.62rem;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+          color: #777777;
+        }
       }
+    }
+  }
+
+  @keyframes kineticSlideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(35%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 
