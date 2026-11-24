@@ -12,16 +12,16 @@ export function MainPage() {
     useMainPage();
   const { projects } = useProjects();
 
-  // 1. 키네틱 롤링 헤드라인 인덱스
+  // 1. 제자리 회전 헤드라인 인덱스
   const [keywordIdx, setKeywordIdx] = useState(0);
-
   // 2. 배경 썸네일 슬라이드 인덱스
   const [bgSlideIdx, setBgSlideIdx] = useState(0);
-
   // 3. 마우스 스포트라이트 그리드 좌표
   const heroRef = useRef<HTMLElement | null>(null);
 
-  // PUBLISHED 프로젝트 썸네일 목록 추출 (폴백: featuredWorks)
+  /**
+   * PUBLISHED 프로젝트 썸네일 목록 추출
+   */
   const heroBgSlides = useMemo(() => {
     const published = (projects || []).filter(
       (p) => p.status === "PUBLISHED" && p.image_url,
@@ -42,7 +42,9 @@ export function MainPage() {
     }));
   }, [projects, featuredWorks]);
 
-  // 키워드 롤링 타이머 (2.8초)
+  /**
+   * 헤드라인 회전 타이머 (2.8초)
+   */
   useEffect(() => {
     const interval = setInterval(() => {
       setKeywordIdx((prev) => (prev + 1) % KINETIC_KEYWORDS.length);
@@ -50,7 +52,9 @@ export function MainPage() {
     return () => clearInterval(interval);
   }, []);
 
-  // 배경 썸네일 크로스페이드 슬라이드 타이머 (4.5초)
+  /**
+   * 배경 썸네일 크로스페이드 슬라이드 타이머 (4.5초)
+   */
   useEffect(() => {
     if (heroBgSlides.length <= 1) return;
     const slideInterval = setInterval(() => {
@@ -59,6 +63,11 @@ export function MainPage() {
     return () => clearInterval(slideInterval);
   }, [heroBgSlides.length]);
 
+  /**
+   * 히어로 섹션 마우스 현재 위치 추적 핸들러
+   * @param e
+   * @returns
+   */
   const handleHeroMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const el = heroRef.current;
     if (!el) return;
@@ -72,13 +81,14 @@ export function MainPage() {
 
   return (
     <div className="portfolio-main">
-      {/* Hero Section: Full-Bleed Ambient Thumbnail + Kinetic Typography */}
+      {/* Hero Section */}
+      {/* Dynamic Thumbnail + Typography */}
       <section
         className="hero hero--interactive"
         ref={heroRef}
         onMouseMove={handleHeroMouseMove}
       >
-        {/* 1. 게시된 프로젝트 썸네일 배경 슬라이드쇼 레이어 */}
+        {/* 1. 배경 슬라이드쇼 레이어 */}
         <div className="hero__bg-slideshow" aria-hidden="true">
           {heroBgSlides.map((slide, idx) => (
             <div
@@ -92,10 +102,10 @@ export function MainPage() {
           <div className="bg-slide-vignette" />
         </div>
 
-        {/* 2. 마우스 반응형 건축 그리드 오버레이 */}
+        {/* 2. 마우스 반응형 오버레이 */}
         <div className="hero__grid-backdrop" aria-hidden="true" />
 
-        {/* 3. 메인 에디토리얼 타이포그래피 & CTA */}
+        {/* 3. 타이포그래피 & CTA */}
         <div className="hero__content-wrap">
           <h1 className="hero__title">
             <span>ARCHITECTING</span>
@@ -124,21 +134,6 @@ export function MainPage() {
                 </Link>
               </div>
             </div>
-
-            {/* 우측 하단: 현재 배경 썸네일 인덱스 인디케이터 */}
-            {/* {currentBgItem && (
-              <div className="hero__bg-caption">
-                <span className="caption-label">
-                  AMBIENT ARCHIVE //{" "}
-                  {String((bgSlideIdx % heroBgSlides.length) + 1).padStart(
-                    2,
-                    "0",
-                  )}{" "}
-                  / {String(heroBgSlides.length).padStart(2, "0")}
-                </span>
-                <span className="caption-title">{currentBgItem.title}</span>
-              </div>
-            )} */}
           </div>
         </div>
       </section>
