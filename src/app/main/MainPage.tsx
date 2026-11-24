@@ -145,7 +145,7 @@ export function MainPage() {
             </div>
 
             {/* 우측 하단: 현재 배경 썸네일 인덱스 인디케이터 */}
-            {/* {currentBgItem && (
+            {currentBgItem && (
               <div className="hero__bg-caption">
                 <span className="caption-label">
                   AMBIENT ARCHIVE //{" "}
@@ -157,12 +157,12 @@ export function MainPage() {
                 </span>
                 <span className="caption-title">{currentBgItem.title}</span>
               </div>
-            )} */}
+            )}
           </div>
         </div>
 
         {/* 5. 하단 5열 핵심 기술 스펙트럼 바 */}
-        {/* <div className="hero__brand-ticker hero__spectrum-bar">
+        <div className="hero__brand-ticker hero__spectrum-bar">
           {CORE_SPECTRUMS.map((item) => (
             <a href="#works" key={item.index} className="spectrum-cell">
               <span className="spectrum-idx">[{item.index}]</span>
@@ -170,7 +170,7 @@ export function MainPage() {
               <span className="spectrum-sub">{item.sub}</span>
             </a>
           ))}
-        </div> */}
+        </div>
       </section>
 
       {/* Featured Works Section */}
