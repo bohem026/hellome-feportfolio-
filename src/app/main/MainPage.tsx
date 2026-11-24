@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
-import { useMainPage, useProjects } from "@/hooks";
+import { useMainPage } from "@/hooks";
 import { KINETIC_KEYWORDS } from "@/constants";
 import "./MainPage.scss";
 

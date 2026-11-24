@@ -11,7 +11,7 @@ import {
 import { WorkItem, ProcessItem, FAQItem } from "@/types";
 
 export function useMainPage() {
-  const { projects } = useProjects();
+  const { projects, isLoading: isProjectsLoading } = useProjects();
   const featuredWorks = FEATURED_WORKS as WorkItem[];
   const processSteps = PROCESS_STEPS as ProcessItem[];
   const faqs = FAQS as FAQItem[];
@@ -33,6 +33,9 @@ export function useMainPage() {
    * PUBLISHED 프로젝트 썸네일 목록 추출
    */
   const heroBgSlides = useMemo(() => {
+    // 추가: DB 로딩 중에는 이미지 노출하지 않음 (깜빡임 방지)
+    if (isProjectsLoading) return [];
+
     const published = (projects || []).filter(
       (p) => p.status === "PUBLISHED" && p.image_url,
     );
@@ -45,12 +48,13 @@ export function useMainPage() {
       }));
     }
 
+    // 이미지 url 누락 방지용 폴백
     return featuredWorks.map((w) => ({
       id: w.id,
       title: w.title,
       imageUrl: w.imageUrl,
     }));
-  }, [projects, featuredWorks]);
+  }, [projects, isProjectsLoading, featuredWorks]);
 
   /**
    * 헤드라인 회전 타이머 (2.8초)
