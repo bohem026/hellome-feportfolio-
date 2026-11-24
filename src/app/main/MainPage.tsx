@@ -7,14 +7,6 @@ import "./MainPage.scss";
 
 const KINETIC_KEYWORDS = ["RESILIENT", "SCALABLE", "INTERACTIVE", "MODULAR"];
 
-const CORE_SPECTRUMS = [
-  { index: "01", label: "REACT & NEXT.JS", sub: "APP ROUTER / SSR" },
-  { index: "02", label: "TYPESCRIPT", sub: "STRICT ARCHITECTURE" },
-  { index: "03", label: "SUPABASE & RLS", sub: "SERVERLESS / EDGE" },
-  { index: "04", label: "AI WORKFLOWS", sub: "OPENAI / AUTOMATION" },
-  { index: "05", label: "SWISS UI SYSTEMS", sub: "DESIGN TOKENS / WCAG" },
-];
-
 export function MainPage() {
   const { featuredWorks, processSteps, faqs, openFaq, toggleFaq } =
     useMainPage();
@@ -80,13 +72,13 @@ export function MainPage() {
 
   return (
     <div className="portfolio-main">
-      {/* Hero Section: Kinetic Typography + Ambient Thumbnail Backdrop */}
+      {/* Hero Section: Full-Bleed Ambient Thumbnail + Kinetic Typography */}
       <section
         className="hero hero--interactive"
         ref={heroRef}
         onMouseMove={handleHeroMouseMove}
       >
-        {/* 1. 게시된 프로젝트 썸네일 배경 슬라이드 레이어 */}
+        {/* 1. 게시된 프로젝트 썸네일 배경 슬라이드쇼 레이어 */}
         <div className="hero__bg-slideshow" aria-hidden="true">
           {heroBgSlides.map((slide, idx) => (
             <div
@@ -103,18 +95,7 @@ export function MainPage() {
         {/* 2. 마우스 반응형 건축 그리드 오버레이 */}
         <div className="hero__grid-backdrop" aria-hidden="true" />
 
-        {/* 3. 상단 메타 바 */}
-        <div className="hero__top-meta">
-          <span className="role-title">
-            SYS.INDEX // FRONTEND SYSTEMS ENGINEER — 주후산
-          </span>
-          <div className="meta-right">
-            <span className="sys-badge">● SYS LIVE PROD VER 4.8</span>
-            <span className="year-range">(2024 — 2026)</span>
-          </div>
-        </div>
-
-        {/* 4. 메인 에디토리얼 타이포그래피 & CTA */}
+        {/* 3. 메인 에디토리얼 타이포그래피 & CTA */}
         <div className="hero__content-wrap">
           <h1 className="hero__title">
             <span>ARCHITECTING</span>
@@ -159,17 +140,6 @@ export function MainPage() {
               </div>
             )}
           </div>
-        </div>
-
-        {/* 5. 하단 5열 핵심 기술 스펙트럼 바 */}
-        <div className="hero__brand-ticker hero__spectrum-bar">
-          {CORE_SPECTRUMS.map((item) => (
-            <a href="#works" key={item.index} className="spectrum-cell">
-              <span className="spectrum-idx">[{item.index}]</span>
-              <strong className="spectrum-name">{item.label}</strong>
-              <span className="spectrum-sub">{item.sub}</span>
-            </a>
-          ))}
         </div>
       </section>
 
