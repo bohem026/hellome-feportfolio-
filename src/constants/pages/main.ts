@@ -104,3 +104,13 @@ export const FAQS: FAQItem[] = [
       "Seamless embedment within product and engineering teams via Slack, GitHub, and Figma workflows is standard.",
   },
 ];
+
+/* ==========================================================================
+   BELOW: CONSTANTS FOR MAIN SECTION RENEWAL
+   ========================================================================== */
+export const KINETIC_KEYWORDS = [
+  "RESILIENT",
+  "SCALABLE",
+  "INTERACTIVE",
+  "MODULAR",
+];
