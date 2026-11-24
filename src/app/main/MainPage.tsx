@@ -126,7 +126,7 @@ export function MainPage() {
             </div>
 
             {/* 우측 하단: 현재 배경 썸네일 인덱스 인디케이터 */}
-            {currentBgItem && (
+            {/* {currentBgItem && (
               <div className="hero__bg-caption">
                 <span className="caption-label">
                   AMBIENT ARCHIVE //{" "}
@@ -138,7 +138,7 @@ export function MainPage() {
                 </span>
                 <span className="caption-title">{currentBgItem.title}</span>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </section>
