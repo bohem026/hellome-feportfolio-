@@ -55,7 +55,7 @@ export function useMainPage() {
   /**
    * 헤드라인 회전 타이머 (2.8초)
    */
-  const handleHeadlineRotate = useEffect(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
       setKeywordIdx((prev) => (prev + 1) % KINETIC_KEYWORDS.length);
     }, 2800);
@@ -65,7 +65,7 @@ export function useMainPage() {
   /**
    * 배경 썸네일 크로스페이드 슬라이드 타이머 (4.5초)
    */
-  const handleThumbnailSlideCrossfade = useEffect(() => {
+  useEffect(() => {
     if (heroBgSlides.length <= 1) return;
     const slideInterval = setInterval(() => {
       setBgSlideIdx((prev) => (prev + 1) % heroBgSlides.length);
@@ -75,8 +75,6 @@ export function useMainPage() {
 
   /**
    * 히어로 섹션 마우스 현재 위치 추적 핸들러
-   * @param e
-   * @returns
    */
   const handleHeroMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const el = heroRef.current;
@@ -93,6 +91,7 @@ export function useMainPage() {
     heroRef,
     heroBgSlides,
     bgSlideIdx,
+    currentBgItem,
     keywordIdx,
     featuredWorks,
     processSteps,
