@@ -18,17 +18,39 @@ const CORE_SPECTRUMS = [
 export function MainPage() {
   const { featuredWorks, processSteps, faqs, openFaq, toggleFaq } =
     useMainPage();
-  const { projects, isLoading: isProjectsLoading } = useProjects();
+  const { projects } = useProjects();
 
   // 1. 키네틱 롤링 헤드라인 인덱스
   const [keywordIdx, setKeywordIdx] = useState(0);
 
-  // 2. 우측 Live Specimen 카드 슬라이드 인덱스
-  const [specimenIdx, setSpecimenIdx] = useState(0);
+  // 2. 배경 썸네일 슬라이드 인덱스
+  const [bgSlideIdx, setBgSlideIdx] = useState(0);
 
   // 3. 마우스 스포트라이트 그리드 좌표
   const heroRef = useRef<HTMLElement | null>(null);
 
+  // PUBLISHED 프로젝트 썸네일 목록 추출 (폴백: featuredWorks)
+  const heroBgSlides = useMemo(() => {
+    const published = (projects || []).filter(
+      (p) => p.status === "PUBLISHED" && p.image_url,
+    );
+
+    if (published.length > 0) {
+      return published.map((p) => ({
+        id: p.id,
+        title: p.title,
+        imageUrl: p.image_url,
+      }));
+    }
+
+    return featuredWorks.map((w) => ({
+      id: w.id,
+      title: w.title,
+      imageUrl: w.imageUrl,
+    }));
+  }, [projects, featuredWorks]);
+
+  // 키워드 롤링 타이머 (2.8초)
   useEffect(() => {
     const interval = setInterval(() => {
       setKeywordIdx((prev) => (prev + 1) % KINETIC_KEYWORDS.length);
@@ -36,53 +58,14 @@ export function MainPage() {
     return () => clearInterval(interval);
   }, []);
 
-  // PUBLISHED 상태인 실제 프로젝트 목록 (없을 경우 featuredWorks 폴백)
-  const liveSpecimens = useMemo(() => {
-    const published = (projects || []).filter((p) => p.status === "PUBLISHED");
-
-    if (published.length > 0) {
-      return published.map((proj) => {
-        const rawCommits = proj.repository?.commit_history || [];
-        const firstEntry = rawCommits[0] as any;
-        const latestCommitMsg = firstEntry
-          ? "commit" in firstEntry
-            ? firstEntry.commit.message
-            : firstEntry.message
-          : "Initial specimen archived & verified.";
-
-        return {
-          id: proj.id,
-          title: proj.title,
-          imageUrl: proj.image_url,
-          categories: proj.categories || [],
-          latestCommit: latestCommitMsg,
-          linkUrl: `/works/${proj.id}`,
-        };
-      });
-    }
-
-    return featuredWorks.map((w) => ({
-      id: w.id,
-      title: w.title,
-      imageUrl: w.imageUrl,
-      categories: [w.category],
-      latestCommit: w.description,
-      linkUrl: w.linkUrl,
-    }));
-  }, [projects, featuredWorks]);
-
-  const activeSpecimen =
-    liveSpecimens[specimenIdx % Math.max(liveSpecimens.length, 1)];
-
-  const handlePrevSpecimen = () => {
-    setSpecimenIdx((prev) =>
-      prev === 0 ? liveSpecimens.length - 1 : prev - 1,
-    );
-  };
-
-  const handleNextSpecimen = () => {
-    setSpecimenIdx((prev) => (prev + 1) % liveSpecimens.length);
-  };
+  // 배경 썸네일 크로스페이드 슬라이드 타이머 (4.5초)
+  useEffect(() => {
+    if (heroBgSlides.length <= 1) return;
+    const slideInterval = setInterval(() => {
+      setBgSlideIdx((prev) => (prev + 1) % heroBgSlides.length);
+    }, 4500);
+    return () => clearInterval(slideInterval);
+  }, [heroBgSlides.length]);
 
   const handleHeroMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const el = heroRef.current;
@@ -92,18 +75,35 @@ export function MainPage() {
     el.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
   };
 
+  const currentBgItem =
+    heroBgSlides[bgSlideIdx % Math.max(heroBgSlides.length, 1)];
+
   return (
     <div className="portfolio-main">
-      {/* Hero Section: 7:5 Asymmetric Split Grid + Interactive Live Specimen */}
+      {/* Hero Section: Kinetic Typography + Ambient Thumbnail Backdrop */}
       <section
         className="hero hero--interactive"
         ref={heroRef}
         onMouseMove={handleHeroMouseMove}
       >
-        {/* 마우스 반응형 건축 그리드 오버레이 */}
+        {/* 1. 게시된 프로젝트 썸네일 배경 슬라이드 레이어 */}
+        <div className="hero__bg-slideshow" aria-hidden="true">
+          {heroBgSlides.map((slide, idx) => (
+            <div
+              key={slide.id}
+              className={`bg-slide-item ${
+                idx === bgSlideIdx % heroBgSlides.length ? "is-active" : ""
+              }`}
+              style={{ backgroundImage: `url(${slide.imageUrl})` }}
+            />
+          ))}
+          <div className="bg-slide-vignette" />
+        </div>
+
+        {/* 2. 마우스 반응형 건축 그리드 오버레이 */}
         <div className="hero__grid-backdrop" aria-hidden="true" />
 
-        {/* 상단 메타 바 */}
+        {/* 3. 상단 메타 바 */}
         <div className="hero__top-meta">
           <span className="role-title">
             SYS.INDEX // FRONTEND SYSTEMS ENGINEER — 주후산
@@ -114,114 +114,54 @@ export function MainPage() {
           </div>
         </div>
 
-        {/* 메인 7:5 스플릿 그리드 */}
-        <div className="hero__split-grid">
-          {/* 좌측 7 cols: 키네틱 에디토리얼 타이포그래피 */}
-          <div className="hero__left-col">
-            <h1 className="hero__title">
-              <span>ARCHITECTING</span>
-              <span className="kinetic-slot" aria-live="polite">
-                <span key={keywordIdx} className="kinetic-word">
-                  {KINETIC_KEYWORDS[keywordIdx]}
-                </span>
+        {/* 4. 메인 에디토리얼 타이포그래피 & CTA */}
+        <div className="hero__content-wrap">
+          <h1 className="hero__title">
+            <span>ARCHITECTING</span>
+            <span className="kinetic-slot" aria-live="polite">
+              <span key={keywordIdx} className="kinetic-word">
+                {KINETIC_KEYWORDS[keywordIdx]}
               </span>
-              <span>WEB INTERFACES.</span>
-            </h1>
+            </span>
+            <span>WEB INTERFACES.</span>
+          </h1>
 
-            <p className="hero__lead">
-              사용자 경험의 디테일과 예측 가능한 데이터 아키텍처를 설계하는
-              프론트엔드 엔지니어입니다. 실제 GitHub 커밋과 서버리스
-              파이프라인이 살아 움직이는 작업 아카이브를 탐색해 보세요.
-            </p>
+          <div className="hero__bottom-row">
+            <div className="hero__lead-block">
+              <p className="hero__lead">
+                사용자 경험의 디테일과 견고한 데이터 흐름을 설계하는 프론트엔드
+                엔지니어입니다. 실제 코드와 커밋 이력으로 검증된 프로덕트
+                아카이브를 확인해 보세요.
+              </p>
 
-            <div className="hero__cta-row">
-              <a href="#works" className="btn-hero-solid">
-                EXPLORE SELECTED WORKS ↓
-              </a>
-              <Link href="/contact" className="btn-hero-outline">
-                ASK AI ASSISTANT ↗
-              </Link>
-            </div>
-          </div>
-
-          {/* 우측 5 cols: 실시간 LIVE SPECIMEN 프리뷰 카드 */}
-          <div className="hero__right-col">
-            <div className="specimen-card">
-              <div className="specimen-card__header">
-                <span className="specimen-status">
-                  ● LIVE SPECIMEN //{" "}
-                  {isProjectsLoading ? "SYNCING..." : "DB INDEXED"}
-                </span>
-
-                {liveSpecimens.length > 1 && (
-                  <div className="specimen-nav">
-                    <button
-                      type="button"
-                      onClick={handlePrevSpecimen}
-                      aria-label="이전 프로젝트"
-                    >
-                      ←
-                    </button>
-                    <span className="specimen-counter">
-                      {String(
-                        (specimenIdx % liveSpecimens.length) + 1,
-                      ).padStart(2, "0")}{" "}
-                      / {String(liveSpecimens.length).padStart(2, "0")}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={handleNextSpecimen}
-                      aria-label="다음 프로젝트"
-                    >
-                      →
-                    </button>
-                  </div>
-                )}
+              <div className="hero__cta-row">
+                <a href="#works" className="btn-hero-solid">
+                  EXPLORE SELECTED WORKS ↓
+                </a>
+                <Link href="/contact" className="btn-hero-outline">
+                  CONTACT AI ASSISTANT ↗
+                </Link>
               </div>
-
-              {activeSpecimen && (
-                <>
-                  <Link
-                    href={activeSpecimen.linkUrl}
-                    className="specimen-card__thumb"
-                  >
-                    <img
-                      src={activeSpecimen.imageUrl}
-                      alt={activeSpecimen.title}
-                    />
-                    <span className="thumb-overlay-badge">
-                      OPEN CASE STUDY ↗
-                    </span>
-                  </Link>
-
-                  <div className="specimen-card__body">
-                    <div className="specimen-title-row">
-                      <h3>{activeSpecimen.title}</h3>
-                      <span className="specimen-id">#{activeSpecimen.id}</span>
-                    </div>
-
-                    <div className="specimen-tags">
-                      {activeSpecimen.categories.slice(0, 3).map((tag, i) => (
-                        <span key={i} className="tag">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="specimen-commit-bar">
-                      <span className="commit-label">LATEST COMMIT</span>
-                      <p className="commit-text">
-                        {activeSpecimen.latestCommit}
-                      </p>
-                    </div>
-                  </div>
-                </>
-              )}
             </div>
+
+            {/* 우측 하단: 현재 배경 썸네일 인덱스 인디케이터 */}
+            {currentBgItem && (
+              <div className="hero__bg-caption">
+                <span className="caption-label">
+                  AMBIENT ARCHIVE //{" "}
+                  {String((bgSlideIdx % heroBgSlides.length) + 1).padStart(
+                    2,
+                    "0",
+                  )}{" "}
+                  / {String(heroBgSlides.length).padStart(2, "0")}
+                </span>
+                <span className="caption-title">{currentBgItem.title}</span>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* 하단 5열 핵심 기술 스펙트럼 바 */}
+        {/* 5. 하단 5열 핵심 기술 스펙트럼 바 */}
         <div className="hero__brand-ticker hero__spectrum-bar">
           {CORE_SPECTRUMS.map((item) => (
             <a href="#works" key={item.index} className="spectrum-cell">
