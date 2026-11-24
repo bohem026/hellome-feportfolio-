@@ -130,16 +130,18 @@ body {
     flex-direction: column;
     justify-content: center;
     min-height: 74vh;
-    padding-top: 5.5rem;
-    padding-bottom: 5.5rem;
+    padding: 5.5rem 4rem;
     border-bottom: 1px solid #dfdeda;
     --mouse-x: 50%;
     --mouse-y: 35%;
 
+    @media (max-width: 1024px) {
+      padding: 4.5rem 2.5rem;
+    }
+
     @media (max-width: 768px) {
       min-height: auto;
-      padding-top: 3.75rem;
-      padding-bottom: 3.75rem;
+      padding: 3.75rem 1.5rem;
     }
 
     /* 1. 게시된 프로젝트 썸네일 배경 슬라이드쇼 (상하 전체 확장) */
