@@ -104,7 +104,7 @@ export function MainPage() {
         <div className="hero__grid-backdrop" aria-hidden="true" />
 
         {/* 3. 상단 메타 바 */}
-        {/* <div className="hero__top-meta">
+        <div className="hero__top-meta">
           <span className="role-title">
             SYS.INDEX // FRONTEND SYSTEMS ENGINEER — 주후산
           </span>
@@ -112,7 +112,7 @@ export function MainPage() {
             <span className="sys-badge">● SYS LIVE PROD VER 4.8</span>
             <span className="year-range">(2024 — 2026)</span>
           </div>
-        </div> */}
+        </div>
 
         {/* 4. 메인 에디토리얼 타이포그래피 & CTA */}
         <div className="hero__content-wrap">
