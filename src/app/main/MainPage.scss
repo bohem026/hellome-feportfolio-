@@ -127,6 +127,7 @@ body {
     position: relative;
     overflow: hidden;
     border-bottom: 1px solid #dfdeda;
+    padding-top: 2.5rem;
     padding-bottom: 0;
     --mouse-x: 50%;
     --mouse-y: 35%;
@@ -142,11 +143,11 @@ body {
         position: absolute;
         top: 0;
         right: 0;
-        width: 62%;
+        width: 66%;
         height: 100%;
         background-size: cover;
         background-position: center;
-        filter: grayscale(100%) contrast(1.05) blur(3px);
+        filter: grayscale(100%) contrast(1.12) blur(1.5px);
         opacity: 0;
         transform: scale(1.04);
         transition:
@@ -154,27 +155,28 @@ body {
           transform 6s ease-out;
 
         &.is-active {
-          opacity: 0.14; // ✅ 타이포그래피 가독성을 해치지 않는 은은한 농도
+          opacity: 0.34; // ✅ 우측 썸네일 디테일이 또렷하게 보이도록 상향 조정
           transform: scale(1);
         }
 
         @media (max-width: 768px) {
           width: 100%;
           &.is-active {
-            opacity: 0.09;
+            opacity: 0.16;
           }
         }
       }
 
-      /* 좌측 텍스트 영역으로 자연스럽게 녹아드는 비네팅 그라데이션 */
+      /* 좌측 타이포그래피 가독성만 보호하고 우측은 투명하게 열어두는 비네팅 */
       .bg-slide-vignette {
         position: absolute;
         inset: 0;
         background: linear-gradient(
           90deg,
-          #faf9f6 28%,
-          rgba(250, 249, 246, 0.72) 62%,
-          rgba(250, 249, 246, 0.35) 100%
+          #faf9f6 24%,
+          rgba(250, 249, 246, 0.78) 48%,
+          rgba(250, 249, 246, 0.18) 78%,
+          rgba(250, 249, 246, 0.06) 100%
         );
       }
     }
@@ -211,9 +213,9 @@ body {
       align-items: center;
       flex-wrap: wrap;
       gap: 0.75rem;
-      padding-bottom: 1.25rem;
+      padding-bottom: 1.5rem;
       border-bottom: 1px solid #dfdeda;
-      margin-bottom: 2.75rem;
+      margin-bottom: 4.5rem; // ✅ 상단 메타 바와 메인 헤드라인 사이 호흡 여백 확장
 
       .meta-right {
         display: flex;
@@ -226,7 +228,7 @@ body {
           letter-spacing: 0.06em;
           background-color: #111111;
           color: #ffffff;
-          padding: 0.25rem 0.6rem;
+          padding: 0.28rem 0.65rem;
         }
       }
     }
@@ -235,24 +237,25 @@ body {
     .hero__content-wrap {
       position: relative;
       z-index: 2;
-      margin-bottom: 3.25rem;
+      margin-bottom: 5rem; // ✅ CTA 버튼과 하단 스펙트럼 바 사이 여백 확장
 
       .hero__title {
-        margin: 0 0 2rem 0;
+        margin: 0 0 2.75rem 0; // ✅ 헤드라인과 설명 문구 사이 여백 확장
         display: flex;
         flex-direction: column;
-        line-height: 0.96;
+        gap: 0.2rem;
+        line-height: 0.98;
 
         .kinetic-slot {
           display: inline-block;
           overflow: hidden;
-          padding: 0.12rem 0;
+          padding: 0.15rem 0;
 
           .kinetic-word {
             display: inline-block;
             background-color: #111111;
             color: #ffffff;
-            padding: 0.06em 0.22em;
+            padding: 0.08em 0.24em;
             animation: kineticSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1);
           }
         }
@@ -263,16 +266,16 @@ body {
         justify-content: space-between;
         align-items: flex-end;
         flex-wrap: wrap;
-        gap: 2rem;
+        gap: 2.5rem;
 
         .hero__lead-block {
           max-width: 560px;
 
           .hero__lead {
-            font-size: 0.95rem;
-            line-height: 1.65;
-            color: #333333;
-            margin-bottom: 1.75rem;
+            font-size: 0.98rem;
+            line-height: 1.7;
+            color: #222222;
+            margin-bottom: 2.25rem; // ✅ 설명 문구와 CTA 버튼 사이 여백 확장
             word-break: keep-all;
           }
 
@@ -280,7 +283,7 @@ body {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.85rem;
 
             .btn-hero-solid {
               display: inline-flex;
@@ -288,8 +291,8 @@ body {
               background-color: #111111;
               color: #ffffff;
               border: 1px solid #111111;
-              padding: 0.85rem 1.4rem;
-              font-size: 0.75rem;
+              padding: 0.95rem 1.6rem;
+              font-size: 0.76rem;
               font-weight: 800;
               letter-spacing: 0.06em;
               text-decoration: none;
@@ -303,11 +306,11 @@ body {
             .btn-hero-outline {
               display: inline-flex;
               align-items: center;
-              background-color: rgba(255, 255, 255, 0.85);
+              background-color: rgba(255, 255, 255, 0.92);
               color: #111111;
               border: 1px solid #111111;
-              padding: 0.85rem 1.4rem;
-              font-size: 0.75rem;
+              padding: 0.95rem 1.6rem;
+              font-size: 0.76rem;
               font-weight: 800;
               letter-spacing: 0.06em;
               text-decoration: none;
@@ -327,8 +330,11 @@ body {
         .hero__bg-caption {
           text-align: right;
           font-family: monospace;
-          border-right: 2px solid #111111;
-          padding-right: 0.75rem;
+          background-color: rgba(250, 249, 246, 0.85);
+          backdrop-filter: blur(4px);
+          border: 1px solid #dfdeda;
+          border-right: 3px solid #111111;
+          padding: 0.55rem 0.85rem;
 
           @media (max-width: 768px) {
             display: none;
@@ -339,7 +345,7 @@ body {
             font-size: 0.65rem;
             font-weight: 700;
             letter-spacing: 0.05em;
-            color: #777777;
+            color: #666666;
             margin-bottom: 0.2rem;
           }
 
@@ -368,12 +374,12 @@ body {
       .spectrum-cell {
         display: flex;
         flex-direction: column;
-        gap: 0.2rem;
-        padding: 1rem 1.15rem;
+        gap: 0.25rem;
+        padding: 1.25rem 1.25rem;
         border-right: 1px solid #dfdeda;
         text-decoration: none;
         color: #111111;
-        background-color: rgba(250, 249, 246, 0.82);
+        background-color: rgba(250, 249, 246, 0.88);
         backdrop-filter: blur(4px);
         transition:
           background-color 0.15s ease,
@@ -400,7 +406,7 @@ body {
         }
 
         .spectrum-name {
-          font-size: 0.8rem;
+          font-size: 0.82rem;
           font-weight: 900;
           letter-spacing: -0.01em;
         }
