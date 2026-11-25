@@ -90,20 +90,20 @@ export function MainPage() {
             <span className="eyebrow">01 // VISUAL INDEX & ARCHITECTURE</span>
             <h2>ARCHIVAL LOOKBOOK.</h2>
           </div>
+
+          {/* 추가: 하단 CTA-> 헤더 우측으로 재배치 */}
           <div className="header-right">
-            <p className="header-desc">
-              프론트엔드 아키텍처부터 서버리스·AI 워크플로우까지,
-              <br />
-              실제 배포된 프로덕트들의 시각적 단면과 기술 스펙트럼입니다.
-            </p>
-            <span className="index-counter">
-              [LIVE INDEX // {String(totalPublishedCount).padStart(2, "0")}{" "}
-              SPECIMENS]
-            </span>
+            <Link href="/works" className="works-header-cta">
+              <span className="cta-label">EXPLORE FULL WORKS ARCHIVE</span>
+              <span className="cta-count">
+                [{String(totalPublishedCount).padStart(2, "0")}]
+              </span>
+              <span className="cta-arrow">→</span>
+            </Link>
           </div>
         </div>
 
-        {/* 1. 자동 연동 프로젝트 썸네일 키네틱 필름스트립 (좌측 흐름) */}
+        {/* 1. 프로젝트 썸네일 필름스트립 */}
         <div className="kinetic-filmstrip-wrapper">
           {isProjectsLoading ? (
             <div className="filmstrip-skeleton-row">
@@ -136,7 +136,7 @@ export function MainPage() {
           )}
         </div>
 
-        {/* 2. 공식 아이콘 기반 핵심 기술 스택 마키 (우측 역방향 흐름) */}
+        {/* 2. 핵심 기술 스택 리본 */}
         <div className="kinetic-stack-wrapper">
           <div className="kinetic-stack-track">
             {[...TECH_STACK_ITEMS, ...TECH_STACK_ITEMS].map((tech, idx) => (
@@ -157,24 +157,6 @@ export function MainPage() {
             ))}
           </div>
         </div>
-
-        {/* 3. /works 전체 아카이브 유도 풀-와이드 게이트웨이 배너 */}
-        <Link href="/works" className="works-gateway-banner">
-          <div className="gateway-left">
-            <span className="gateway-eyebrow">
-              INSPECT SOURCE CODE, TROUBLESHOOTING & COMMITS
-            </span>
-            <strong className="gateway-title">
-              EXPLORE FULL WORKS ARCHIVE
-            </strong>
-          </div>
-          <div className="gateway-right">
-            <span className="gateway-count">
-              [{String(totalPublishedCount).padStart(2, "0")} SPECIMENS]
-            </span>
-            <span className="gateway-arrow">→</span>
-          </div>
-        </Link>
       </section>
 
       {/* Client List Banner */}

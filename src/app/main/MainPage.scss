@@ -354,14 +354,14 @@ body {
     }
   }
 
-  /* Works Section */
+  /* Showcase Section */
   .showcase-section {
-    padding: 6rem 0;
+    padding: 5.5rem 0 0 0;
     border-bottom: 1px solid #dfdeda;
     overflow: hidden;
 
     @media (max-width: 768px) {
-      padding: 4rem 0;
+      padding: 3.75rem 0 0 0;
     }
 
     .showcase-header {
@@ -369,10 +369,8 @@ body {
       justify-content: space-between;
       align-items: flex-end;
       flex-wrap: wrap;
-      gap: 2rem;
-      padding: 0 4rem 2.5rem 4rem;
-      border-bottom: 1px solid #111111;
-      margin-bottom: 3rem;
+      gap: 1.5rem;
+      padding: 0 4rem 2.25rem 4rem;
 
       @media (max-width: 1024px) {
         padding: 0 2.5rem 2rem 2.5rem;
@@ -403,81 +401,68 @@ body {
         }
       }
 
+      /* 헤드라인 우측 /works CTA 버튼 */
       .header-right {
-        text-align: right;
-
-        @media (max-width: 768px) {
-          text-align: left;
-        }
-
-        .header-desc {
-          font-size: 0.88rem;
-          line-height: 1.6;
-          color: #444444;
-          margin: 0 0 0.75rem 0;
-          word-break: keep-all;
-        }
-
-        .index-counter {
-          font-family: monospace;
-          font-size: 0.72rem;
+        .works-header-cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.9rem 1.45rem;
+          background-color: #111111;
+          color: #ffffff;
+          border: 1px solid #111111;
+          text-decoration: none;
+          font-size: 0.75rem;
           font-weight: 800;
-          color: #111111;
+          letter-spacing: 0.06em;
+
+          .cta-count {
+            font-family: monospace;
+            color: #bbbbbb;
+          }
+
+          .cta-arrow {
+            font-size: 0.95rem;
+          }
         }
       }
     }
 
-    /* 1. 자동 연동 프로젝트 썸네일 키네틱 필름스트립 */
+    /* 1. 연속된 띠 형태의 썸네일 필름스트립 (여백 제거 + 반투명 테두리 + 느린 속도) */
     .kinetic-filmstrip-wrapper {
       position: relative;
       width: 100%;
       overflow: hidden;
-      padding: 0.5rem 0 2.5rem 0;
-
-      &:hover .kinetic-filmstrip-track {
-        animation-play-state: paused;
-      }
+      border-top: 1px solid rgba(17, 17, 17, 0.14);
+      border-bottom: 1px solid rgba(17, 17, 17, 0.14);
+      background-color: #ffffff;
 
       .filmstrip-skeleton-row {
         display: flex;
-        gap: 1.5rem;
-        padding: 0 4rem;
+        gap: 0;
 
         .film-frame-skeleton {
-          flex: 0 0 380px;
+          flex: 0 0 360px;
           height: 260px;
-          background-color: #ecece9;
-          border: 1px solid #dfdeda;
+          background-color: #f3f3f0;
+          border-right: 1px solid rgba(17, 17, 17, 0.14);
         }
       }
 
       .kinetic-filmstrip-track {
         display: flex;
         width: max-content;
-        gap: 1.5rem;
-        animation: marqueeScrollLeft 36s linear infinite;
+        gap: 0;
+        animation: marqueeScrollLeft 64s linear infinite;
 
         .filmstrip-frame {
-          flex: 0 0 380px;
-          border: 1px solid #111111;
+          flex: 0 0 360px;
+          border-right: 1px solid rgba(17, 17, 17, 0.14);
           background-color: #ffffff;
           padding: 0.75rem;
-          transition:
-            transform 0.3s ease,
-            box-shadow 0.3s ease;
 
           @media (max-width: 768px) {
-            flex: 0 0 280px;
-          }
-
-          &:hover {
-            transform: translateY(-4px);
-            box-shadow: 6px 6px 0px #111111;
-
-            .frame-image img {
-              filter: grayscale(0%) contrast(1.03);
-              transform: scale(1.04);
-            }
+            flex: 0 0 260px;
           }
 
           .frame-meta {
@@ -485,23 +470,23 @@ body {
             justify-content: space-between;
             align-items: center;
             font-family: monospace;
-            font-size: 0.65rem;
+            font-size: 0.64rem;
             font-weight: 800;
             letter-spacing: 0.06em;
-            color: #555555;
-            padding-bottom: 0.55rem;
-            margin-bottom: 0.6rem;
-            border-bottom: 1px solid #eaeae6;
+            color: #666666;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.55rem;
+            border-bottom: 1px solid rgba(17, 17, 17, 0.08);
           }
 
           .frame-image {
             width: 100%;
-            height: 220px;
+            height: 215px;
             overflow: hidden;
             background-color: #ecece9;
 
             @media (max-width: 768px) {
-              height: 170px;
+              height: 165px;
             }
 
             img {
@@ -509,143 +494,45 @@ body {
               height: 100%;
               object-fit: cover;
               display: block;
-              filter: grayscale(100%) contrast(1.08);
-              transition:
-                filter 0.45s ease,
-                transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+              filter: grayscale(100%) contrast(1.06);
             }
           }
         }
       }
     }
 
-    /* 2. 공식 아이콘 기반 기술 스택 역방향 마키 */
+    /* 2. 연속된 띠 형태의 기술 스택 역방향 마키 (여백 제거 + 반투명 테두리 + 느린 속도) */
     .kinetic-stack-wrapper {
       position: relative;
       width: 100%;
       overflow: hidden;
-      border-top: 1px solid #dfdeda;
-      border-bottom: 1px solid #dfdeda;
       background-color: #faf9f6;
-      padding: 1.15rem 0;
-      margin-bottom: 3.5rem;
-
-      &:hover .kinetic-stack-track {
-        animation-play-state: paused;
-      }
 
       .kinetic-stack-track {
         display: flex;
         width: max-content;
-        gap: 1rem;
-        animation: marqueeScrollRight 32s linear infinite;
+        gap: 0;
+        animation: marqueeScrollRight 56s linear infinite;
 
         .stack-marquee-chip {
           display: inline-flex;
           align-items: center;
           gap: 0.6rem;
-          padding: 0.55rem 1.05rem;
-          border: 1px solid #d4d4d0;
-          background-color: #ffffff;
+          padding: 0.95rem 1.45rem;
+          border-right: 1px solid rgba(17, 17, 17, 0.14);
+          background-color: #faf9f6;
           font-family: monospace;
-          font-size: 0.75rem;
+          font-size: 0.74rem;
           font-weight: 800;
           letter-spacing: 0.05em;
           color: #111111;
           white-space: nowrap;
-          transition:
-            border-color 0.2s ease,
-            background-color 0.2s ease;
 
           img {
             display: block;
             flex-shrink: 0;
+            opacity: 0.85;
           }
-
-          &:hover {
-            border-color: #111111;
-            background-color: #f2f2ee;
-          }
-        }
-      }
-    }
-
-    /* 3. /works 전체 아카이브 유도 게이트웨이 배너 */
-    .works-gateway-banner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      margin: 0 4rem;
-      padding: 2.15rem 2.5rem;
-      border: 1px solid #111111;
-      background-color: #111111;
-      color: #ffffff;
-      text-decoration: none;
-      transition:
-        background-color 0.2s ease,
-        color 0.2s ease;
-
-      @media (max-width: 1024px) {
-        margin: 0 2.5rem;
-      }
-
-      @media (max-width: 768px) {
-        margin: 0 1.5rem;
-        padding: 1.5rem;
-      }
-
-      &:hover {
-        background-color: #ffffff;
-        color: #111111;
-
-        .gateway-eyebrow,
-        .gateway-count {
-          color: #555555;
-        }
-
-        .gateway-arrow {
-          transform: translateX(6px);
-        }
-      }
-
-      .gateway-left {
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
-
-        .gateway-eyebrow {
-          font-family: monospace;
-          font-size: 0.68rem;
-          font-weight: 700;
-          letter-spacing: 0.08em;
-          color: #aaaaaa;
-        }
-
-        .gateway-title {
-          font-size: clamp(1.15rem, 2vw, 1.55rem);
-          font-weight: 900;
-          letter-spacing: -0.02em;
-        }
-      }
-
-      .gateway-right {
-        display: flex;
-        align-items: center;
-        gap: 1.25rem;
-
-        .gateway-count {
-          font-family: monospace;
-          font-size: 0.85rem;
-          font-weight: 800;
-          color: #cccccc;
-        }
-
-        .gateway-arrow {
-          font-size: 1.4rem;
-          font-weight: 800;
-          transition: transform 0.2s ease;
         }
       }
     }
