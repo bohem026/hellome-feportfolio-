@@ -370,7 +370,7 @@ body {
       align-items: flex-end;
       flex-wrap: wrap;
       gap: 1.5rem;
-      padding: 0 4rem 2.25rem 4rem;
+      padding: 0 1.5rem 2rem 4rem;
 
       @media (max-width: 1024px) {
         padding: 0 2.5rem 2rem 2.5rem;
@@ -402,33 +402,36 @@ body {
       }
 
       /* 헤드라인 우측 /works CTA 버튼 */
+      /* 수정: 배경 제거 및 밑줄 처리된 간결한 링크로 수정 */
       .header-right {
         .works-header-cta {
           display: inline-flex;
           align-items: center;
-          gap: 0.75rem;
-          padding: 0.9rem 1.45rem;
-          background-color: #111111;
-          color: #ffffff;
-          border: 1px solid #111111;
+          gap: 0.45rem;
+          padding: 0 0 0.25rem 0;
+          background-color: transparent;
+          border: none;
+          border-bottom: 1px solid #111111;
+          color: #111111;
           text-decoration: none;
-          font-size: 0.75rem;
+          font-size: 0.7rem;
           font-weight: 800;
           letter-spacing: 0.06em;
 
           .cta-count {
             font-family: monospace;
-            color: #bbbbbb;
+            color: #666666;
           }
 
           .cta-arrow {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
           }
         }
       }
     }
 
-    /* 1. 연속된 띠 형태의 썸네일 필름스트립 (여백 제거 + 반투명 테두리 + 느린 속도) */
+    /* 연속된 띠 형태의 썸네일 필름스트립 */
+    /* 수정: 크기 확대 */
     .kinetic-filmstrip-wrapper {
       position: relative;
       width: 100%;
@@ -442,8 +445,8 @@ body {
         gap: 0;
 
         .film-frame-skeleton {
-          flex: 0 0 360px;
-          height: 260px;
+          flex: 0 0 460px;
+          height: 335px;
           background-color: #f3f3f0;
           border-right: 1px solid rgba(17, 17, 17, 0.14);
         }
@@ -456,13 +459,13 @@ body {
         animation: marqueeScrollLeft 64s linear infinite;
 
         .filmstrip-frame {
-          flex: 0 0 360px;
+          flex: 0 0 460px; // ✅ 가로 너비 확대 (360px -> 460px)
           border-right: 1px solid rgba(17, 17, 17, 0.14);
           background-color: #ffffff;
-          padding: 0.75rem;
+          padding: 0.85rem;
 
           @media (max-width: 768px) {
-            flex: 0 0 260px;
+            flex: 0 0 320px;
           }
 
           .frame-meta {
@@ -475,18 +478,18 @@ body {
             letter-spacing: 0.06em;
             color: #666666;
             padding-bottom: 0.5rem;
-            margin-bottom: 0.55rem;
+            margin-bottom: 0.6rem;
             border-bottom: 1px solid rgba(17, 17, 17, 0.08);
           }
 
           .frame-image {
             width: 100%;
-            height: 215px;
+            height: 285px; // ✅ 세로 높이 확대 (215px -> 285px)
             overflow: hidden;
             background-color: #ecece9;
 
             @media (max-width: 768px) {
-              height: 165px;
+              height: 205px;
             }
 
             img {
@@ -501,7 +504,8 @@ body {
       }
     }
 
-    /* 2. 연속된 띠 형태의 기술 스택 역방향 마키 (여백 제거 + 반투명 테두리 + 느린 속도) */
+    /* 연속된 띠 형태의 기술 스택 */
+    /* 추가: 여백 제거 + 반투명 테두리 + 느린 속도 */
     .kinetic-stack-wrapper {
       position: relative;
       width: 100%;
