@@ -356,15 +356,12 @@ body {
 
   /* Works Section */
   .showcase-section {
-    padding: 6rem 4rem;
+    padding: 6rem 0;
     border-bottom: 1px solid #dfdeda;
-
-    @media (max-width: 1024px) {
-      padding: 4.5rem 2.5rem;
-    }
+    overflow: hidden;
 
     @media (max-width: 768px) {
-      padding: 3.5rem 1.5rem;
+      padding: 4rem 0;
     }
 
     .showcase-header {
@@ -373,9 +370,17 @@ body {
       align-items: flex-end;
       flex-wrap: wrap;
       gap: 2rem;
-      padding-bottom: 2.5rem;
+      padding: 0 4rem 2.5rem 4rem;
       border-bottom: 1px solid #111111;
-      margin-bottom: 4rem;
+      margin-bottom: 3rem;
+
+      @media (max-width: 1024px) {
+        padding: 0 2.5rem 2rem 2.5rem;
+      }
+
+      @media (max-width: 768px) {
+        padding: 0 1.5rem 1.75rem 1.5rem;
+      }
 
       .header-left {
         .eyebrow {
@@ -422,258 +427,182 @@ body {
       }
     }
 
-    /* 큐레이션 플레이트 리스트 */
-    .showcase-plates {
-      display: flex;
-      flex-direction: column;
-      gap: 4.5rem;
-      margin-bottom: 4.5rem;
+    /* 1. 자동 연동 프로젝트 썸네일 키네틱 필름스트립 */
+    .kinetic-filmstrip-wrapper {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      padding: 0.5rem 0 2.5rem 0;
 
-      .showcase-plate {
-        display: grid;
-        grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-        gap: 3rem;
-        align-items: stretch;
-        text-decoration: none;
-        color: #111111;
-        border: 1px solid #dfdeda;
-        background-color: #ffffff;
-        transition:
-          border-color 0.25s ease,
-          box-shadow 0.25s ease;
+      &:hover .kinetic-filmstrip-track {
+        animation-play-state: paused;
+      }
 
-        &.is-reversed {
-          grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      .filmstrip-skeleton-row {
+        display: flex;
+        gap: 1.5rem;
+        padding: 0 4rem;
 
-          .plate-media {
-            order: 2;
-          }
-          .plate-meta {
-            order: 1;
-          }
-        }
-
-        @media (max-width: 960px) {
-          grid-template-columns: 1fr !important;
-          gap: 0;
-
-          .plate-media,
-          .plate-meta {
-            order: unset !important;
-          }
-        }
-
-        &:hover {
-          border-color: #111111;
-          box-shadow: 8px 8px 0px #111111;
-
-          .plate-media {
-            .media-inner img {
-              filter: grayscale(0%) contrast(1.02);
-              transform: scale(1.05);
-            }
-
-            .floating-cta {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-
-          .plate-meta .plate-footer .arrow-circle {
-            background-color: #111111;
-            color: #ffffff;
-            transform: translateX(4px);
-          }
-        }
-
-        /* 비주얼 프레임 */
-        .plate-media {
-          position: relative;
-          overflow: hidden;
-          min-height: 360px;
+        .film-frame-skeleton {
+          flex: 0 0 380px;
+          height: 260px;
           background-color: #ecece9;
+          border: 1px solid #dfdeda;
+        }
+      }
+
+      .kinetic-filmstrip-track {
+        display: flex;
+        width: max-content;
+        gap: 1.5rem;
+        animation: marqueeScrollLeft 36s linear infinite;
+
+        .filmstrip-frame {
+          flex: 0 0 380px;
+          border: 1px solid #111111;
+          background-color: #ffffff;
+          padding: 0.75rem;
+          transition:
+            transform 0.3s ease,
+            box-shadow 0.3s ease;
 
           @media (max-width: 768px) {
-            min-height: 240px;
+            flex: 0 0 280px;
           }
 
-          .media-inner {
+          &:hover {
+            transform: translateY(-4px);
+            box-shadow: 6px 6px 0px #111111;
+
+            .frame-image img {
+              filter: grayscale(0%) contrast(1.03);
+              transform: scale(1.04);
+            }
+          }
+
+          .frame-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: monospace;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            color: #555555;
+            padding-bottom: 0.55rem;
+            margin-bottom: 0.6rem;
+            border-bottom: 1px solid #eaeae6;
+          }
+
+          .frame-image {
             width: 100%;
-            height: 100%;
+            height: 220px;
+            overflow: hidden;
+            background-color: #ecece9;
+
+            @media (max-width: 768px) {
+              height: 170px;
+            }
 
             img {
               width: 100%;
               height: 100%;
               object-fit: cover;
               display: block;
-              filter: grayscale(100%) contrast(1.06);
+              filter: grayscale(100%) contrast(1.08);
               transition:
-                filter 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-            }
-          }
-
-          .floating-cta {
-            position: absolute;
-            bottom: 1.25rem;
-            left: 1.25rem;
-            background-color: #111111;
-            color: #ffffff;
-            font-size: 0.7rem;
-            font-weight: 800;
-            letter-spacing: 0.08em;
-            padding: 0.5rem 0.9rem;
-            opacity: 0;
-            transform: translateY(8px);
-            transition:
-              opacity 0.25s ease,
-              transform 0.25s ease;
-          }
-        }
-
-        /* 에디토리얼 메타 영역 */
-        .plate-meta {
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          padding: 2.5rem 2.25rem;
-
-          @media (max-width: 768px) {
-            padding: 1.75rem 1.5rem;
-          }
-
-          .meta-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-
-            .specimen-num {
-              font-family: monospace;
-              font-size: 0.72rem;
-              font-weight: 800;
-              letter-spacing: 0.08em;
-              background-color: #111111;
-              color: #ffffff;
-              padding: 0.25rem 0.6rem;
-            }
-
-            .repo-telemetry {
-              font-family: monospace;
-              font-size: 0.7rem;
-              font-weight: 700;
-              color: #555555;
-            }
-          }
-
-          .plate-title {
-            margin: 0 0 1.25rem 0;
-            font-size: clamp(1.5rem, 2.5vw, 2.1rem);
-            font-weight: 900;
-            letter-spacing: -0.02em;
-            line-height: 1.15;
-            word-break: break-word;
-          }
-
-          .plate-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.45rem;
-            margin-bottom: 2.5rem;
-
-            .tag-pill {
-              font-size: 0.7rem;
-              font-weight: 700;
-              padding: 0.3rem 0.65rem;
-              border: 1px solid #d4d4d0;
-              background-color: #faf9f6;
-              color: #222222;
-            }
-          }
-
-          .plate-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 1.25rem;
-            border-top: 1px solid #eaeae6;
-
-            .inspect-link {
-              font-size: 0.74rem;
-              font-weight: 800;
-              letter-spacing: 0.08em;
-            }
-
-            .arrow-circle {
-              display: inline-flex;
-              align-items: center;
-              justify-content: center;
-              width: 34px;
-              height: 34px;
-              border: 1px solid #111111;
-              font-size: 0.9rem;
-              font-weight: 800;
-              transition:
-                background-color 0.2s ease,
-                color 0.2s ease,
-                transform 0.2s ease;
-            }
-          }
-        }
-
-        /* 로딩 스켈레톤 */
-        &.is-skeleton {
-          pointer-events: none;
-
-          .skeleton-box {
-            background-color: #ecece9;
-          }
-
-          .skeleton-line {
-            height: 16px;
-            background-color: #ecece9;
-            margin-bottom: 1rem;
-
-            &.short {
-              width: 30%;
-            }
-            &.title {
-              width: 75%;
-              height: 32px;
+                filter 0.45s ease,
+                transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
             }
           }
         }
       }
     }
 
-    /* /works 전체 아카이브 유도 게이트웨이 배너 */
+    /* 2. 공식 아이콘 기반 기술 스택 역방향 마키 */
+    .kinetic-stack-wrapper {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-top: 1px solid #dfdeda;
+      border-bottom: 1px solid #dfdeda;
+      background-color: #faf9f6;
+      padding: 1.15rem 0;
+      margin-bottom: 3.5rem;
+
+      &:hover .kinetic-stack-track {
+        animation-play-state: paused;
+      }
+
+      .kinetic-stack-track {
+        display: flex;
+        width: max-content;
+        gap: 1rem;
+        animation: marqueeScrollRight 32s linear infinite;
+
+        .stack-marquee-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.6rem;
+          padding: 0.55rem 1.05rem;
+          border: 1px solid #d4d4d0;
+          background-color: #ffffff;
+          font-family: monospace;
+          font-size: 0.75rem;
+          font-weight: 800;
+          letter-spacing: 0.05em;
+          color: #111111;
+          white-space: nowrap;
+          transition:
+            border-color 0.2s ease,
+            background-color 0.2s ease;
+
+          img {
+            display: block;
+            flex-shrink: 0;
+          }
+
+          &:hover {
+            border-color: #111111;
+            background-color: #f2f2ee;
+          }
+        }
+      }
+    }
+
+    /* 3. /works 전체 아카이브 유도 게이트웨이 배너 */
     .works-gateway-banner {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 1.5rem;
-      padding: 2rem 2.5rem;
+      margin: 0 4rem;
+      padding: 2.15rem 2.5rem;
       border: 1px solid #111111;
-      background-color: #faf9f6;
-      color: #111111;
+      background-color: #111111;
+      color: #ffffff;
       text-decoration: none;
       transition:
         background-color 0.2s ease,
         color 0.2s ease;
 
+      @media (max-width: 1024px) {
+        margin: 0 2.5rem;
+      }
+
       @media (max-width: 768px) {
+        margin: 0 1.5rem;
         padding: 1.5rem;
       }
 
       &:hover {
-        background-color: #111111;
-        color: #ffffff;
+        background-color: #ffffff;
+        color: #111111;
 
         .gateway-eyebrow,
         .gateway-count {
-          color: #cccccc;
+          color: #555555;
         }
 
         .gateway-arrow {
@@ -691,7 +620,7 @@ body {
           font-size: 0.68rem;
           font-weight: 700;
           letter-spacing: 0.08em;
-          color: #666666;
+          color: #aaaaaa;
         }
 
         .gateway-title {
@@ -710,7 +639,7 @@ body {
           font-family: monospace;
           font-size: 0.85rem;
           font-weight: 800;
-          color: #555555;
+          color: #cccccc;
         }
 
         .gateway-arrow {
@@ -719,6 +648,24 @@ body {
           transition: transform 0.2s ease;
         }
       }
+    }
+  }
+
+  @keyframes marqueeScrollLeft {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes marqueeScrollRight {
+    0% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0);
     }
   }
 

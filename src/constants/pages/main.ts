@@ -114,3 +114,22 @@ export const KINETIC_KEYWORDS = [
   "INTERACTIVE",
   "MODULAR",
 ];
+
+export const TECH_STACK_ITEMS = [
+  { name: "REACT", slug: "react" },
+  { name: "NEXT.JS", slug: "nextdotjs" },
+  { name: "TYPESCRIPT", slug: "typescript" },
+  { name: "JAVASCRIPT", slug: "javascript" },
+  { name: "HTML5", slug: "html5" },
+  { name: "SASS / SCSS", slug: "sass" },
+  { name: "SUPABASE", slug: "supabase" },
+  { name: "POSTGRESQL", slug: "postgresql" },
+  { name: "NODE.JS", slug: "nodedotjs" },
+  { name: "EXPRESS", slug: "express" },
+  { name: "OPENAI API", slug: "openai" },
+  { name: "MUI", slug: "mui" },
+  { name: "D3.JS", slug: "d3" },
+  { name: "DOCKER", slug: "docker" },
+  { name: "GIT", slug: "git" },
+  { name: "FIGMA", slug: "figma" },
+];

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMainPage } from "@/hooks";
-import { KINETIC_KEYWORDS } from "@/constants";
+import { KINETIC_KEYWORDS, TECH_STACK_ITEMS } from "@/constants";
 import "./MainPage.scss";
 
 export function MainPage() {
@@ -82,84 +82,88 @@ export function MainPage() {
         </div>
       </section>
 
-      {/* Selected Showcase Section */}
+      {/* Kinetic Archive Lookbook & */}
+      {/* Tech Stack Marquee Section */}
       <section className="showcase-section" id="works">
         <div className="showcase-header">
           <div className="header-left">
-            <span className="eyebrow">01 // CURATED EXHIBITION</span>
-            <h2>SELECTED SHOWCASE.</h2>
+            <span className="eyebrow">01 // VISUAL INDEX & ARCHITECTURE</span>
+            <h2>ARCHIVAL LOOKBOOK.</h2>
           </div>
           <div className="header-right">
             <p className="header-desc">
-              아키텍처 설계부터 배포까지 직접 주도한 대표 프로덕트입니다.
-              <br />각 플레이트를 선택해 상세 명세와 커밋 로그를 확인하세요.
+              프론트엔드 아키텍처부터 서버리스·AI 워크플로우까지,
+              <br />
+              실제 배포된 프로덕트들의 시각적 단면과 기술 스펙트럼입니다.
             </p>
             <span className="index-counter">
-              [SHOWING 01 — 0{Math.max(showcaseProjects.length, 3)}]
+              [LIVE INDEX // {String(totalPublishedCount).padStart(2, "0")}{" "}
+              SPECIMENS]
             </span>
           </div>
         </div>
 
-        {/* 큐레이션 플레이트 리스트 */}
-        <div className="showcase-plates">
-          {isProjectsLoading
-            ? Array.from({ length: 3 }).map((_, idx) => (
-                <div key={idx} className="showcase-plate is-skeleton">
-                  <div className="plate-media skeleton-box" />
-                  <div className="plate-meta">
-                    <div className="skeleton-line short" />
-                    <div className="skeleton-line title" />
-                  </div>
-                </div>
-              ))
-            : showcaseProjects.map((item, idx) => (
-                <Link
-                  href={item.linkUrl}
-                  key={item.id}
-                  className={`showcase-plate ${idx % 2 === 1 ? "is-reversed" : ""}`}
-                >
-                  {/* 비주얼 프레임 */}
-                  <div className="plate-media">
-                    <div className="media-inner">
-                      <img src={item.imageUrl} alt={item.title} />
-                    </div>
-                    <span className="floating-cta">VIEW SPECIMEN ↗</span>
-                  </div>
-
-                  {/* 에디토리얼 메타 정보 */}
-                  <div className="plate-meta">
-                    <div className="meta-top">
-                      <span className="specimen-num">{item.indexLabel}</span>
-                      {item.commitCount > 0 && (
-                        <span className="repo-telemetry">
-                          ● {item.commitCount} COMMITS
-                        </span>
-                      )}
-                    </div>
-
-                    <h3 className="plate-title">{item.title}</h3>
-
-                    <div className="plate-tags">
-                      {item.categories.slice(0, 3).map((tag, tagIdx) => (
-                        <span key={tagIdx} className="tag-pill">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="plate-footer">
-                      <span className="inspect-link">INSPECT CASE STUDY</span>
-                      <span className="arrow-circle">→</span>
-                    </div>
-                  </div>
-                </Link>
+        {/* 1. 자동 연동 프로젝트 썸네일 키네틱 필름스트립 (좌측 흐름) */}
+        <div className="kinetic-filmstrip-wrapper">
+          {isProjectsLoading ? (
+            <div className="filmstrip-skeleton-row">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="film-frame-skeleton" />
               ))}
+            </div>
+          ) : (
+            <div className="kinetic-filmstrip-track">
+              {/* 무한 루프를 위해 2회 복제 렌더링 */}
+              {[...heroBgSlides, ...heroBgSlides].map((slide, idx) => {
+                const serialNum = (idx % heroBgSlides.length) + 1;
+                return (
+                  <div
+                    key={`${slide.id}-${idx}`}
+                    className="filmstrip-frame"
+                    aria-hidden={idx >= heroBgSlides.length}
+                  >
+                    <div className="frame-meta">
+                      <span>FIG. {String(serialNum).padStart(2, "0")}</span>
+                      <span>35MM // ARCHIVE</span>
+                    </div>
+                    <div className="frame-image">
+                      <img src={slide.imageUrl} alt="" loading="lazy" />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
-        {/* /works 전체 인덱스 유도 풀-와이드 게이트웨이 배너 */}
+        {/* 2. 공식 아이콘 기반 핵심 기술 스택 마키 (우측 역방향 흐름) */}
+        <div className="kinetic-stack-wrapper">
+          <div className="kinetic-stack-track">
+            {[...TECH_STACK_ITEMS, ...TECH_STACK_ITEMS].map((tech, idx) => (
+              <div
+                key={`${tech.name}-${idx}`}
+                className="stack-marquee-chip"
+                aria-hidden={idx >= TECH_STACK_ITEMS.length}
+              >
+                <img
+                  src={`https://cdn.simpleicons.org/${tech.slug}/111111`}
+                  alt={tech.name}
+                  width={18}
+                  height={18}
+                  loading="lazy"
+                />
+                <span>{tech.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 3. /works 전체 아카이브 유도 풀-와이드 게이트웨이 배너 */}
         <Link href="/works" className="works-gateway-banner">
           <div className="gateway-left">
-            <span className="gateway-eyebrow">COMPLETE REPOSITORY INDEX</span>
+            <span className="gateway-eyebrow">
+              INSPECT SOURCE CODE, TROUBLESHOOTING & COMMITS
+            </span>
             <strong className="gateway-title">
               EXPLORE FULL WORKS ARCHIVE
             </strong>
