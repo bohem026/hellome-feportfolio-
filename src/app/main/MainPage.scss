@@ -355,67 +355,368 @@ body {
   }
 
   /* Works Section */
-  .works-section {
-    padding: 60px 0;
+  .showcase-section {
+    padding: 6rem 4rem;
+    border-bottom: 1px solid #dfdeda;
 
-    .works-list {
+    @media (max-width: 1024px) {
+      padding: 4.5rem 2.5rem;
+    }
+
+    @media (max-width: 768px) {
+      padding: 3.5rem 1.5rem;
+    }
+
+    .showcase-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid #111111;
+      margin-bottom: 4rem;
+
+      .header-left {
+        .eyebrow {
+          display: block;
+          font-family: monospace;
+          font-size: 0.72rem;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          color: #666666;
+          margin-bottom: 0.65rem;
+        }
+
+        h2 {
+          margin: 0;
+          font-size: clamp(2.1rem, 4vw, 3.4rem);
+          font-weight: 900;
+          letter-spacing: -0.03em;
+          line-height: 0.98;
+          color: #111111;
+        }
+      }
+
+      .header-right {
+        text-align: right;
+
+        @media (max-width: 768px) {
+          text-align: left;
+        }
+
+        .header-desc {
+          font-size: 0.88rem;
+          line-height: 1.6;
+          color: #444444;
+          margin: 0 0 0.75rem 0;
+          word-break: keep-all;
+        }
+
+        .index-counter {
+          font-family: monospace;
+          font-size: 0.72rem;
+          font-weight: 800;
+          color: #111111;
+        }
+      }
+    }
+
+    /* 큐레이션 플레이트 리스트 */
+    .showcase-plates {
       display: flex;
       flex-direction: column;
-      gap: 40px;
-      margin-top: 30px;
+      gap: 4.5rem;
+      margin-bottom: 4.5rem;
 
-      .work-card {
+      .showcase-plate {
         display: grid;
-        grid-template-columns: 1fr 1.5fr;
-        gap: 30px;
-        align-items: center;
-        background: $bg-secondary;
-        padding: 30px;
+        grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+        gap: 3rem;
+        align-items: stretch;
+        text-decoration: none;
+        color: #111111;
+        border: 1px solid #dfdeda;
+        background-color: #ffffff;
+        transition:
+          border-color 0.25s ease,
+          box-shadow 0.25s ease;
 
-        &__info {
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          height: 100%;
+        &.is-reversed {
+          grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
 
-          .category {
-            font-size: 10px;
-            font-weight: 700;
-            color: $text-muted;
+          .plate-media {
+            order: 2;
           }
-
-          .title {
-            font-size: 32px;
-            font-weight: 900;
-            margin: 16px 0;
-            letter-spacing: -0.01em;
-          }
-
-          .description {
-            font-size: 13px;
-            line-height: 1.5;
-            color: $text-muted;
-            margin-bottom: 40px;
-          }
-
-          .explore-btn {
-            font-size: 11px;
-            font-weight: 700;
-            color: $text-main;
-            text-decoration: none;
+          .plate-meta {
+            order: 1;
           }
         }
 
-        &__media img {
-          width: 100%;
-          height: 320px;
-          object-fit: cover;
-          filter: grayscale(100%);
-          transition: filter 0.3s ease;
+        @media (max-width: 960px) {
+          grid-template-columns: 1fr !important;
+          gap: 0;
 
-          &:hover {
-            filter: grayscale(0%);
+          .plate-media,
+          .plate-meta {
+            order: unset !important;
           }
+        }
+
+        &:hover {
+          border-color: #111111;
+          box-shadow: 8px 8px 0px #111111;
+
+          .plate-media {
+            .media-inner img {
+              filter: grayscale(0%) contrast(1.02);
+              transform: scale(1.05);
+            }
+
+            .floating-cta {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          .plate-meta .plate-footer .arrow-circle {
+            background-color: #111111;
+            color: #ffffff;
+            transform: translateX(4px);
+          }
+        }
+
+        /* 비주얼 프레임 */
+        .plate-media {
+          position: relative;
+          overflow: hidden;
+          min-height: 360px;
+          background-color: #ecece9;
+
+          @media (max-width: 768px) {
+            min-height: 240px;
+          }
+
+          .media-inner {
+            width: 100%;
+            height: 100%;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              display: block;
+              filter: grayscale(100%) contrast(1.06);
+              transition:
+                filter 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+          }
+
+          .floating-cta {
+            position: absolute;
+            bottom: 1.25rem;
+            left: 1.25rem;
+            background-color: #111111;
+            color: #ffffff;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            padding: 0.5rem 0.9rem;
+            opacity: 0;
+            transform: translateY(8px);
+            transition:
+              opacity 0.25s ease,
+              transform 0.25s ease;
+          }
+        }
+
+        /* 에디토리얼 메타 영역 */
+        .plate-meta {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          padding: 2.5rem 2.25rem;
+
+          @media (max-width: 768px) {
+            padding: 1.75rem 1.5rem;
+          }
+
+          .meta-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+
+            .specimen-num {
+              font-family: monospace;
+              font-size: 0.72rem;
+              font-weight: 800;
+              letter-spacing: 0.08em;
+              background-color: #111111;
+              color: #ffffff;
+              padding: 0.25rem 0.6rem;
+            }
+
+            .repo-telemetry {
+              font-family: monospace;
+              font-size: 0.7rem;
+              font-weight: 700;
+              color: #555555;
+            }
+          }
+
+          .plate-title {
+            margin: 0 0 1.25rem 0;
+            font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            word-break: break-word;
+          }
+
+          .plate-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-bottom: 2.5rem;
+
+            .tag-pill {
+              font-size: 0.7rem;
+              font-weight: 700;
+              padding: 0.3rem 0.65rem;
+              border: 1px solid #d4d4d0;
+              background-color: #faf9f6;
+              color: #222222;
+            }
+          }
+
+          .plate-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.25rem;
+            border-top: 1px solid #eaeae6;
+
+            .inspect-link {
+              font-size: 0.74rem;
+              font-weight: 800;
+              letter-spacing: 0.08em;
+            }
+
+            .arrow-circle {
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              width: 34px;
+              height: 34px;
+              border: 1px solid #111111;
+              font-size: 0.9rem;
+              font-weight: 800;
+              transition:
+                background-color 0.2s ease,
+                color 0.2s ease,
+                transform 0.2s ease;
+            }
+          }
+        }
+
+        /* 로딩 스켈레톤 */
+        &.is-skeleton {
+          pointer-events: none;
+
+          .skeleton-box {
+            background-color: #ecece9;
+          }
+
+          .skeleton-line {
+            height: 16px;
+            background-color: #ecece9;
+            margin-bottom: 1rem;
+
+            &.short {
+              width: 30%;
+            }
+            &.title {
+              width: 75%;
+              height: 32px;
+            }
+          }
+        }
+      }
+    }
+
+    /* /works 전체 아카이브 유도 게이트웨이 배너 */
+    .works-gateway-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding: 2rem 2.5rem;
+      border: 1px solid #111111;
+      background-color: #faf9f6;
+      color: #111111;
+      text-decoration: none;
+      transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+
+      @media (max-width: 768px) {
+        padding: 1.5rem;
+      }
+
+      &:hover {
+        background-color: #111111;
+        color: #ffffff;
+
+        .gateway-eyebrow,
+        .gateway-count {
+          color: #cccccc;
+        }
+
+        .gateway-arrow {
+          transform: translateX(6px);
+        }
+      }
+
+      .gateway-left {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+
+        .gateway-eyebrow {
+          font-family: monospace;
+          font-size: 0.68rem;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          color: #666666;
+        }
+
+        .gateway-title {
+          font-size: clamp(1.15rem, 2vw, 1.55rem);
+          font-weight: 900;
+          letter-spacing: -0.02em;
+        }
+      }
+
+      .gateway-right {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+
+        .gateway-count {
+          font-family: monospace;
+          font-size: 0.85rem;
+          font-weight: 800;
+          color: #555555;
+        }
+
+        .gateway-arrow {
+          font-size: 1.4rem;
+          font-weight: 800;
+          transition: transform 0.2s ease;
         }
       }
     }

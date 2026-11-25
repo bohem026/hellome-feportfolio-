@@ -19,3 +19,14 @@ export interface FAQItem {
   question: string;
   answer: string;
 }
+
+export interface ShowcaseItem {
+  id: number | string;
+  indexLabel: string;
+  title: string;
+  categories: string[];
+  imageUrl: string;
+  commitCount: number;
+  stars: number;
+  linkUrl: string;
+}

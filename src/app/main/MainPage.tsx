@@ -12,6 +12,9 @@ export function MainPage() {
     bgSlideIdx,
     currentBgItem,
     keywordIdx,
+    isProjectsLoading,
+    showcaseProjects,
+    totalPublishedCount,
     featuredWorks,
     processSteps,
     faqs,
@@ -79,30 +82,95 @@ export function MainPage() {
         </div>
       </section>
 
-      {/* Featured Works Section */}
-      <section className="works-section" id="works">
-        <div className="section-header">
-          <span>INDEXED WORKS / RECENT COMMISSIONS</span>
-          <span>[01 — 03]</span>
+      {/* Selected Showcase Section */}
+      <section className="showcase-section" id="works">
+        <div className="showcase-header">
+          <div className="header-left">
+            <span className="eyebrow">01 // CURATED EXHIBITION</span>
+            <h2>SELECTED SHOWCASE.</h2>
+          </div>
+          <div className="header-right">
+            <p className="header-desc">
+              아키텍처 설계부터 배포까지 직접 주도한 대표 프로덕트입니다.
+              <br />각 플레이트를 선택해 상세 명세와 커밋 로그를 확인하세요.
+            </p>
+            <span className="index-counter">
+              [SHOWING 01 — 0{Math.max(showcaseProjects.length, 3)}]
+            </span>
+          </div>
         </div>
 
-        <div className="works-list">
-          {featuredWorks.map((work) => (
-            <article className="work-card" key={work.id}>
-              <div className="work-card__info">
-                <span className="category">{work.category}</span>
-                <h2 className="title">{work.title}</h2>
-                <p className="description">{work.description}</p>
-                <a href={work.linkUrl} className="explore-btn">
-                  EXPLORE ARCHIVE ↗
-                </a>
-              </div>
-              <div className="work-card__media">
-                <img src={work.imageUrl} alt={work.title} />
-              </div>
-            </article>
-          ))}
+        {/* 큐레이션 플레이트 리스트 */}
+        <div className="showcase-plates">
+          {isProjectsLoading
+            ? Array.from({ length: 3 }).map((_, idx) => (
+                <div key={idx} className="showcase-plate is-skeleton">
+                  <div className="plate-media skeleton-box" />
+                  <div className="plate-meta">
+                    <div className="skeleton-line short" />
+                    <div className="skeleton-line title" />
+                  </div>
+                </div>
+              ))
+            : showcaseProjects.map((item, idx) => (
+                <Link
+                  href={item.linkUrl}
+                  key={item.id}
+                  className={`showcase-plate ${idx % 2 === 1 ? "is-reversed" : ""}`}
+                >
+                  {/* 비주얼 프레임 */}
+                  <div className="plate-media">
+                    <div className="media-inner">
+                      <img src={item.imageUrl} alt={item.title} />
+                    </div>
+                    <span className="floating-cta">VIEW SPECIMEN ↗</span>
+                  </div>
+
+                  {/* 에디토리얼 메타 정보 */}
+                  <div className="plate-meta">
+                    <div className="meta-top">
+                      <span className="specimen-num">{item.indexLabel}</span>
+                      {item.commitCount > 0 && (
+                        <span className="repo-telemetry">
+                          ● {item.commitCount} COMMITS
+                        </span>
+                      )}
+                    </div>
+
+                    <h3 className="plate-title">{item.title}</h3>
+
+                    <div className="plate-tags">
+                      {item.categories.slice(0, 3).map((tag, tagIdx) => (
+                        <span key={tagIdx} className="tag-pill">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="plate-footer">
+                      <span className="inspect-link">INSPECT CASE STUDY</span>
+                      <span className="arrow-circle">→</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
         </div>
+
+        {/* /works 전체 인덱스 유도 풀-와이드 게이트웨이 배너 */}
+        <Link href="/works" className="works-gateway-banner">
+          <div className="gateway-left">
+            <span className="gateway-eyebrow">COMPLETE REPOSITORY INDEX</span>
+            <strong className="gateway-title">
+              EXPLORE FULL WORKS ARCHIVE
+            </strong>
+          </div>
+          <div className="gateway-right">
+            <span className="gateway-count">
+              [{String(totalPublishedCount).padStart(2, "0")} SPECIMENS]
+            </span>
+            <span className="gateway-arrow">→</span>
+          </div>
+        </Link>
       </section>
 
       {/* Client List Banner */}
