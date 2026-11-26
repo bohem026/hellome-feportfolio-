@@ -7,6 +7,7 @@ import {
   PROCESS_STEPS,
   FAQS,
   KINETIC_KEYWORDS,
+  DOSSIER_TERMINAL_ENTRIES,
 } from "@/constants";
 import { WorkItem, ProcessItem, FAQItem, ShowcaseItem } from "@/types";
 
@@ -23,6 +24,10 @@ export function useMainPage() {
   // 3. 마우스 스포트라이트 그리드 좌표
   const heroRef = useRef<HTMLElement | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const [entryIdx, setEntryIdx] = useState(0);
+  const [typedText, setTypedText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const toggleFaq = (id: number) => {
     setOpenFaq((prev) => (prev === id ? null : id));
@@ -123,6 +128,46 @@ export function useMainPage() {
   }, [heroBgSlides.length]);
 
   /**
+   * CMD 터미널 타이핑 & 삭제 이펙트
+   */
+  useEffect(() => {
+    const currentEntry = DOSSIER_TERMINAL_ENTRIES[entryIdx];
+    const fullText = currentEntry.text;
+
+    let timer: ReturnType<typeof setTimeout>;
+
+    if (!isDeleting && typedText.length < fullText.length) {
+      // 타이핑 진행
+      timer = setTimeout(() => {
+        setTypedText(fullText.slice(0, typedText.length + 1));
+      }, 38);
+    } else if (!isDeleting && typedText.length === fullText.length) {
+      // 문장 완성 후 가독 대기 (2.4초)
+      timer = setTimeout(() => {
+        setIsDeleting(true);
+      }, 2400);
+    } else if (isDeleting && typedText.length > 0) {
+      // 빠른 역순 삭제
+      timer = setTimeout(() => {
+        setTypedText(fullText.slice(0, typedText.length - 1));
+      }, 18);
+    } else if (isDeleting && typedText.length === 0) {
+      // 다음 이력/역량 항목으로 전환
+      setIsDeleting(false);
+      setEntryIdx((prev) => (prev + 1) % DOSSIER_TERMINAL_ENTRIES.length);
+    }
+
+    return () => clearTimeout(timer);
+  }, [typedText, isDeleting, entryIdx]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setKeywordIdx((prev) => (prev + 1) % KINETIC_KEYWORDS.length);
+    }, 2800);
+    return () => clearInterval(interval);
+  }, []);
+
+  /**
    * 히어로 섹션 마우스 현재 위치 추적 핸들러
    */
   const handleHeroMouseMove = (e: React.MouseEvent<HTMLElement>) => {
@@ -136,6 +181,8 @@ export function useMainPage() {
   const currentBgItem =
     heroBgSlides[bgSlideIdx % Math.max(heroBgSlides.length, 1)];
 
+  const currentTerminalCmd = DOSSIER_TERMINAL_ENTRIES[entryIdx].cmd;
+
   return {
     heroRef,
     heroBgSlides,
@@ -145,7 +192,11 @@ export function useMainPage() {
     isProjectsLoading,
     showcaseProjects,
     totalPublishedCount,
-    featuredWorks,
+    currentTerminalCmd,
+    typedText,
+    terminalStepLabel: `${String(entryIdx + 1).padStart(2, "0")} / ${String(
+      DOSSIER_TERMINAL_ENTRIES.length,
+    ).padStart(2, "0")}`,
     processSteps,
     faqs,
     openFaq,

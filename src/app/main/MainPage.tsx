@@ -10,12 +10,14 @@ export function MainPage() {
     heroRef,
     heroBgSlides,
     bgSlideIdx,
-    // currentBgItem,
+    currentBgItem,
     keywordIdx,
     isProjectsLoading,
-    // showcaseProjects,
+    showcaseProjects,
     totalPublishedCount,
-    // featuredWorks,
+    currentTerminalCmd,
+    typedText,
+    terminalStepLabel,
     processSteps,
     faqs,
     openFaq,
@@ -159,19 +161,39 @@ export function MainPage() {
         </div>
       </section>
 
-      {/* Client List Banner */}
-      <section className="banner-names">
-        <div className="banner-names__header">
-          CLIENT ROSTER // ARCHIVAL INDEX
+      {/* Section 3: CMD Terminal Auto-Typing Area */}
+      <aside className="dossier-telemetry">
+        <div className="cmd-terminal-card">
+          {/* 터미널 상단 타이틀 바 */}
+          <div className="cmd-terminal__head">
+            <div className="head-left">
+              <span className="status-dot" />
+              <span>DOSSIER_STREAM.EXE</span>
+            </div>
+            <span className="step-counter">[{terminalStepLabel}]</span>
+          </div>
+
+          {/* 현재 실행 중인 커맨드 라인 */}
+          <div className="cmd-terminal__prompt-bar">
+            <span className="prompt-text">{currentTerminalCmd}</span>
+          </div>
+
+          {/* 타이핑 & 삭제 루프 스크린 (고정 높이로 레이아웃 흔들림 방지) */}
+          <div className="cmd-terminal__screen">
+            <textarea
+              readOnly
+              value={`${typedText}█`}
+              aria-label="개발 이력 및 핵심 역량 요약 터미널"
+            />
+          </div>
+
+          {/* /about 전체 프로필 유도 하단 게이트웨이 */}
+          <Link href="/about" className="cmd-terminal__foot">
+            <span>READ FULL BIO, TIMELINE &amp; RESUME</span>
+            <span>→</span>
+          </Link>
         </div>
-        <h2 className="banner-names__list">
-          HUNTER YEANY
-          <br />
-          VELOCE
-          <br />
-          WALKER
-        </h2>
-      </section>
+      </aside>
 
       {/* Thoughtful Process */}
       <section className="process-section">

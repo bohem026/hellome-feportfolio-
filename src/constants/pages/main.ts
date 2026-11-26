@@ -133,3 +133,22 @@ export const TECH_STACK_ITEMS = [
   { name: "GIT", slug: "git" },
   { name: "FIGMA", slug: "figma" },
 ];
+
+export const DOSSIER_TERMINAL_ENTRIES = [
+  {
+    cmd: "$ whoami --role",
+    text: "주후산 (Joo Husan) — Frontend Systems Engineer.\n사용자 경험의 디테일과 예측 가능한 데이터 아키텍처를 설계합니다.",
+  },
+  {
+    cmd: "$ cat ./education/background.log",
+    text: "홍익대학교 컴퓨터공학과 전공 및 이스트소프트(ESTsoft)\n오르미 프론트엔드 13기 과정 수료 · 실전 웹 서비스 설계 및 배포 주도.",
+  },
+  {
+    cmd: "$ inspect --core-stack",
+    text: "React · Next.js (App Router) · TypeScript · SCSS 모듈 시스템.\n1px 그리드 규율과 WCAG 웹 접근성·Lighthouse 성능 최적화를 지향합니다.",
+  },
+  {
+    cmd: "$ run --serverless-ai-pipeline",
+    text: "Supabase (PostgreSQL, Auth, RLS, Edge Functions) & OpenAI API.\n데이터 동기화부터 AI 자동 요약·실시간 응대 챗봇까지 엔드투엔드 구축.",
+  },
+];
