@@ -33,6 +33,8 @@ body {
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 24px;
+  background-color: #faf9f6;
+  color: #111111;
 
   /* Header */
   .header {
@@ -129,19 +131,19 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 74vh;
-    padding: 5.5rem 4rem;
-    border-bottom: 1px solid #dfdeda;
+    min-height: 82vh;
+    padding: 7.5rem 4rem;
+    background-color: #faf9f6;
     --mouse-x: 50%;
     --mouse-y: 35%;
 
     @media (max-width: 1024px) {
-      padding: 4.5rem 2.5rem;
+      padding: 6rem 2.5rem;
     }
 
     @media (max-width: 768px) {
       min-height: auto;
-      padding: 3.75rem 1.5rem;
+      padding: 4.5rem 1.5rem;
     }
 
     /* 1. 게시된 프로젝트 썸네일 배경 슬라이드쇼 (상하 전체 확장) */
@@ -183,13 +185,21 @@ body {
       .bg-slide-vignette {
         position: absolute;
         inset: 0;
-        background: linear-gradient(
-          90deg,
-          #faf9f6 24%,
-          rgba(250, 249, 246, 0.78) 48%,
-          rgba(250, 249, 246, 0.16) 78%,
-          rgba(250, 249, 246, 0.05) 100%
-        );
+        background:
+          linear-gradient(
+            180deg,
+            #faf9f6 0%,
+            rgba(250, 249, 246, 0) 14%,
+            rgba(250, 249, 246, 0) 84%,
+            #faf9f6 100%
+          ),
+          linear-gradient(
+            90deg,
+            #faf9f6 24%,
+            rgba(250, 249, 246, 0.78) 48%,
+            rgba(250, 249, 246, 0.16) 78%,
+            rgba(250, 249, 246, 0.05) 100%
+          );
       }
     }
 
@@ -257,9 +267,9 @@ body {
 
           .hero__lead {
             font-size: 0.98rem;
-            line-height: 1.7;
+            line-height: 1.75;
             color: #222222;
-            margin-bottom: 2.25rem;
+            margin-bottom: 2.5rem;
             word-break: keep-all;
           }
 
@@ -356,12 +366,16 @@ body {
 
   /* Showcase Section */
   .showcase-section {
-    padding: 5.5rem 0 0 0;
-    border-bottom: 1px solid #dfdeda;
+    padding: 8.5rem 0;
+    background-color: #faf9f6;
     overflow: hidden;
 
+    @media (max-width: 1024px) {
+      padding: 6.5rem 0;
+    }
+
     @media (max-width: 768px) {
-      padding: 3.75rem 0 0 0;
+      padding: 5rem 0;
     }
 
     .showcase-header {
@@ -370,14 +384,14 @@ body {
       align-items: flex-end;
       flex-wrap: wrap;
       gap: 1.5rem;
-      padding: 0 1.5rem 2rem 4rem;
+      padding: 0 1.5rem 2.5rem 4rem;
 
       @media (max-width: 1024px) {
-        padding: 0 2.5rem 2rem 2.5rem;
+        padding: 0 1.25rem 2rem 2.5rem;
       }
 
       @media (max-width: 768px) {
-        padding: 0 1.5rem 1.75rem 1.5rem;
+        padding: 0 1rem 1.75rem 1.5rem;
       }
 
       .header-left {
@@ -388,7 +402,7 @@ body {
           font-weight: 800;
           letter-spacing: 0.08em;
           color: #666666;
-          margin-bottom: 0.65rem;
+          margin-bottom: 0.75rem;
         }
 
         h2 {
@@ -401,8 +415,6 @@ body {
         }
       }
 
-      /* 헤드라인 우측 /works CTA 버튼 */
-      /* 수정: 배경 제거 및 밑줄 처리된 간결한 링크로 수정 */
       .header-right {
         .works-header-cta {
           display: inline-flex;
@@ -430,15 +442,13 @@ body {
       }
     }
 
-    /* 연속된 띠 형태의 썸네일 필름스트립 */
-    /* 수정: 크기 확대 */
     .kinetic-filmstrip-wrapper {
       position: relative;
       width: 100%;
       overflow: hidden;
       border-top: 1px solid rgba(17, 17, 17, 0.14);
       border-bottom: 1px solid rgba(17, 17, 17, 0.14);
-      background-color: #ffffff;
+      background-color: #faf9f6;
 
       .filmstrip-skeleton-row {
         display: flex;
@@ -459,10 +469,10 @@ body {
         animation: marqueeScrollLeft 64s linear infinite;
 
         .filmstrip-frame {
-          flex: 0 0 460px; // ✅ 가로 너비 확대 (360px -> 460px)
+          flex: 0 0 460px;
           border-right: 1px solid rgba(17, 17, 17, 0.14);
-          background-color: #ffffff;
-          padding: 0.85rem;
+          background-color: #faf9f6;
+          padding: 0.9rem;
 
           @media (max-width: 768px) {
             flex: 0 0 320px;
@@ -484,7 +494,7 @@ body {
 
           .frame-image {
             width: 100%;
-            height: 285px; // ✅ 세로 높이 확대 (215px -> 285px)
+            height: 285px;
             overflow: hidden;
             background-color: #ecece9;
 
@@ -504,12 +514,11 @@ body {
       }
     }
 
-    /* 연속된 띠 형태의 기술 스택 */
-    /* 추가: 여백 제거 + 반투명 테두리 + 느린 속도 */
     .kinetic-stack-wrapper {
       position: relative;
       width: 100%;
       overflow: hidden;
+      border-bottom: 1px solid rgba(17, 17, 17, 0.14);
       background-color: #faf9f6;
 
       .kinetic-stack-track {
@@ -522,7 +531,7 @@ body {
           display: inline-flex;
           align-items: center;
           gap: 0.6rem;
-          padding: 0.95rem 1.45rem;
+          padding: 1rem 1.5rem;
           border-right: 1px solid rgba(17, 17, 17, 0.14);
           background-color: #faf9f6;
           font-family: monospace;
@@ -560,338 +569,261 @@ body {
     }
   }
 
-  /* 우측 CMD 스타일 개발 이력 & 역량 타이핑 터미널 */
-  .dossier-telemetry {
-    .cmd-terminal-card {
-      border: 1px solid #111111;
-      background-color: #111111;
-      box-shadow: 6px 6px 0px #111111;
+  /* Terminal Auto-Typing Section */
+  .dossier-section {
+    padding: 8.5rem 0;
+    background-color: #faf9f6;
 
-      .cmd-terminal__head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.8rem 1.15rem;
-        background-color: #f4f4f0;
-        border-bottom: 1px solid #111111;
-        font-family: monospace;
-        font-size: 0.68rem;
-        font-weight: 800;
-        letter-spacing: 0.06em;
-        color: #111111;
+    @media (max-width: 1024px) {
+      padding: 6.5rem 0;
+    }
 
-        .head-left {
-          display: flex;
+    @media (max-width: 768px) {
+      padding: 5rem 0;
+    }
+
+    .dossier-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding: 0 1.5rem 2.5rem 4rem;
+      margin-bottom: 4rem;
+
+      @media (max-width: 1024px) {
+        padding: 0 1.25rem 2rem 2.5rem;
+        margin-bottom: 3rem;
+      }
+
+      @media (max-width: 768px) {
+        padding: 0 1rem 1.75rem 1.5rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .header-left {
+        .eyebrow {
+          display: block;
+          font-family: monospace;
+          font-size: 0.72rem;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          color: #666666;
+          margin-bottom: 0.75rem;
+        }
+
+        h2 {
+          margin: 0;
+          font-size: clamp(2.1rem, 4vw, 3.4rem);
+          font-weight: 900;
+          letter-spacing: -0.03em;
+          line-height: 0.98;
+          color: #111111;
+        }
+      }
+
+      .header-right {
+        .dossier-header-cta {
+          display: inline-flex;
           align-items: center;
-          gap: 0.5rem;
+          gap: 0.45rem;
+          padding: 0 0 0.25rem 0;
+          border-bottom: 1px solid #111111;
+          color: #111111;
+          text-decoration: none;
+          font-size: 0.7rem;
+          font-weight: 800;
+          letter-spacing: 0.06em;
 
-          .status-dot {
-            display: inline-block;
-            width: 7px;
-            height: 7px;
-            background-color: #111111;
-            animation: cursorBlink 1.1s steps(2, start) infinite;
+          .cta-arrow {
+            font-size: 0.85rem;
+          }
+        }
+      }
+    }
+
+    .dossier-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: 5rem;
+      padding: 0 4rem;
+      align-items: start;
+
+      @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+        gap: 3.5rem;
+        padding: 0 2.5rem;
+      }
+
+      @media (max-width: 768px) {
+        padding: 0 1.5rem;
+      }
+    }
+
+    /* 좌측 매니페스토 및 3대 원칙 */
+    .dossier-manifesto {
+      .manifesto-quote {
+        margin: 0 0 3.25rem 0;
+        padding-left: 1.5rem;
+        border-left: 3px solid #111111;
+        font-size: clamp(1.15rem, 1.85vw, 1.45rem);
+        font-weight: 800;
+        line-height: 1.55;
+        letter-spacing: -0.02em;
+        color: #111111;
+        word-break: keep-all;
+      }
+
+      .principles-list {
+        border-top: 1px solid rgba(17, 17, 17, 0.14);
+
+        .principle-row {
+          display: grid;
+          grid-template-columns: 44px minmax(0, 1fr);
+          gap: 1rem;
+          padding: 1.9rem 0;
+          border-bottom: 1px solid rgba(17, 17, 17, 0.14);
+
+          .principle-num {
+            font-family: monospace;
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: #666666;
+            padding-top: 0.15rem;
+          }
+
+          .principle-body {
+            h3 {
+              margin: 0 0 0.6rem 0;
+              font-size: 0.94rem;
+              font-weight: 900;
+              letter-spacing: 0.02em;
+              color: #111111;
+            }
+
+            p {
+              margin: 0;
+              font-size: 0.9rem;
+              line-height: 1.7;
+              color: #444444;
+              word-break: keep-all;
+            }
+          }
+        }
+      }
+    }
+
+    /* 우측 CMD 스타일 개발 이력 & 역량 타이핑 터미널 (section 태그) */
+    section.dossier-telemetry,
+    .dossier-telemetry {
+      padding: 0;
+      margin: 0;
+      background-color: transparent;
+
+      .cmd-terminal-card {
+        border: 1px solid #111111;
+        background-color: #111111;
+        box-shadow: 6px 6px 0px #111111;
+
+        .cmd-terminal__head {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.85rem 1.25rem;
+          background-color: #faf9f6;
+          border-bottom: 1px solid #111111;
+          font-family: monospace;
+          font-size: 0.68rem;
+          font-weight: 800;
+          letter-spacing: 0.06em;
+          color: #111111;
+
+          .head-left {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            .status-dot {
+              display: inline-block;
+              width: 7px;
+              height: 7px;
+              background-color: #111111;
+              animation: cursorBlink 1.1s steps(2, start) infinite;
+            }
+          }
+
+          .step-counter {
+            color: #666666;
           }
         }
 
-        .step-counter {
-          color: #666666;
-        }
-      }
-
-      .cmd-terminal__prompt-bar {
-        padding: 0.75rem 1.25rem;
-        background-color: #1a1a1a;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-        font-family: monospace;
-        font-size: 0.74rem;
-        font-weight: 700;
-        color: #9e9e98;
-      }
-
-      .cmd-terminal__screen {
-        padding: 1.35rem 1.25rem;
-        background-color: #111111;
-
-        textarea {
-          width: 100%;
-          height: 170px; // ✅ 타이핑/삭제 시에도 카드 높이가 흔들리지 않도록 고정
-          resize: none;
-          border: none;
-          outline: none;
-          background: transparent;
-          color: #f4f4f0;
+        .cmd-terminal__prompt-bar {
+          padding: 0.8rem 1.35rem;
+          background-color: #1a1a1a;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.12);
           font-family: monospace;
-          font-size: 0.84rem;
-          line-height: 1.75;
-          letter-spacing: -0.01em;
-          word-break: keep-all;
-          cursor: default;
-          overflow: hidden;
-        }
-      }
-
-      .cmd-terminal__foot {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1.05rem 1.25rem;
-        background-color: #ffffff;
-        border-top: 1px solid #111111;
-        color: #111111;
-        text-decoration: none;
-        font-family: monospace;
-        font-size: 0.72rem;
-        font-weight: 800;
-        letter-spacing: 0.05em;
-        transition:
-          background-color 0.15s ease,
-          color 0.15s ease;
-
-        &:hover {
-          background-color: #f4f4f0;
-        }
-      }
-    }
-  }
-
-  @keyframes cursorBlink {
-    0%,
-    49% {
-      opacity: 1;
-    }
-    50%,
-    100% {
-      opacity: 0;
-    }
-  }
-
-  /* Banner Names */
-  .banner-names {
-    padding: 60px 0;
-    border-top: 1px solid $border-color;
-    border-bottom: 1px solid $border-color;
-
-    &__header {
-      font-size: 10px;
-      font-weight: 700;
-      color: $text-muted;
-      margin-bottom: 20px;
-    }
-
-    &__list {
-      font-size: clamp(40px, 6vw, 72px);
-      font-weight: 900;
-      line-height: 1;
-      letter-spacing: -0.02em;
-    }
-  }
-
-  /* Thoughtful Process Section */
-  .process-section {
-    padding: 60px 0;
-
-    .process-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-top: 40px;
-
-      .process-card {
-        background: $bg-card;
-        padding: 24px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        min-height: 220px;
-
-        .step-num {
-          font-size: 10px;
+          font-size: 0.74rem;
           font-weight: 700;
-          color: $text-muted;
+          color: #9e9e98;
         }
 
-        h3 {
-          font-size: 18px;
-          font-weight: 800;
-          margin: 12px 0;
+        .cmd-terminal__screen {
+          padding: 1.5rem 1.35rem;
+          background-color: #111111;
+
+          textarea {
+            width: 100%;
+            height: 175px;
+            resize: none;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #faf9f6;
+            font-family: monospace;
+            font-size: 0.84rem;
+            line-height: 1.8;
+            letter-spacing: -0.01em;
+            word-break: keep-all;
+            cursor: default;
+            overflow: hidden;
+          }
         }
 
-        p {
-          font-size: 12px;
-          color: $text-muted;
-          line-height: 1.5;
-        }
-
-        .card-footer {
+        .cmd-terminal__foot {
           display: flex;
           justify-content: space-between;
-          font-size: 10px;
-          font-weight: 700;
-          color: $text-muted;
-          margin-top: 20px;
+          align-items: center;
+          padding: 1.1rem 1.35rem;
+          background-color: #faf9f6;
+          border-top: 1px solid #111111;
+          color: #111111;
+          text-decoration: none;
+          font-family: monospace;
+          font-size: 0.72rem;
+          font-weight: 800;
+          letter-spacing: 0.05em;
+          transition: background-color 0.15s ease;
+
+          &:hover {
+            background-color: #f0efe9;
+          }
         }
       }
     }
   }
 
-  /* Humble Brag & Awards */
-  .brag-section {
-    padding: 60px 0;
-
-    .award-blocks {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 10px;
-      margin-top: 40px;
-
-      .block {
-        padding: 16px;
-        height: 120px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        font-size: 11px;
-
-        h3 {
-          font-size: 16px;
-          font-weight: 900;
-        }
-
-        &--purple {
-          background: #220b38;
-          color: #fff;
-        }
-        &--mint {
-          background: #51ffb6;
-          color: #000;
-        }
-        &--green {
-          background: #006638;
-          color: #fff;
-        }
-        &--peach {
-          background: #fcd5ce;
-          color: #000;
-        }
-        &--lavender {
-          background: #e2c0ff;
-          color: #000;
-        }
-        &--black {
-          background: #000000;
-          color: #fff;
-        }
-      }
-    }
-
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: $border-color;
-      margin-top: 40px;
-
-      .metric-item {
-        background: $bg-primary;
-        padding: 30px 20px;
-
-        .label {
-          font-size: 10px;
-          color: $text-muted;
-          font-weight: 700;
-        }
-
-        .value {
-          font-size: 42px;
-          font-weight: 900;
-          margin: 10px 0;
-        }
-
-        .desc {
-          font-size: 10px;
-          font-weight: 700;
-          color: $text-muted;
-        }
-      }
-    }
-
-    .quote-box {
-      background: $bg-card;
-      padding: 40px;
-      margin-top: 40px;
-      display: grid;
-      grid-template-columns: 200px 1fr;
-      gap: 40px;
-
-      .author-info {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-
-        .avatar-placeholder {
-          width: 48px;
-          height: 48px;
-          background: #333;
-        }
-
-        strong {
-          display: block;
-          font-size: 12px;
-        }
-        span {
-          font-size: 10px;
-          color: $text-muted;
-        }
-      }
-
-      .quote-text {
-        font-size: 16px;
-        line-height: 1.6;
-        font-weight: 600;
-      }
-    }
-  }
-
-  /* FAQ Accordion Section */
+  /* 4. FAQ Accordion Section (상단 여백 확장 & 배경색 통일) */
   .faq-section {
-    padding: 60px 0;
+    padding: 8.5rem 4rem 9.5rem 4rem;
+    background-color: #faf9f6;
 
-    .faq-list {
-      margin-top: 30px;
-      border-top: 1px solid $border-color;
-
-      .faq-item {
-        border-bottom: 1px solid $border-color;
-        padding: 20px 0;
-        cursor: pointer;
-
-        .faq-question {
-          display: flex;
-          justify-content: space-between;
-          font-size: 14px;
-          font-weight: 800;
-        }
-
-        .faq-answer {
-          margin-top: 12px;
-          font-size: 13px;
-          color: $text-muted;
-          line-height: 1.6;
-        }
-      }
+    @media (max-width: 1024px) {
+      padding: 6.5rem 2.5rem 7.5rem 2.5rem;
     }
-  }
 
-  /* Footer */
-  .footer {
-    display: flex;
-    justify-content: space-between;
-    padding: 30px 0;
-    border-top: 1px solid $border-color;
-    font-size: 10px;
-    font-weight: 700;
-    color: $text-muted;
+    @media (max-width: 768px) {
+      padding: 5rem 1.5rem 6rem 1.5rem;
+    }
   }
 }
 
