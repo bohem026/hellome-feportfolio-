@@ -560,6 +560,228 @@ body {
     }
   }
 
+  /* Engineering Philosophy & Dossier Section */
+  .dossier-section {
+    padding: 6rem 0;
+    border-bottom: 1px solid #dfdeda;
+    background-color: #faf9f6;
+
+    @media (max-width: 768px) {
+      padding: 4rem 0;
+    }
+
+    .dossier-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding: 0 1.5rem 2.25rem 4rem;
+      border-bottom: 1px solid #111111;
+      margin-bottom: 3.5rem;
+
+      @media (max-width: 1024px) {
+        padding: 0 1.25rem 2rem 2.5rem;
+      }
+
+      @media (max-width: 768px) {
+        padding: 0 1rem 1.75rem 1.5rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .header-left {
+        .eyebrow {
+          display: block;
+          font-family: monospace;
+          font-size: 0.72rem;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          color: #666666;
+          margin-bottom: 0.65rem;
+        }
+
+        h2 {
+          margin: 0;
+          font-size: clamp(2.1rem, 4vw, 3.4rem);
+          font-weight: 900;
+          letter-spacing: -0.03em;
+          line-height: 0.98;
+          color: #111111;
+        }
+      }
+
+      .header-right {
+        .dossier-header-cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.45rem;
+          padding: 0 0 0.25rem 0;
+          border-bottom: 1px solid #111111;
+          color: #111111;
+          text-decoration: none;
+          font-size: 0.7rem;
+          font-weight: 800;
+          letter-spacing: 0.06em;
+
+          .cta-arrow {
+            font-size: 0.85rem;
+          }
+        }
+      }
+    }
+
+    .dossier-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: 4rem;
+      padding: 0 4rem;
+      align-items: start;
+
+      @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding: 0 2.5rem;
+      }
+
+      @media (max-width: 768px) {
+        padding: 0 1.5rem;
+      }
+    }
+
+    /* 좌측 매니페스토 및 3대 원칙 */
+    .dossier-manifesto {
+      .manifesto-quote {
+        margin: 0 0 2.75rem 0;
+        padding-left: 1.35rem;
+        border-left: 3px solid #111111;
+        font-size: clamp(1.15rem, 1.85vw, 1.45rem);
+        font-weight: 800;
+        line-height: 1.5;
+        letter-spacing: -0.02em;
+        color: #111111;
+        word-break: keep-all;
+      }
+
+      .principles-list {
+        border-top: 1px solid rgba(17, 17, 17, 0.16);
+
+        .principle-row {
+          display: grid;
+          grid-template-columns: 44px minmax(0, 1fr);
+          gap: 1rem;
+          padding: 1.65rem 0;
+          border-bottom: 1px solid rgba(17, 17, 17, 0.16);
+
+          .principle-num {
+            font-family: monospace;
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: #666666;
+            padding-top: 0.15rem;
+          }
+
+          .principle-body {
+            h3 {
+              margin: 0 0 0.5rem 0;
+              font-size: 0.92rem;
+              font-weight: 900;
+              letter-spacing: 0.02em;
+              color: #111111;
+            }
+
+            p {
+              margin: 0;
+              font-size: 0.88rem;
+              line-height: 1.65;
+              color: #444444;
+              word-break: keep-all;
+            }
+          }
+        }
+      }
+    }
+
+    /* 우측 실시간 시스템 텔레메트리 카드 */
+    .dossier-telemetry {
+      .telemetry-card {
+        border: 1px solid #111111;
+        background-color: #ffffff;
+
+        .telemetry-card__head {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.75rem 1.15rem;
+          border-bottom: 1px solid #111111;
+          background-color: #f4f4f0;
+          font-family: monospace;
+          font-size: 0.68rem;
+          font-weight: 800;
+          letter-spacing: 0.06em;
+          color: #111111;
+        }
+
+        .topology-diagram {
+          padding: 1.25rem 1rem;
+          border-bottom: 1px solid rgba(17, 17, 17, 0.14);
+          background-color: #faf9f6;
+
+          svg {
+            width: 100%;
+            height: auto;
+            display: block;
+          }
+        }
+
+        .telemetry-metrics {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+
+          .metric-cell {
+            padding: 1.25rem 1.15rem;
+            border-right: 1px solid rgba(17, 17, 17, 0.14);
+            border-bottom: 1px solid rgba(17, 17, 17, 0.14);
+
+            &:nth-child(2n) {
+              border-right: none;
+            }
+
+            .m-label {
+              display: block;
+              font-family: monospace;
+              font-size: 0.62rem;
+              font-weight: 700;
+              letter-spacing: 0.05em;
+              color: #777777;
+              margin-bottom: 0.4rem;
+            }
+
+            .m-val {
+              font-size: 1.45rem;
+              font-weight: 900;
+              letter-spacing: -0.02em;
+              color: #111111;
+            }
+          }
+        }
+
+        .telemetry-card__foot {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem 1.15rem;
+          background-color: #111111;
+          color: #ffffff;
+          text-decoration: none;
+          font-family: monospace;
+          font-size: 0.72rem;
+          font-weight: 800;
+          letter-spacing: 0.05em;
+        }
+      }
+    }
+  }
+
   /* Banner Names */
   .banner-names {
     padding: 60px 0;

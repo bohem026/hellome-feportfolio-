@@ -15,6 +15,7 @@ export function MainPage() {
     isProjectsLoading,
     // showcaseProjects,
     totalPublishedCount,
+    totalCommitCount,
     // featuredWorks,
     processSteps,
     faqs,
@@ -159,18 +160,232 @@ export function MainPage() {
         </div>
       </section>
 
-      {/* Client List Banner */}
-      <section className="banner-names">
-        <div className="banner-names__header">
-          CLIENT ROSTER // ARCHIVAL INDEX
+      {/* Section 03: Engineering Philosophy & */}
+      {/* Dossier (/about) */}
+      <section className="dossier-section" id="dossier">
+        <div className="dossier-header">
+          <div className="header-left">
+            <span className="eyebrow">
+              02 // ENGINEERING DOSSIER & PHILOSOPHY
+            </span>
+            <h2>SYSTEMS OVER SURFACE.</h2>
+          </div>
+
+          <div className="header-right">
+            <Link href="/about" className="dossier-header-cta">
+              <span className="cta-label">READ FULL DOSSIER & RESUME</span>
+              <span className="cta-arrow">→</span>
+            </Link>
+          </div>
         </div>
-        <h2 className="banner-names__list">
-          HUNTER YEANY
-          <br />
-          VELOCE
-          <br />
-          WALKER
-        </h2>
+
+        <div className="dossier-grid">
+          {/* 좌측 7 cols: 엔지니어링 선언문 & 3대 설계 원칙 */}
+          <div className="dossier-manifesto">
+            <blockquote className="manifesto-quote">
+              “견고한 프론트엔드 아키텍처는 화려한 시각 효과 이전에 예측 가능한
+              데이터 흐름과 타협 없는 디테일에서 완성됩니다.”
+            </blockquote>
+
+            <div className="principles-list">
+              <div className="principle-row">
+                <span className="principle-num">01</span>
+                <div className="principle-body">
+                  <h3>PREDICTABLE STATE & DATA FLOW</h3>
+                  <p>
+                    단방향 데이터 흐름과 엄격한 타입 시스템(TypeScript)을
+                    기반으로 복잡한 비동기 상태와 서버리스 동기화 로직을
+                    안전하게 격리합니다.
+                  </p>
+                </div>
+              </div>
+
+              <div className="principle-row">
+                <span className="principle-num">02</span>
+                <div className="principle-body">
+                  <h3>TOKENIZED DESIGN SYSTEMS & ACCESSIBILITY</h3>
+                  <p>
+                    1px 그리드 규율과 모듈형 스타일 토큰을 통해 일관된 UI
+                    확장성을 확보하고, 시맨틱 마크업과 웹 접근성(WCAG) 기준을
+                    준수합니다.
+                  </p>
+                </div>
+              </div>
+
+              <div className="principle-row">
+                <span className="principle-num">03</span>
+                <div className="principle-body">
+                  <h3>AI-AUGMENTED SERVERLESS PIPELINES</h3>
+                  <p>
+                    PostgreSQL·Edge Functions·LLM API를 유기적으로 결합해
+                    반복적인 콘텐츠 요약, 데이터 동기화, 사용자 응대
+                    워크플로우를 자동화합니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 우측 5 cols: 아키텍처 라인 다이어그램 & 실시간 DB 지표 */}
+          <aside className="dossier-telemetry">
+            <div className="telemetry-card">
+              <div className="telemetry-card__head">
+                <span>ARCHITECTURE TOPOLOGY</span>
+                <span>● LIVE METRICS</span>
+              </div>
+
+              {/* 1px 모노크롬 시스템 아키텍처 도식 */}
+              <div className="topology-diagram" aria-hidden="true">
+                <svg viewBox="0 0 360 150" fill="none">
+                  {/* 연결선 */}
+                  <line
+                    x1="95"
+                    y1="75"
+                    x2="145"
+                    y2="75"
+                    stroke="#111111"
+                    strokeWidth="1"
+                    strokeDasharray="3 3"
+                  />
+                  <line
+                    x1="215"
+                    y1="75"
+                    x2="265"
+                    y2="75"
+                    stroke="#111111"
+                    strokeWidth="1"
+                    strokeDasharray="3 3"
+                  />
+
+                  {/* Node 1: Client */}
+                  <rect
+                    x="15"
+                    y="45"
+                    width="80"
+                    height="60"
+                    fill="#ffffff"
+                    stroke="#111111"
+                    strokeWidth="1"
+                  />
+                  <text
+                    x="55"
+                    y="72"
+                    textAnchor="middle"
+                    fontSize="8"
+                    fontWeight="800"
+                    fill="#111111"
+                    fontFamily="monospace"
+                  >
+                    NEXT.JS
+                  </text>
+                  <text
+                    x="55"
+                    y="85"
+                    textAnchor="middle"
+                    fontSize="6.5"
+                    fill="#666666"
+                    fontFamily="monospace"
+                  >
+                    CLIENT UI
+                  </text>
+
+                  {/* Node 2: Edge / AI */}
+                  <rect
+                    x="145"
+                    y="45"
+                    width="70"
+                    height="60"
+                    fill="#111111"
+                    stroke="#111111"
+                    strokeWidth="1"
+                  />
+                  <text
+                    x="180"
+                    y="72"
+                    textAnchor="middle"
+                    fontSize="8"
+                    fontWeight="800"
+                    fill="#ffffff"
+                    fontFamily="monospace"
+                  >
+                    EDGE / AI
+                  </text>
+                  <text
+                    x="180"
+                    y="85"
+                    textAnchor="middle"
+                    fontSize="6.5"
+                    fill="#bbbbbb"
+                    fontFamily="monospace"
+                  >
+                    FUNCTIONS
+                  </text>
+
+                  {/* Node 3: DB */}
+                  <rect
+                    x="265"
+                    y="45"
+                    width="80"
+                    height="60"
+                    fill="#ffffff"
+                    stroke="#111111"
+                    strokeWidth="1"
+                  />
+                  <text
+                    x="305"
+                    y="72"
+                    textAnchor="middle"
+                    fontSize="8"
+                    fontWeight="800"
+                    fill="#111111"
+                    fontFamily="monospace"
+                  >
+                    SUPABASE
+                  </text>
+                  <text
+                    x="305"
+                    y="85"
+                    textAnchor="middle"
+                    fontSize="6.5"
+                    fill="#666666"
+                    fontFamily="monospace"
+                  >
+                    POSTGRES DB
+                  </text>
+                </svg>
+              </div>
+
+              {/* 실시간 DB 집계 지표 4칸 그리드 */}
+              <div className="telemetry-metrics">
+                <div className="metric-cell">
+                  <span className="m-label">PUBLISHED SYSTEMS</span>
+                  <strong className="m-val">
+                    {String(totalPublishedCount).padStart(2, "0")}
+                  </strong>
+                </div>
+                <div className="metric-cell">
+                  <span className="m-label">INDEXED COMMITS</span>
+                  <strong className="m-val">
+                    {totalCommitCount > 0 ? `${totalCommitCount}+` : "120+"}
+                  </strong>
+                </div>
+                <div className="metric-cell">
+                  <span className="m-label">CORE STACKS</span>
+                  <strong className="m-val">16+</strong>
+                </div>
+                <div className="metric-cell">
+                  <span className="m-label">BASE LOCATION</span>
+                  <strong className="m-val">SEOUL, KR</strong>
+                </div>
+              </div>
+
+              <Link href="/about" className="telemetry-card__foot">
+                <span>INSPECT EXPERIENCE, SKILLS & BIO</span>
+                <span>↗</span>
+              </Link>
+            </div>
+          </aside>
+        </div>
       </section>
 
       {/* Thoughtful Process */}

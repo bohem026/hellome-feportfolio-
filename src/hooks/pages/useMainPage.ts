@@ -136,6 +136,17 @@ export function useMainPage() {
   const currentBgItem =
     heroBgSlides[bgSlideIdx % Math.max(heroBgSlides.length, 1)];
 
+  /**
+   * 총 커밋 이력 누적 개수 추출
+   */
+  const totalCommitCount = useMemo(() => {
+    if (isProjectsLoading) return 0;
+    return publishedProjects.reduce((acc, proj) => {
+      const commits = proj.repository?.commit_history;
+      return acc + (Array.isArray(commits) ? commits.length : 0);
+    }, 0);
+  }, [publishedProjects, isProjectsLoading]);
+
   return {
     heroRef,
     heroBgSlides,
@@ -145,6 +156,7 @@ export function useMainPage() {
     isProjectsLoading,
     showcaseProjects,
     totalPublishedCount,
+    totalCommitCount,
     featuredWorks,
     processSteps,
     faqs,
