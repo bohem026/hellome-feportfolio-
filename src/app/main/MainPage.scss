@@ -570,243 +570,95 @@ body {
   }
 
   /* Terminal Auto-Typing Section */
-  .dossier-section {
-    padding: 8.5rem 0;
-    background-color: #faf9f6;
+  .dossier-telemetry {
+    .cmd-terminal-card {
+      border: 1px solid #111111;
+      background-color: #111111;
+      box-shadow: 6px 6px 0px #111111;
 
-    @media (max-width: 1024px) {
-      padding: 6.5rem 0;
-    }
-
-    @media (max-width: 768px) {
-      padding: 5rem 0;
-    }
-
-    .dossier-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      padding: 0 1.5rem 2.5rem 4rem;
-      margin-bottom: 4rem;
-
-      @media (max-width: 1024px) {
-        padding: 0 1.25rem 2rem 2.5rem;
-        margin-bottom: 3rem;
-      }
-
-      @media (max-width: 768px) {
-        padding: 0 1rem 1.75rem 1.5rem;
-        margin-bottom: 2.5rem;
-      }
-
-      .header-left {
-        .eyebrow {
-          display: block;
-          font-family: monospace;
-          font-size: 0.72rem;
-          font-weight: 800;
-          letter-spacing: 0.08em;
-          color: #666666;
-          margin-bottom: 0.75rem;
-        }
-
-        h2 {
-          margin: 0;
-          font-size: clamp(2.1rem, 4vw, 3.4rem);
-          font-weight: 900;
-          letter-spacing: -0.03em;
-          line-height: 0.98;
-          color: #111111;
-        }
-      }
-
-      .header-right {
-        .dossier-header-cta {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.45rem;
-          padding: 0 0 0.25rem 0;
-          border-bottom: 1px solid #111111;
-          color: #111111;
-          text-decoration: none;
-          font-size: 0.7rem;
-          font-weight: 800;
-          letter-spacing: 0.06em;
-
-          .cta-arrow {
-            font-size: 0.85rem;
-          }
-        }
-      }
-    }
-
-    .dossier-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-      gap: 5rem;
-      padding: 0 4rem;
-      align-items: start;
-
-      @media (max-width: 1024px) {
-        grid-template-columns: 1fr;
-        gap: 3.5rem;
-        padding: 0 2.5rem;
-      }
-
-      @media (max-width: 768px) {
-        padding: 0 1.5rem;
-      }
-    }
-
-    /* 좌측 매니페스토 및 3대 원칙 */
-    .dossier-manifesto {
-      .manifesto-quote {
-        margin: 0 0 3.25rem 0;
-        padding-left: 1.5rem;
-        border-left: 3px solid #111111;
-        font-size: clamp(1.15rem, 1.85vw, 1.45rem);
+      .cmd-terminal__head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem 1.15rem;
+        background-color: #f4f4f0;
+        border-bottom: 1px solid #111111;
+        font-family: monospace;
+        font-size: 0.68rem;
         font-weight: 800;
-        line-height: 1.55;
-        letter-spacing: -0.02em;
+        letter-spacing: 0.06em;
         color: #111111;
-        word-break: keep-all;
-      }
 
-      .principles-list {
-        border-top: 1px solid rgba(17, 17, 17, 0.14);
+        .head-left {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
 
-        .principle-row {
-          display: grid;
-          grid-template-columns: 44px minmax(0, 1fr);
-          gap: 1rem;
-          padding: 1.9rem 0;
-          border-bottom: 1px solid rgba(17, 17, 17, 0.14);
-
-          .principle-num {
-            font-family: monospace;
-            font-size: 0.78rem;
-            font-weight: 800;
-            color: #666666;
-            padding-top: 0.15rem;
-          }
-
-          .principle-body {
-            h3 {
-              margin: 0 0 0.6rem 0;
-              font-size: 0.94rem;
-              font-weight: 900;
-              letter-spacing: 0.02em;
-              color: #111111;
-            }
-
-            p {
-              margin: 0;
-              font-size: 0.9rem;
-              line-height: 1.7;
-              color: #444444;
-              word-break: keep-all;
-            }
+          .status-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            background-color: #111111;
+            animation: cursorBlink 1.1s steps(2, start) infinite;
           }
         }
+
+        .step-counter {
+          color: #666666;
+        }
       }
-    }
 
-    /* 우측 CMD 스타일 개발 이력 & 역량 타이핑 터미널 (section 태그) */
-    section.dossier-telemetry,
-    .dossier-telemetry {
-      padding: 0;
-      margin: 0;
-      background-color: transparent;
+      .cmd-terminal__prompt-bar {
+        padding: 0.75rem 1.25rem;
+        background-color: #1a1a1a;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        font-family: monospace;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: #9e9e98;
+      }
 
-      .cmd-terminal-card {
-        border: 1px solid #111111;
+      .cmd-terminal__screen {
+        padding: 1.35rem 1.25rem;
         background-color: #111111;
-        box-shadow: 6px 6px 0px #111111;
 
-        .cmd-terminal__head {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 0.85rem 1.25rem;
-          background-color: #faf9f6;
-          border-bottom: 1px solid #111111;
+        textarea {
+          width: 100%;
+          height: 170px; // ✅ 타이핑/삭제 시에도 카드 높이가 흔들리지 않도록 고정
+          resize: none;
+          border: none;
+          outline: none;
+          background: transparent;
+          color: #f4f4f0;
           font-family: monospace;
-          font-size: 0.68rem;
-          font-weight: 800;
-          letter-spacing: 0.06em;
-          color: #111111;
-
-          .head-left {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-
-            .status-dot {
-              display: inline-block;
-              width: 7px;
-              height: 7px;
-              background-color: #111111;
-              animation: cursorBlink 1.1s steps(2, start) infinite;
-            }
-          }
-
-          .step-counter {
-            color: #666666;
-          }
+          font-size: 0.84rem;
+          line-height: 1.75;
+          letter-spacing: -0.01em;
+          word-break: keep-all;
+          cursor: default;
+          overflow: hidden;
         }
+      }
 
-        .cmd-terminal__prompt-bar {
-          padding: 0.8rem 1.35rem;
-          background-color: #1a1a1a;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-          font-family: monospace;
-          font-size: 0.74rem;
-          font-weight: 700;
-          color: #9e9e98;
-        }
+      .cmd-terminal__foot {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.05rem 1.25rem;
+        background-color: #ffffff;
+        border-top: 1px solid #111111;
+        color: #111111;
+        text-decoration: none;
+        font-family: monospace;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        transition:
+          background-color 0.15s ease,
+          color 0.15s ease;
 
-        .cmd-terminal__screen {
-          padding: 1.5rem 1.35rem;
-          background-color: #111111;
-
-          textarea {
-            width: 100%;
-            height: 175px;
-            resize: none;
-            border: none;
-            outline: none;
-            background: transparent;
-            color: #faf9f6;
-            font-family: monospace;
-            font-size: 0.84rem;
-            line-height: 1.8;
-            letter-spacing: -0.01em;
-            word-break: keep-all;
-            cursor: default;
-            overflow: hidden;
-          }
-        }
-
-        .cmd-terminal__foot {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 1.1rem 1.35rem;
-          background-color: #faf9f6;
-          border-top: 1px solid #111111;
-          color: #111111;
-          text-decoration: none;
-          font-family: monospace;
-          font-size: 0.72rem;
-          font-weight: 800;
-          letter-spacing: 0.05em;
-          transition: background-color 0.15s ease;
-
-          &:hover {
-            background-color: #f0efe9;
-          }
+        &:hover {
+          background-color: #f4f4f0;
         }
       }
     }
