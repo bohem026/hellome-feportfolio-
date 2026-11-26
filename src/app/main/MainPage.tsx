@@ -10,12 +10,12 @@ export function MainPage() {
     heroRef,
     heroBgSlides,
     bgSlideIdx,
-    currentBgItem,
+    // currentBgItem,
     keywordIdx,
     isProjectsLoading,
-    showcaseProjects,
+    // showcaseProjects,
     totalPublishedCount,
-    featuredWorks,
+    // featuredWorks,
     processSteps,
     faqs,
     openFaq,
@@ -25,7 +25,7 @@ export function MainPage() {
 
   return (
     <div className="portfolio-main">
-      {/* Hero Section */}
+      {/* Section 1: Hero Section */}
       {/* Dynamic Thumbnail + Typography */}
       <section
         className="hero hero--interactive"
@@ -82,7 +82,7 @@ export function MainPage() {
         </div>
       </section>
 
-      {/* Kinetic Archive Lookbook & */}
+      {/* Section 2: Kinetic Archive Lookbook & */}
       {/* Tech Stack Marquee Section */}
       <section className="showcase-section" id="works">
         <div className="showcase-header">
