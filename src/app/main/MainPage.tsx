@@ -162,7 +162,7 @@ export function MainPage() {
       </section>
 
       {/* Section 3: CMD Terminal Auto-Typing Area */}
-      <aside className="dossier-telemetry">
+      <section className="dossier-telemetry">
         <div className="cmd-terminal-card">
           {/* 터미널 상단 타이틀 바 */}
           <div className="cmd-terminal__head">
@@ -193,7 +193,7 @@ export function MainPage() {
             <span>→</span>
           </Link>
         </div>
-      </aside>
+      </section>
 
       {/* Thoughtful Process */}
       <section className="process-section">
