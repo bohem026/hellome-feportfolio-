@@ -196,7 +196,7 @@ export function MainPage() {
       </section>
 
       {/* Thoughtful Process */}
-      <section className="process-section">
+      {/* <section className="process-section">
         <div className="section-header">
           <h2>
             THOUGHTFUL
@@ -219,96 +219,10 @@ export function MainPage() {
             </div>
           ))}
         </div>
-      </section>
-
-      {/* Humble Brag / Highlights Section */}
-      <section className="brag-section">
-        <div className="section-header">
-          <h2>
-            HUMBLE
-            <br />
-            BRAG
-          </h2>
-          <span className="sub-label">[RECOGNITION & AWARDS]</span>
-        </div>
-
-        <div className="award-blocks">
-          <div className="block block--purple">
-            <span className="tag">AWWWARDS</span>
-            <h3>SOTD</h3>
-            <span className="year">2026</span>
-          </div>
-          <div className="block block--mint">
-            <span className="tag">FWA</span>
-            <h3>OF THE DAY</h3>
-            <span className="year">2X RECIPIENT</span>
-          </div>
-          <div className="block block--green">
-            <span className="tag">RED DOT</span>
-            <h3>BEST</h3>
-            <span className="year">BRAND DESIGN</span>
-          </div>
-          <div className="block block--peach">
-            <span className="tag">INDIGO</span>
-            <h3>GOLD</h3>
-            <span className="year">TYPOGRAPHY</span>
-          </div>
-          <div className="block block--lavender">
-            <span className="tag">COMM ARTS</span>
-            <h3>EXCELLENCE</h3>
-            <span className="year">INTERACTIVE</span>
-          </div>
-          <div className="block block--black">
-            <span className="tag">WEBBY</span>
-            <h3>NOMINEE</h3>
-            <span className="year">BEST VISUAL</span>
-          </div>
-        </div>
-
-        {/* Metrics Grid */}
-        <div className="metrics-grid">
-          <div className="metric-item">
-            <span className="label">METRIC / IMPACT</span>
-            <div className="value">12+</div>
-            <span className="desc">INTERNATIONAL HONORS</span>
-          </div>
-          <div className="metric-item">
-            <span className="label">COMMISSIONS</span>
-            <div className="value">48</div>
-            <span className="desc">SHIPPED WORLDWIDE</span>
-          </div>
-          <div className="metric-item">
-            <span className="label">ACTIVE RETENTION</span>
-            <div className="value">94%</div>
-            <span className="desc">REPEAT ENTERPRISE RATE</span>
-          </div>
-          <div className="metric-item">
-            <span className="label">LATENCY BENCHMARK</span>
-            <div className="value">60 FPS</div>
-            <span className="desc">GPU RENDERING FLOOR</span>
-          </div>
-        </div>
-
-        {/* Endorsement Quote */}
-        <div className="quote-box">
-          <div className="author-info">
-            <div className="avatar-placeholder" />
-            <div>
-              <strong>MARCUS VANCE</strong>
-              <span>VP CREATIVE, VELOCE LABS</span>
-            </div>
-          </div>
-          <blockquote className="quote-text">
-            "Ethan possesses that extraordinarily rare hybrid capability:
-            uncompromising Swiss typographic discipline combined with native,
-            fluid web engineering instincts. The digital experience he
-            engineered redefined our market positioning instantly."
-          </blockquote>
-        </div>
-      </section>
+      </section> */}
 
       {/* FAQ Accordion Section */}
-      <section className="faq-section">
+      {/* <section className="faq-section">
         <div className="section-header">
           <h2>
             COMMON
@@ -341,7 +255,7 @@ export function MainPage() {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }

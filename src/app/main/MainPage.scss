@@ -663,18 +663,18 @@ body {
   }
 
   /* 4. FAQ Accordion Section (상단 여백 확장 & 배경색 통일) */
-  .faq-section {
-    padding: 8.5rem 4rem 9.5rem 4rem;
-    background-color: #faf9f6;
+  // .faq-section {
+  //   padding: 8.5rem 4rem 9.5rem 4rem;
+  //   background-color: #faf9f6;
 
-    @media (max-width: 1024px) {
-      padding: 6.5rem 2.5rem 7.5rem 2.5rem;
-    }
+  //   @media (max-width: 1024px) {
+  //     padding: 6.5rem 2.5rem 7.5rem 2.5rem;
+  //   }
 
-    @media (max-width: 768px) {
-      padding: 5rem 1.5rem 6rem 1.5rem;
-    }
-  }
+  //   @media (max-width: 768px) {
+  //     padding: 5rem 1.5rem 6rem 1.5rem;
+  //   }
+  // }
 }
 
 /* Responsive Styles */
