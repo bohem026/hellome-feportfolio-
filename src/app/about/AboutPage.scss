@@ -570,8 +570,8 @@ $font-sans:
     width: 100vw;
     margin-left: calc(50% - 50vw);
     padding: 8.5rem 4rem;
-    background-color: $bg-dark;
-    color: $bg-primary;
+    // background-color: $bg-dark;
+    // color: $bg-primary;
 
     @media (max-width: 1024px) {
       padding: 6.5rem 2.5rem;
