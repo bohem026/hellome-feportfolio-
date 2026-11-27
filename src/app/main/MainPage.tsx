@@ -285,14 +285,13 @@ export function MainPage() {
           </span> */}
 
           <h2 className="closing-headline">
-            LET&apos;S ARCHITECT YOUR
-            {/* <br /> */}
-            NEXT PRODUCT.
+            <span className="headline-line">LET&apos;S ARCHITECT YOUR</span>
+            <span className="headline-line">NEXT PRODUCT.</span>
           </h2>
 
           <p className="closing-subcopy">
-            채용 제안부터 프로덕트 협업까지, AI 어시스턴트를 통해 가장 빠르게
-            대화를 시작해 보세요.
+            채용 제안부터 프로젝트 협업까지, AI 어시스턴트를 통해 빠르게 대화를
+            시작해 보세요.
           </p>
 
           <Link href="/contact" className="btn-spotlight-cta">

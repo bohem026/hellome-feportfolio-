@@ -940,7 +940,8 @@ body {
     .closing-spotlight__inner {
       position: relative;
       z-index: 3;
-      max-width: 680px;
+      width: 100%;
+      max-width: 820px;
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -957,11 +958,20 @@ body {
 
       .closing-headline {
         margin: 0 0 1.5rem 0;
-        font-size: clamp(2.2rem, 5vw, 4.1rem);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.15em;
+        font-size: clamp(2rem, 4.8vw, 4rem);
         font-weight: 900;
         letter-spacing: -0.03em;
         line-height: 1.04;
         color: #faf9f6;
+        text-wrap: balance;
+
+        .headline-line {
+          display: block;
+        }
       }
 
       .closing-subcopy {
