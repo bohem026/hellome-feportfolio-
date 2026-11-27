@@ -280,13 +280,13 @@ export function MainPage() {
 
         {/* 4. 중앙 정렬 단일 포커스 콘텐츠 & 단일 CTA */}
         <div className="closing-spotlight__inner">
-          <span className="closing-eyebrow">
+          {/* <span className="closing-eyebrow">
             04 // NEXT STEP — DIRECT TRANSMISSION
-          </span>
+          </span> */}
 
           <h2 className="closing-headline">
             LET&apos;S ARCHITECT YOUR
-            <br />
+            {/* <br /> */}
             NEXT PRODUCT.
           </h2>
 
