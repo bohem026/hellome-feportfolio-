@@ -40,7 +40,7 @@ export function AboutPage() {
 
           {/* 로컬 프로필 이미지 카드 */}
           <div className="hero-portrait-card">
-            <div className="portrait-badge">01 // PROFILE SPECIMEN</div>
+            <div className="portrait-badge">PROFILE IMAGE</div>
             <div className="portrait-frame">
               <img
                 src={ABOUT_PROFILE.avatarUrl}
@@ -54,7 +54,7 @@ export function AboutPage() {
         <div className="philosophy-box">
           <div className="philosophy-meta">
             <span>PHILOSOPHY & ENGINEERING APPROACH</span>
-            <span>SPEC METHODOLOGY // STRUCTURAL CLARITY</span>
+            {/* <span>SPEC METHODOLOGY // STRUCTURAL CLARITY</span> */}
           </div>
           <p className="philosophy-lead">{ABOUT_PROFILE.philosophyHeadline}</p>
           <p className="philosophy-sub">{ABOUT_PROFILE.philosophySub}</p>
@@ -105,17 +105,17 @@ export function AboutPage() {
       <section className="about-milestone-section">
         <div className="section-header">
           <div>
-            <span className="section-index">02 // EXPERIENCE & TIMELINE</span>
-            <h2>EDUCATION & PROJECT TIMELINE</h2>
+            {/* <span className="section-index">02 // EXPERIENCE & TIMELINE</span> */}
+            <h2>TIMELINE.</h2>
           </div>
-          <p className="section-desc">
+          {/* <p className="section-desc">
             소속 기관 및 활동 기간별 주요 프로젝트 진행 흐름입니다. 세부 구현
             내역은{" "}
             <Link href="/works" className="inline-works-link">
               WORKS INDEX ↗
             </Link>
             에서 확인할 수 있습니다.
-          </p>
+          </p> */}
         </div>
 
         <div className="timeline-groups">
@@ -159,19 +159,19 @@ export function AboutPage() {
       <section className="about-craft-section">
         <div className="section-header">
           <div>
-            <span className="section-index">03 // TECHNICAL STACK</span>
-            <h2>CAPABLE TECHNOLOGIES</h2>
+            {/* <span className="section-index">03 // TECHNICAL STACK</span> */}
+            <h2>CAPABLE TECHNOLOGIES.</h2>
           </div>
-          <p className="section-desc">
+          {/* <p className="section-desc">
             프론트엔드·서버리스 메인 스택과 그 외 사이드 스택입니다.
-          </p>
+          </p> */}
         </div>
 
         <div className="stack-category-grid">
           {TECH_STACK_GROUPS.map((group) => (
             <div key={group.id} className="stack-group-card">
               <div className="group-card-head">
-                <span className="craft-index">{group.indexLabel}</span>
+                {/* <span className="craft-index">{group.indexLabel}</span> */}
                 <h3 className="group-title">{group.categoryName}</h3>
               </div>
 
@@ -197,7 +197,7 @@ export function AboutPage() {
       <section className="about-contact-section">
         <div className="contact-box">
           <div className="contact-main">
-            <span className="section-index">04 // CONNECT & COLLABORATE</span>
+            {/* <span className="section-index">04 // CONNECT & COLLABORATE</span> */}
             <h2>INITIATE A COLLABORATION.</h2>
             <p>
               프론트엔드 및 풀스택 웹 개발 포지션 제안, 혹은 기술적인 협업에

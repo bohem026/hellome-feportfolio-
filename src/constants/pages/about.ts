@@ -3,19 +3,19 @@ import { TechStackIconKey } from "@/components/TechStackIcon";
 
 export interface TimelineProjectItem {
   id: string;
-  period: string;       // 진행 기간
-  title: string;        // 프로젝트명
-  type: string;         // 프로젝트 특성 태그
-  role: string;         // 담당 역할
-  summary: string;      // 한 줄 요약
+  period: string; // 진행 기간
+  title: string; // 프로젝트명
+  type: string; // 프로젝트 특성 태그
+  role: string; // 담당 역할
+  summary: string; // 한 줄 요약
 }
 
 export interface TimelineGroupItem {
   id: string;
-  period: string;       // 활동 기간
+  period: string; // 활동 기간
   organization: string; // 기관명 또는 활동 구분
-  subtitle: string;     // 과정명 또는 활동 성격
-  badge: string;        // 상태/구분 배지
+  subtitle: string; // 과정명 또는 활동 성격
+  badge: string; // 상태/구분 배지
   projects: TimelineProjectItem[];
 }
 
@@ -68,7 +68,8 @@ export const EXPERIENCE_MILESTONES: MilestoneItem[] = [
     id: "milestone-recipe",
     period: "2026.07.15 — 2026.08.21",
     organization: "이스트소프트 생성형 AI 앱 개발 프로젝트",
-    title: "깃깔나는 레시피 — 생성형 AI 기반 맞춤형 레시피 & 스마트 쿠킹 플랫폼",
+    title:
+      "깃깔나는 레시피 — 생성형 AI 기반 맞춤형 레시피 & 스마트 쿠킹 플랫폼",
     role: "FRONTEND & BACKEND",
     category: "AI APPLICATION",
     highlights: [
@@ -109,9 +110,9 @@ export const EXPERIENCE_TIMELINE: TimelineGroupItem[] = [
   {
     id: "group-personal",
     period: "2026.09 — PRESENT",
-    organization: "PERSONAL LAB & ARCHIVE",
-    subtitle: "독립 개발 및 서버리스·AI 웹 아키텍처 연구",
-    badge: "INDEPENDENT",
+    organization: "PERSONAL WORK",
+    subtitle: "개인 프로젝트 작업",
+    badge: "PERSONAL",
     projects: [
       {
         id: "proj-hellome",
@@ -119,16 +120,16 @@ export const EXPERIENCE_TIMELINE: TimelineGroupItem[] = [
         title: "HelloMe",
         type: "APPLICATION",
         role: "FULLSTACK",
-        summary:
-          "GitHub 레포지토리 아카이빙 플랫폼",
+        summary: "GitHub 레포지토리 아카이빙 플랫폼",
       },
     ],
   },
   {
     id: "group-estsoft",
     period: "2026.04 — 2026.08",
-    organization: "이스트소프트 (ESTSOFT)",
-    subtitle: "오르미캠프 프론트엔드 13기 과정 수료 및 팀 프로젝트",
+    organization: "ESTSOFT BOOTCAMP",
+    subtitle:
+      "이스트소프트 주관 프론트엔드 오르미캠프 13기 과정 수료 및 팀 프로젝트",
     badge: "BOOTCAMP & TEAM",
     projects: [
       {
@@ -137,8 +138,7 @@ export const EXPERIENCE_TIMELINE: TimelineGroupItem[] = [
         title: "깃깔나는 레시피",
         type: "APPLICATION",
         role: "FULLSTACK",
-        summary:
-          "생성형 AI 맞춤형 레시피 & 스마트 쿠킹 플랫폼",
+        summary: "생성형 AI 맞춤형 레시피 & 스마트 쿠킹 플랫폼",
       },
       {
         id: "proj-rounz",
@@ -146,8 +146,7 @@ export const EXPERIENCE_TIMELINE: TimelineGroupItem[] = [
         title: "웹 페이지 리뉴얼 프로젝트(2)",
         type: "RENEWAL",
         role: "FRONTEND",
-        summary:
-          "이스트소프트 아이웨어 플랫폼 ROUNZ 리뉴얼",
+        summary: "이스트소프트 아이웨어 플랫폼 ROUNZ 리뉴얼",
       },
       {
         id: "proj-estsoft-main",
@@ -155,8 +154,7 @@ export const EXPERIENCE_TIMELINE: TimelineGroupItem[] = [
         title: "웹 페이지 리뉴얼 프로젝트(1)",
         type: "RENEWAL",
         role: "TEAM LEAD / FRONTEND",
-        summary:
-          "이스트소프트 교육 모집 메인 페이지 리뉴얼",
+        summary: "이스트소프트 교육 모집 메인 페이지 리뉴얼",
       },
     ],
   },
