@@ -232,16 +232,20 @@ body {
       width: 100%;
 
       .hero__title {
-        margin: 0 0 2.75rem 0;
+        margin: 0 0 2.25rem 0;
         display: flex;
         flex-direction: column;
+        align-items: flex-start;
         gap: 0.25rem;
+        font-size: clamp(2.4rem, 5.2vw, 4.4rem);
+        font-weight: 900;
+        letter-spacing: -0.03em;
         line-height: 0.98;
+        color: #111111;
 
         .kinetic-slot {
           display: inline-block;
           overflow: hidden;
-          padding: 0.15rem 0;
 
           .kinetic-word {
             display: inline-block;
