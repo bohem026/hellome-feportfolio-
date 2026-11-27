@@ -89,8 +89,8 @@ export function MainPage() {
       <section className="showcase-section" id="works">
         <div className="showcase-header">
           <div className="header-left">
-            <span className="eyebrow">01 // VISUAL INDEX & ARCHITECTURE</span>
-            <h2>Works & Stacks.</h2>
+            {/* <span className="eyebrow">01 // VISUAL INDEX & ARCHITECTURE</span> */}
+            <h2>Works & Tech Stacks.</h2>
           </div>
 
           {/* 추가: 하단 CTA-> 헤더 우측으로 재배치 */}
@@ -195,38 +195,12 @@ export function MainPage() {
         </div>
       </section>
 
-      {/* Thoughtful Process */}
-      {/* <section className="process-section">
-        <div className="section-header">
-          <h2>
-            THOUGHTFUL
-            <br />
-            PROCESS
-          </h2>
-          <span className="sub-label">[DISCIPLINE & EXECUTION]</span>
-        </div>
-
-        <div className="process-grid">
-          {processSteps.map((step, idx) => (
-            <div className="process-card" key={idx}>
-              <div className="step-num">{step.step}</div>
-              <h3>{step.title}</h3>
-              <p>{step.description}</p>
-              <div className="card-footer">
-                <span>{step.phase}</span>
-                <span className="icon">↗</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section> */}
-
-      {/* Section 03: Engineering FAQ */}
+      {/* Section 4: Engineering FAQ */}
       {/* FAQ Accordion Section */}
       <section className="faq-section" id="faq">
         <div className="faq-header">
           <div className="header-left">
-            <span className="eyebrow">03 // TECHNICAL INQUIRIES</span>
+            {/* <span className="eyebrow">03 // TECHNICAL INQUIRIES</span> */}
             <h2>FAQS.</h2>
           </div>
 
