@@ -777,16 +777,16 @@ body {
             .faq-index {
               font-family: monospace;
               font-size: 0.78rem;
-              font-weight: 800;
+              font-weight: 700;
               color: #666666;
               flex-shrink: 0;
             }
 
             .question-text {
-              font-size: clamp(1rem, 1.5vw, 1.18rem);
-              font-weight: 800;
-              letter-spacing: -0.02em;
-              line-height: 1.45;
+              font-size: clamp(0.92rem, 1.25vw, 1.02rem);
+              font-weight: 600;
+              letter-spacing: -0.015em;
+              line-height: 1.5;
               word-break: keep-all;
             }
           }
