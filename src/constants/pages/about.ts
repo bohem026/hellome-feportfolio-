@@ -22,7 +22,7 @@ export interface TimelineGroupItem {
 export const ABOUT_PROFILE = {
   koreanName: "주후산",
   englishName: "JOO HU SAN",
-  roleTitle: "JUNIOR FRONTEND ENGINEER & CREATIVE ARCHITECT",
+  roleTitle: "JUNIOR FRONTEND ENGINEER & CREATIVE ARCHITECT.",
   statusBadge: "OPEN TO WORK // FRONTEND & FULLSTACK ROLES",
   locationBadge: "SEOUL, KR — AVAILABLE FOR COLLABORATION",
   avatarUrl: "/images/profile-image.jpg",
