@@ -197,8 +197,14 @@ export function useMainPage() {
     const el = closingRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    el.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
-    el.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    // 워터마크 미세 이동 (-12px ~ +12px)
+    const ratioX = (x / rect.width - 0.5) * 24;
+
+    el.style.setProperty("--spot-x", `${x}px`);
+    el.style.setProperty("--spot-y", `${y}px`);
+    el.style.setProperty("--parallax-x", `${ratioX}px`);
   };
 
   return {

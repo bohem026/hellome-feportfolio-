@@ -252,67 +252,53 @@ export function MainPage() {
 
       {/* Section 5: Closing Gateway Section */}
       <section
-        className="closing-gateway"
+        className="closing-spotlight"
         ref={closingRef}
         onMouseMove={handleClosingMouseMove}
       >
-        <div className="closing-gateway__bg" aria-hidden="true">
-          {currentBgItem && (
-            <div
-              className="closing-bg-visual"
-              style={{ backgroundImage: `url(${currentBgItem.imageUrl})` }}
-            />
-          )}
-          <div className="closing-bg-vignette" />
+        {/* 1. 마우스 추적 스포트라이트 오라 */}
+        <div className="spotlight-aura" aria-hidden="true" />
+
+        {/* 2. 배경 초대형 아웃라인 워터마크 (마우스 미세 패럴랙스) */}
+        <div className="closing-watermark" aria-hidden="true">
+          COLLABORATE
         </div>
 
-        {/* Hero와 대칭되는 마우스 반응형 48px 건축 그리드 */}
-        <div className="closing-gateway__grid" aria-hidden="true" />
+        {/* 3. 건축 도면 스타일 코너 크로스헤어 */}
+        <span className="corner-mark top-left" aria-hidden="true">
+          +
+        </span>
+        <span className="corner-mark top-right" aria-hidden="true">
+          +
+        </span>
+        <span className="corner-mark bottom-left" aria-hidden="true">
+          +
+        </span>
+        <span className="corner-mark bottom-right" aria-hidden="true">
+          +
+        </span>
 
-        {/* 클로징 타이포그래피 & /contact 유도 CTA */}
-        <div className="closing-gateway__content">
-          <div className="status-badge">
-            <span className="pulse-dot" />
-            <span>04 // CHANNEL OPEN — AI CONCIERGE &amp; DIRECT CONTACT</span>
-          </div>
+        {/* 4. 중앙 정렬 단일 포커스 콘텐츠 & 단일 CTA */}
+        <div className="closing-spotlight__inner">
+          <span className="closing-eyebrow">
+            04 // NEXT STEP — DIRECT TRANSMISSION
+          </span>
 
-          <h2 className="closing-title">
-            <span>READY TO BUILD</span>
-            <span className="highlight-block">MEANINGFUL</span>
-            <span>PRODUCTS TOGETHER.</span>
+          <h2 className="closing-headline">
+            LET&apos;S ARCHITECT YOUR
+            <br />
+            NEXT PRODUCT.
           </h2>
 
-          <p className="closing-lead">
-            채용 포지션 제안부터 기술 아키텍처 논의, 새로운 프로덕트 협업까지
-            언제든 환영합니다. AI 어시스턴트를 통해 제안을 남기시면 확인 후
-            빠르게 회신드리겠습니다.
+          <p className="closing-subcopy">
+            채용 제안부터 프로덕트 협업까지, AI 어시스턴트를 통해 가장 빠르게
+            대화를 시작해 보세요.
           </p>
 
-          {/* 대화 주제 퀵 프롬프트 칩 */}
-          <div className="quick-topic-row">
-            <Link href="/contact" className="topic-pill">
-              <span>01. 채용 및 포지션 제안</span>
-              <span>↗</span>
-            </Link>
-            <Link href="/contact" className="topic-pill">
-              <span>02. 기술 스택 · 아키텍처 질의</span>
-              <span>↗</span>
-            </Link>
-            <Link href="/contact" className="topic-pill">
-              <span>03. 협업 · 프로젝트 의뢰</span>
-              <span>↗</span>
-            </Link>
-          </div>
-
-          {/* 메인 전환 CTA 버튼 */}
-          <div className="closing-cta-row">
-            <Link href="/contact" className="btn-closing-solid">
-              LAUNCH CONTACT AI ASSISTANT →
-            </Link>
-            <Link href="/works" className="btn-closing-outline">
-              BROWSE FULL ARCHIVE ↗
-            </Link>
-          </div>
+          <Link href="/contact" className="btn-spotlight-cta">
+            <span>START CONVERSATION</span>
+            <span className="cta-arrow">→</span>
+          </Link>
         </div>
       </section>
     </div>

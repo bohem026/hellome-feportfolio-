@@ -850,225 +850,157 @@ body {
   }
 
   /* 5. Closing Visual Gateway */
-  .closing-gateway {
+  .closing-spotlight {
     position: relative;
+    width: 100vw;
+    // 상위 컨테이너 여백과 무관하게 뷰포트 가로 100% 확장
+    margin-left: calc(50% - 50vw);
     overflow: hidden;
     display: flex;
-    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    min-height: 74vh;
-    padding: 9rem 4rem 10rem 4rem;
-    background-color: #faf9f6;
-    --mouse-x: 50%;
-    --mouse-y: 50%;
-
-    @media (max-width: 1024px) {
-      padding: 7rem 2.5rem 8rem 2.5rem;
-    }
+    min-height: 68vh;
+    padding: 8rem 2rem;
+    background-color: #111111;
+    color: #faf9f6;
+    --spot-x: 50%;
+    --spot-y: 50%;
+    --parallax-x: 0px;
 
     @media (max-width: 768px) {
-      min-height: auto;
-      padding: 5.5rem 1.5rem 6.5rem 1.5rem;
+      min-height: 56vh;
+      padding: 6rem 1.5rem;
     }
 
-    .closing-gateway__bg {
+    /* 마우스를 따라 부드럽게 비추는 스포트라이트 오라 */
+    .spotlight-aura {
       position: absolute;
       inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background: radial-gradient(
+        520px circle at var(--spot-x) var(--spot-y),
+        rgba(250, 249, 246, 0.11) 0%,
+        rgba(250, 249, 246, 0.03) 45%,
+        transparent 75%
+      );
+    }
+
+    /* 배경 초대형 아웃라인 워터마크 */
+    .closing-watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(calc(-50% + var(--parallax-x)), -50%);
+      font-size: clamp(4.5rem, 15vw, 13.5rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(250, 249, 246, 0.08);
+      white-space: nowrap;
+      user-select: none;
       pointer-events: none;
       z-index: 0;
-
-      .closing-bg-visual {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 62%;
-        height: 100%;
-        background-size: cover;
-        background-position: center;
-        filter: grayscale(100%) contrast(1.1) blur(2px);
-        opacity: 0.22;
-        transition: background-image 1.4s ease-in-out;
-
-        @media (max-width: 768px) {
-          width: 100%;
-          opacity: 0.1;
-        }
-      }
-
-      .closing-bg-vignette {
-        position: absolute;
-        inset: 0;
-        background:
-          linear-gradient(
-            180deg,
-            #faf9f6 0%,
-            rgba(250, 249, 246, 0) 20%,
-            rgba(250, 249, 246, 0) 80%,
-            #faf9f6 100%
-          ),
-          linear-gradient(
-            90deg,
-            #faf9f6 30%,
-            rgba(250, 249, 246, 0.84) 55%,
-            rgba(250, 249, 246, 0.28) 85%,
-            rgba(250, 249, 246, 0.12) 100%
-          );
-      }
+      transition: transform 0.25s ease-out;
     }
 
-    /* Hero와 대칭되는 마우스 반응형 48px 건축 그리드 */
-    .closing-gateway__grid {
+    /* 모서리 건축 크로스헤어 마크 */
+    .corner-mark {
       position: absolute;
-      inset: 0;
-      z-index: 1;
+      font-family: monospace;
+      font-size: 0.9rem;
+      color: rgba(250, 249, 246, 0.32);
       pointer-events: none;
-      background-image:
-        linear-gradient(to right, rgba(17, 17, 17, 0.055) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(17, 17, 17, 0.055) 1px, transparent 1px);
-      background-size: 48px 48px;
-      mask-image: radial-gradient(
-        420px circle at var(--mouse-x) var(--mouse-y),
-        rgba(0, 0, 0, 0.95) 0%,
-        rgba(0, 0, 0, 0.25) 60%,
-        transparent 100%
-      );
-      -webkit-mask-image: radial-gradient(
-        420px circle at var(--mouse-x) var(--mouse-y),
-        rgba(0, 0, 0, 0.95) 0%,
-        rgba(0, 0, 0, 0.25) 60%,
-        transparent 100%
-      );
+      z-index: 2;
+
+      &.top-left {
+        top: 2rem;
+        left: 2.5rem;
+      }
+      &.top-right {
+        top: 2rem;
+        right: 2.5rem;
+      }
+      &.bottom-left {
+        bottom: 2rem;
+        left: 2.5rem;
+      }
+      &.bottom-right {
+        bottom: 2rem;
+        right: 2.5rem;
+      }
+
+      @media (max-width: 768px) {
+        display: none;
+      }
     }
 
-    .closing-gateway__content {
+    /* 중앙 정렬 단일 포커스 콘텐츠 */
+    .closing-spotlight__inner {
       position: relative;
-      z-index: 2;
-      max-width: 820px;
+      z-index: 3;
+      max-width: 680px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
 
-      .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.55rem;
+      .closing-eyebrow {
         font-family: monospace;
         font-size: 0.72rem;
         font-weight: 800;
-        letter-spacing: 0.08em;
-        color: #555555;
+        letter-spacing: 0.12em;
+        color: #9e9e98;
         margin-bottom: 1.5rem;
-
-        .pulse-dot {
-          width: 7px;
-          height: 7px;
-          background-color: #111111;
-          animation: cursorBlink 1.2s steps(2, start) infinite;
-        }
       }
 
-      .closing-title {
-        margin: 0 0 2rem 0;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.25rem;
-        font-size: clamp(2.4rem, 5.2vw, 4.4rem);
+      .closing-headline {
+        margin: 0 0 1.5rem 0;
+        font-size: clamp(2.2rem, 5vw, 4.1rem);
         font-weight: 900;
         letter-spacing: -0.03em;
-        line-height: 0.98;
-        color: #111111;
-
-        .highlight-block {
-          display: inline-block;
-          background-color: #111111;
-          color: #ffffff;
-          padding: 0.08em 0.24em;
-        }
+        line-height: 1.04;
+        color: #faf9f6;
       }
 
-      .closing-lead {
-        max-width: 560px;
-        font-size: 0.98rem;
-        line-height: 1.75;
-        color: #222222;
-        margin: 0 0 2rem 0;
+      .closing-subcopy {
+        margin: 0 0 2.75rem 0;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: #b8b8b2;
         word-break: keep-all;
       }
 
-      /* 퀵 프롬프트 토픽 칩 */
-      .quick-topic-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.65rem;
-        margin-bottom: 2.5rem;
-
-        .topic-pill {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.45rem;
-          padding: 0.55rem 0.95rem;
-          border: 1px solid rgba(17, 17, 17, 0.25);
-          background-color: rgba(250, 249, 246, 0.85);
-          color: #111111;
-          font-family: monospace;
-          font-size: 0.72rem;
-          font-weight: 800;
-          letter-spacing: 0.03em;
-          text-decoration: none;
-          transition:
-            border-color 0.15s ease,
-            background-color 0.15s ease,
-            color 0.15s ease;
-
-          &:hover {
-            border-color: #111111;
-            background-color: #111111;
-            color: #ffffff;
-          }
-        }
-      }
-
-      /* 메인 CTA 행 */
-      .closing-cta-row {
-        display: flex;
-        flex-wrap: wrap;
+      /* 단일 액션 CTA 버튼 */
+      .btn-spotlight-cta {
+        display: inline-flex;
         align-items: center;
         gap: 0.85rem;
+        padding: 1.1rem 2.2rem;
+        background-color: #faf9f6;
+        color: #111111;
+        border: 1px solid #faf9f6;
+        font-size: 0.78rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-decoration: none;
+        transition:
+          background-color 0.2s ease,
+          color 0.2s ease,
+          transform 0.2s ease;
 
-        .btn-closing-solid {
-          display: inline-flex;
-          align-items: center;
-          background-color: #111111;
-          color: #ffffff;
-          border: 1px solid #111111;
-          padding: 1rem 1.75rem;
-          font-size: 0.78rem;
-          font-weight: 800;
-          letter-spacing: 0.06em;
-          text-decoration: none;
-          transition: background-color 0.15s ease;
-
-          &:hover {
-            background-color: #333333;
-          }
+        .cta-arrow {
+          font-size: 1rem;
+          transition: transform 0.2s ease;
         }
 
-        .btn-closing-outline {
-          display: inline-flex;
-          align-items: center;
-          background-color: rgba(255, 255, 255, 0.92);
-          color: #111111;
-          border: 1px solid #111111;
-          padding: 1rem 1.65rem;
-          font-size: 0.78rem;
-          font-weight: 800;
-          letter-spacing: 0.06em;
-          text-decoration: none;
-          transition:
-            background-color 0.15s ease,
-            color 0.15s ease;
+        &:hover {
+          background-color: transparent;
+          color: #faf9f6;
 
-          &:hover {
-            background-color: #111111;
-            color: #ffffff;
+          .cta-arrow {
+            transform: translateX(5px);
           }
         }
       }
