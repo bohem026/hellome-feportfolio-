@@ -5,7 +5,7 @@ import { useProjects } from "../common/useProjects";
 import {
   FEATURED_WORKS,
   PROCESS_STEPS,
-  FAQS,
+  ENGINEERING_FAQS,
   KINETIC_KEYWORDS,
   DOSSIER_TERMINAL_ENTRIES,
 } from "@/constants";
@@ -15,7 +15,7 @@ export function useMainPage() {
   const { projects, isLoading: isProjectsLoading } = useProjects();
   const featuredWorks = FEATURED_WORKS as WorkItem[];
   const processSteps = PROCESS_STEPS as ProcessItem[];
-  const faqs = FAQS as FAQItem[];
+  const engineeringFAQs = ENGINEERING_FAQS as FAQItem[];
 
   // 1. 제자리 회전 헤드라인 인덱스
   const [keywordIdx, setKeywordIdx] = useState(0);
@@ -198,7 +198,7 @@ export function useMainPage() {
       DOSSIER_TERMINAL_ENTRIES.length,
     ).padStart(2, "0")}`,
     processSteps,
-    faqs,
+    engineeringFAQs,
     openFaq,
     handleHeroMouseMove,
     toggleFaq,

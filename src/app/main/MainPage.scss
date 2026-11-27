@@ -662,19 +662,175 @@ body {
     }
   }
 
-  /* 4. FAQ Accordion Section (상단 여백 확장 & 배경색 통일) */
-  // .faq-section {
-  //   padding: 8.5rem 4rem 9.5rem 4rem;
-  //   background-color: #faf9f6;
+  /* 4. FAQ Accordion Section */
+  .faq-section {
+    padding: 8.5rem 0;
+    background-color: #faf9f6;
 
-  //   @media (max-width: 1024px) {
-  //     padding: 6.5rem 2.5rem 7.5rem 2.5rem;
-  //   }
+    @media (max-width: 1024px) {
+      padding: 6.5rem 0;
+    }
 
-  //   @media (max-width: 768px) {
-  //     padding: 5rem 1.5rem 6rem 1.5rem;
-  //   }
-  // }
+    @media (max-width: 768px) {
+      padding: 5rem 0;
+    }
+
+    .faq-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding: 0 1.5rem 2.5rem 4rem;
+      margin-bottom: 1.5rem;
+
+      @media (max-width: 1024px) {
+        padding: 0 1.25rem 2rem 2.5rem;
+      }
+
+      @media (max-width: 768px) {
+        padding: 0 1rem 1.75rem 1.5rem;
+      }
+
+      .header-left {
+        .eyebrow {
+          display: block;
+          font-family: monospace;
+          font-size: 0.72rem;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          color: #666666;
+          margin-bottom: 0.75rem;
+        }
+
+        h2 {
+          margin: 0;
+          font-size: clamp(2.1rem, 4vw, 3.4rem);
+          font-weight: 900;
+          letter-spacing: -0.03em;
+          line-height: 0.98;
+          color: #111111;
+        }
+      }
+
+      .header-right {
+        .faq-header-cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.45rem;
+          padding: 0 0 0.25rem 0;
+          border-bottom: 1px solid #111111;
+          color: #111111;
+          text-decoration: none;
+          font-size: 0.7rem;
+          font-weight: 800;
+          letter-spacing: 0.06em;
+
+          .cta-arrow {
+            font-size: 0.85rem;
+          }
+        }
+      }
+    }
+
+    .faq-list {
+      margin: 0 4rem;
+      border-top: 1px solid rgba(17, 17, 17, 0.16);
+
+      @media (max-width: 1024px) {
+        margin: 0 2.5rem;
+      }
+
+      @media (max-width: 768px) {
+        margin: 0 1.5rem;
+      }
+
+      .faq-item {
+        border-bottom: 1px solid rgba(17, 17, 17, 0.16);
+
+        .faq-question {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 1.5rem;
+          padding: 2rem 0;
+          background: transparent;
+          border: none;
+          text-align: left;
+          cursor: pointer;
+          color: #111111;
+
+          @media (max-width: 768px) {
+            padding: 1.5rem 0;
+          }
+
+          .question-left {
+            display: flex;
+            align-items: baseline;
+            gap: 1.5rem;
+
+            @media (max-width: 768px) {
+              gap: 1rem;
+            }
+
+            .faq-index {
+              font-family: monospace;
+              font-size: 0.78rem;
+              font-weight: 800;
+              color: #666666;
+              flex-shrink: 0;
+            }
+
+            .question-text {
+              font-size: clamp(1rem, 1.5vw, 1.18rem);
+              font-weight: 800;
+              letter-spacing: -0.02em;
+              line-height: 1.45;
+              word-break: keep-all;
+            }
+          }
+
+          .toggle-icon {
+            font-family: monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #111111;
+            flex-shrink: 0;
+          }
+        }
+
+        .faq-answer {
+          padding: 0 0 2.25rem 2.65rem;
+          max-width: 780px;
+          animation: faqReveal 0.25s ease;
+
+          @media (max-width: 768px) {
+            padding: 0 0 1.75rem 1.95rem;
+          }
+
+          p {
+            margin: 0;
+            font-size: 0.92rem;
+            line-height: 1.75;
+            color: #444444;
+            word-break: keep-all;
+          }
+        }
+      }
+    }
+  }
+
+  @keyframes faqReveal {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 /* Responsive Styles */

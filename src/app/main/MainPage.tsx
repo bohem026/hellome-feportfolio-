@@ -19,7 +19,7 @@ export function MainPage() {
     typedText,
     terminalStepLabel,
     processSteps,
-    faqs,
+    engineeringFAQs,
     openFaq,
     handleHeroMouseMove,
     toggleFaq,
@@ -221,41 +221,58 @@ export function MainPage() {
         </div>
       </section> */}
 
+      {/* Section 03: Engineering FAQ */}
       {/* FAQ Accordion Section */}
-      {/* <section className="faq-section">
-        <div className="section-header">
-          <h2>
-            COMMON
-            <br />
-            QUESTIONS
-          </h2>
-          <span className="sub-label">[TERMS & WORKFLOW]</span>
+      <section className="faq-section" id="faq">
+        <div className="faq-header">
+          <div className="header-left">
+            <span className="eyebrow">03 // TECHNICAL INQUIRIES</span>
+            <h2>COMMON QUESTIONS.</h2>
+          </div>
+
+          <div className="header-right">
+            <Link href="/contact" className="faq-header-cta">
+              <span className="cta-label">ASK DIRECTLY VIA AI</span>
+              <span className="cta-arrow">→</span>
+            </Link>
+          </div>
         </div>
 
         <div className="faq-list">
-          {faqs.map((faq) => (
-            <div
-              className={`faq-item ${openFaq === faq.id ? "open" : ""}`}
-              key={faq.id}
-              onClick={() => toggleFaq(faq.id)}
-            >
-              <div className="faq-question">
-                <span>
-                  0{faq.id} {faq.question}
-                </span>
-                <span className="toggle-icon">
-                  {openFaq === faq.id ? "−" : "+"}
-                </span>
+          {engineeringFAQs.map((faq) => {
+            const isOpen = openFaq === faq.id;
+            return (
+              <div
+                className={`faq-item ${isOpen ? "is-open" : ""}`}
+                key={faq.id}
+              >
+                <button
+                  type="button"
+                  className="faq-question"
+                  aria-expanded={isOpen}
+                  onClick={() => toggleFaq(faq.id)}
+                >
+                  <div className="question-left">
+                    <span className="faq-index">
+                      {String(faq.id).padStart(2, "0")}
+                    </span>
+                    <span className="question-text">{faq.question}</span>
+                  </div>
+                  <span className="toggle-icon" aria-hidden="true">
+                    {isOpen ? "−" : "+"}
+                  </span>
+                </button>
+
+                {isOpen && (
+                  <div className="faq-answer">
+                    <p>{faq.answer}</p>
+                  </div>
+                )}
               </div>
-              {openFaq === faq.id && (
-                <div className="faq-answer">
-                  <p>{faq.answer}</p>
-                </div>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
-      </section> */}
+      </section>
     </div>
   );
 }
