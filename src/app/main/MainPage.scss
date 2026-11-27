@@ -816,6 +816,19 @@ body {
             color: #444444;
             word-break: keep-all;
           }
+
+          .faq-inline-link {
+            color: #111111;
+            font-weight: 800;
+            text-decoration: none;
+            border-bottom: 1.5px solid #111111;
+            padding-bottom: 1px;
+            transition: opacity 0.15s ease;
+
+            &:hover {
+              opacity: 0.65;
+            }
+          }
         }
       }
     }

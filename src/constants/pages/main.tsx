@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { WorkItem, ProcessItem, FAQItem } from "@/types";
 
 export const FEATURED_WORKS: WorkItem[] = [
@@ -126,7 +127,7 @@ export const DOSSIER_TERMINAL_ENTRIES = [
   },
 ];
 
-export const ENGINEERING_FAQS: FAQItem[] = [
+export const ENGINEERING_FAQS = [
   {
     id: 1,
     question: "주로 어떤 기술 스택과 프론트엔드 아키텍처를 지향하나요?",
@@ -135,20 +136,36 @@ export const ENGINEERING_FAQS: FAQItem[] = [
   },
   {
     id: 2,
-    question: "백엔드 설계 및 AI 워크플로우도 구현하시나요?",
+    question: "백엔드(DB) 설계 및 AI API 워크플로우도 직접 구현하시나요?",
     answer:
-      "프론트엔드 UI 구현을 넘어 Supabase 기반의 PostgreSQL 스키마 설계, Row Level Security(RLS) 권한 제어, Serverless Edge Functions 구축까지 엔드투엔드로 다룹니다. 또한 OpenAI API를 연동해 문서 요약, 데이터 자동 분류, 실시간 챗봇 등의 자동화 파이프라인을 프로덕션 환경에 통합한 경험이 있습니다.",
+      "네, 프론트엔드 UI 구현을 넘어 Supabase 기반의 PostgreSQL 스키마 설계, Row Level Security(RLS) 권한 제어, Serverless Edge Functions 구축까지 엔드투엔드로 다룹니다. 또한 OpenAI API를 연동해 레포지토리 요약, 데이터 자동 분류, 실시간 응대 챗봇 등의 자동화 파이프라인을 프로덕션 환경에 통합한 경험이 있습니다.",
   },
   {
     id: 3,
-    question: "프로젝트별 상세 구현 내용은 어디서 확인하나요?",
-    answer:
-      "여기를 클릭하시면, 각 프로젝트의 상세 명세와 트러블슈팅 리포트는 물론 실시간 커밋 히스토리 및 기술 태그를 직접 확인하실 수 있습니다.",
+    question:
+      "프로젝트별 트러블슈팅 과정과 실제 코드 커밋 이력은 어디서 확인하나요?",
+    answer: (
+      <>
+        <Link href="/works" className="faq-inline-link">
+          여기
+        </Link>
+        를 클릭하시면, 각 프로젝트의 상세 명세와 트러블슈팅 리포트는 물론 실시간
+        커밋 히스토리 및 기술 태그를 직접 확인하실 수 있습니다.
+      </>
+    ),
   },
   {
     id: 4,
     question: "현재 채용 포지션 제안이나 프로젝트 협업 문의가 가능한가요?",
-    answer:
-      "현재 프론트엔드 엔지니어 포지션 합류 및 프로덕트 협업 제안 모두 열려 있습니다. 여기를 클릭하시면, 협업 제안 도우미 챗봇으로 연결됩니다.",
+    answer: (
+      <>
+        현재 프론트엔드 엔지니어 포지션 합류 및 프로덕트 협업 제안 모두 열려
+        있습니다.{" "}
+        <Link href="/contact" className="faq-inline-link">
+          여기
+        </Link>
+        를 클릭하시면, 협업 제안 도우미 챗봇으로 연결됩니다.
+      </>
+    ),
   },
 ];

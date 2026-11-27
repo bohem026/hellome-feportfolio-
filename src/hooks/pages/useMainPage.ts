@@ -5,9 +5,10 @@ import { useProjects } from "../common/useProjects";
 import {
   FEATURED_WORKS,
   PROCESS_STEPS,
-  ENGINEERING_FAQS,
+  // ENGINEERING_FAQS,
   KINETIC_KEYWORDS,
   DOSSIER_TERMINAL_ENTRIES,
+  ENGINEERING_FAQS,
 } from "@/constants";
 import { WorkItem, ProcessItem, FAQItem, ShowcaseItem } from "@/types";
 
