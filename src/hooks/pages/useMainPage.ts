@@ -190,6 +190,7 @@ export function useMainPage() {
 
   /**
    * 하단 히어로 섹션 마우스 추적 핸들러
+   * 배경 워터마크 이동거리 계산 핸들러
    * @param e
    * @returns
    */
