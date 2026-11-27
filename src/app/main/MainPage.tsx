@@ -8,6 +8,7 @@ import "./MainPage.scss";
 export function MainPage() {
   const {
     heroRef,
+    closingRef,
     heroBgSlides,
     bgSlideIdx,
     currentBgItem,
@@ -22,6 +23,7 @@ export function MainPage() {
     engineeringFAQs,
     openFaq,
     handleHeroMouseMove,
+    handleClosingMouseMove,
     toggleFaq,
   } = useMainPage();
 
@@ -201,7 +203,7 @@ export function MainPage() {
         <div className="faq-header">
           <div className="header-left">
             {/* <span className="eyebrow">03 // TECHNICAL INQUIRIES</span> */}
-            <h2>FAQS.</h2>
+            <h2>FAQs.</h2>
           </div>
 
           <div className="header-right">
@@ -245,6 +247,72 @@ export function MainPage() {
               </div>
             );
           })}
+        </div>
+      </section>
+
+      {/* Section 5: Closing Gateway Section */}
+      <section
+        className="closing-gateway"
+        ref={closingRef}
+        onMouseMove={handleClosingMouseMove}
+      >
+        <div className="closing-gateway__bg" aria-hidden="true">
+          {currentBgItem && (
+            <div
+              className="closing-bg-visual"
+              style={{ backgroundImage: `url(${currentBgItem.imageUrl})` }}
+            />
+          )}
+          <div className="closing-bg-vignette" />
+        </div>
+
+        {/* Hero와 대칭되는 마우스 반응형 48px 건축 그리드 */}
+        <div className="closing-gateway__grid" aria-hidden="true" />
+
+        {/* 클로징 타이포그래피 & /contact 유도 CTA */}
+        <div className="closing-gateway__content">
+          <div className="status-badge">
+            <span className="pulse-dot" />
+            <span>04 // CHANNEL OPEN — AI CONCIERGE &amp; DIRECT CONTACT</span>
+          </div>
+
+          <h2 className="closing-title">
+            <span>READY TO BUILD</span>
+            <span className="highlight-block">MEANINGFUL</span>
+            <span>PRODUCTS TOGETHER.</span>
+          </h2>
+
+          <p className="closing-lead">
+            채용 포지션 제안부터 기술 아키텍처 논의, 새로운 프로덕트 협업까지
+            언제든 환영합니다. AI 어시스턴트를 통해 제안을 남기시면 확인 후
+            빠르게 회신드리겠습니다.
+          </p>
+
+          {/* 대화 주제 퀵 프롬프트 칩 */}
+          <div className="quick-topic-row">
+            <Link href="/contact" className="topic-pill">
+              <span>01. 채용 및 포지션 제안</span>
+              <span>↗</span>
+            </Link>
+            <Link href="/contact" className="topic-pill">
+              <span>02. 기술 스택 · 아키텍처 질의</span>
+              <span>↗</span>
+            </Link>
+            <Link href="/contact" className="topic-pill">
+              <span>03. 협업 · 프로젝트 의뢰</span>
+              <span>↗</span>
+            </Link>
+          </div>
+
+          {/* 메인 전환 CTA 버튼 */}
+          <div className="closing-cta-row">
+            <Link href="/contact" className="btn-closing-solid">
+              LAUNCH CONTACT AI ASSISTANT →
+            </Link>
+            <Link href="/works" className="btn-closing-outline">
+              BROWSE FULL ARCHIVE ↗
+            </Link>
+          </div>
         </div>
       </section>
     </div>

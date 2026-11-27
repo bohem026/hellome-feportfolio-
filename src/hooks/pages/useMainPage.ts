@@ -30,6 +30,8 @@ export function useMainPage() {
   const [typedText, setTypedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const closingRef = useRef<HTMLElement | null>(null);
+
   const toggleFaq = (id: number) => {
     setOpenFaq((prev) => (prev === id ? null : id));
   };
@@ -170,6 +172,8 @@ export function useMainPage() {
 
   /**
    * 히어로 섹션 마우스 현재 위치 추적 핸들러
+   * @param e
+   * @returns
    */
   const handleHeroMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const el = heroRef.current;
@@ -184,8 +188,22 @@ export function useMainPage() {
 
   const currentTerminalCmd = DOSSIER_TERMINAL_ENTRIES[entryIdx].cmd;
 
+  /**
+   * 하단 히어로 섹션 마우스 추적 핸들러
+   * @param e
+   * @returns
+   */
+  const handleClosingMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const el = closingRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    el.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+    el.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+  };
+
   return {
     heroRef,
+    closingRef,
     heroBgSlides,
     bgSlideIdx,
     currentBgItem,
@@ -202,6 +220,7 @@ export function useMainPage() {
     engineeringFAQs,
     openFaq,
     handleHeroMouseMove,
+    handleClosingMouseMove,
     toggleFaq,
   };
 }
